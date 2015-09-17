@@ -1,8 +1,7 @@
 /**
  * Created by romans on 9/15/15.
  */
-var KaazingAmpgClientService = angular.module('KaazingAmpgClientService', [])
-KaazingAmpgClientService.factory('AmqpClient', ['$log', function ($log) {
+var clientFunction=function(logInformation){
     var queueName="client" + Math.floor(Math.random() * 1000000);
     var routingKey="broadcastkey";
     function getRandomInt(min, max) {
@@ -29,23 +28,6 @@ KaazingAmpgClientService.factory('AmqpClient', ['$log', function ($log) {
     var amqpClient=null;
     var publishChannel=null;
     var consumeChannel=null;
-
-    var logInformation=function(severity, message){
-        if (loggerFunction!==null)
-            loggerFunction(severity, message);
-        if (severity=="INFO"){
-            $log.info(message);
-        }
-        else if (severity=="ERROR"){
-            $log.error(message);
-        }
-        else if (severity=="WARN"){
-            $log.warn(message);
-        }
-        else
-            $log.debug(message);
-
-    }
 
     var topicPub=null;
     var topicSub=null;
@@ -150,11 +132,10 @@ KaazingAmpgClientService.factory('AmqpClient', ['$log', function ($log) {
     var arrayBufferToString = function(buf) {
         return String.fromCharCode.apply(null, new Uint8Array(buf));
     }
-    AmqpClient.connect=function(url,username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, loggerFuncHandle){
+    AmqpClient.connect=function(url,username, password, topicP, topicS, noLocal, messageDestinationFuncHandle){
         topicPub=topicP;
         topicSub=topicS;
         user=username;
-        loggerFunction=loggerFuncHandle;
         messageReceivedFunc=messageDestinationFuncHandle;
         noLocalFlag=noLocal;
         var amqpClientFactory = new AmqpClientFactory();
@@ -203,5 +184,4 @@ KaazingAmpgClientService.factory('AmqpClient', ['$log', function ($log) {
     }
 
     return AmqpClient;
-
-}]);
+};
