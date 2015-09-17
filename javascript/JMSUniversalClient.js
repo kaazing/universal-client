@@ -1,8 +1,7 @@
 /**
  * Created by romans on 9/15/15.
  */
-var KaazingClientService = angular.module('KaazingJMSClientService', [])
-KaazingClientService.factory('JMSClient', ['$log', function ($log) {
+var clientFunction=function(logInformation){
     var queueName="client" + Math.floor(Math.random() * 1000000);
     var routingKey="broadcastkey";
     function getRandomInt(min, max) {
@@ -26,26 +25,6 @@ KaazingClientService.factory('JMSClient', ['$log', function ($log) {
 
     var loggerFunction=null;
     var messageReceivedFunc=null;
-    var amqpClient=null;
-    var publishChannel=null;
-    var consumeChannel=null;
-
-    var logInformation=function(severity, message){
-        if (loggerFunction!==null)
-            loggerFunction(severity, message);
-        if (severity=="INFO"){
-            $log.info(message);
-        }
-        else if (severity=="ERROR"){
-            $log.error(message);
-        }
-        else if (severity=="WARN"){
-            $log.warn(message);
-        }
-        else
-            $log.debug(message);
-
-    }
 
     var topicPub=null;
     var topicSub=null;
@@ -77,7 +56,10 @@ KaazingClientService.factory('JMSClient', ['$log', function ($log) {
 
     var prepareReceive = function (rcvFunction) {
         var dest = session.createTopic(topicSub);
-        consumer = session.createConsumer(dest, "appId<>'" + appId + "'");
+        if (noLocalFlag)
+            consumer = session.createConsumer(dest, "appId<>'" + appId + "'");
+        else
+            consumer = session.createConsumer(dest);
         consumer.setMessageListener(function (message) {
             var body=message.getText();
             logInformation("DEBUG","Received from the wire "+body);
@@ -106,8 +88,7 @@ KaazingClientService.factory('JMSClient', ['$log', function ($log) {
         //setup challenge handler
         setupSSO(jmsConnectionFactory.getWebSocketFactory());
         try {
-            var connectionFuture =
-                jmsConnectionFactory.createConnection(username, password, function () {
+            var connectionFuture = jmsConnectionFactory.createConnection(username, password, function () {
                     if (!connectionFuture.exception) {
                         try {
                             connection = connectionFuture.getValue();
@@ -143,7 +124,8 @@ KaazingClientService.factory('JMSClient', ['$log', function ($log) {
         }
 
         var textMsg = session.createTextMessage(msg);
-        textMsg.setStringProperty("appId", appId);
+        if (noLocalFlag)
+            textMsg.setStringProperty("appId", appId);
         try {
             var future = producer.send(textMsg, function () {
                 if (future.exception) {
@@ -157,5 +139,4 @@ KaazingClientService.factory('JMSClient', ['$log', function ($log) {
     }
 
     return JMSClient;
-
-}]);
+};
