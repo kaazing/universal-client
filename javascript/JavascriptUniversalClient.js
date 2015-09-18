@@ -2,11 +2,10 @@
  * Created by romans on 9/15/15.
  */
 
-var KaazingClientService = angular.module('KaazingClientService', [])
-KaazingClientService.factory('UniversalClient', [function () {
+var UniversalClientDef=function(protocol){
     var UniversalClient = {};
     var client = null;
-    UniversalClient.connect = function (protocol, url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, loggerFuncHandle) {
+    UniversalClient.connect = function (url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, loggerFuncHandle) {
         var logInformation = function (severity, message) {
             if (loggerFuncHandle !== null)
                 loggerFuncHandle(severity, message);
@@ -51,4 +50,4 @@ KaazingClientService.factory('UniversalClient', [function () {
 
     return UniversalClient;
 
-}]);
+};

@@ -64,14 +64,14 @@ var clientFunction=function(logInformation){
             var body=message.getText();
             logInformation("DEBUG","Received from the wire "+body);
             try{
-                body=angular.fromJson(body);
+                body=JSON.parse(body);
             }
             catch(e){
-                logInformation("Received object is not JSON");
+                logInformation("WARN","Received object is not JSON");
             }
             rcvFunction(body);
         });
-        logInformation("Consumer is ready!");
+        logInformation("INFO","Consumer is ready!");
     }
 
     JMSClient.connect=function(url,username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, loggerFuncHandle){
@@ -94,7 +94,7 @@ var clientFunction=function(logInformation){
                             connection = connectionFuture.getValue();
                             connection.setExceptionListener(handleException);
 
-                            logInformation("CONNECTED");
+                            logInformation("INFO","CONNECTED");
 
                             session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
@@ -120,7 +120,7 @@ var clientFunction=function(logInformation){
 
     JMSClient.sendMessage=function(msg){
         if (typeof msg ==="object"){
-            msg=angular.toJson(msg);
+            msg=JSON.stringify(msg);
         }
 
         var textMsg = session.createTextMessage(msg);
@@ -136,6 +136,19 @@ var clientFunction=function(logInformation){
             handleException(e);
         }
         logInformation("sent","Send command " + msg, "sent");
+    }
+
+    JMSClient.disconnect=function(){
+        // Not sure what is the correct sequence!!!
+        producer.close();
+        connection.close(function(){
+            session.close(function(){
+                consumer.close(function(){
+
+                });
+            });
+        });
+
     }
 
     return JMSClient;

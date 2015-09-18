@@ -90,10 +90,10 @@ var clientFunction=function(logInformation){
             }
             logInformation("DEBUG","Received from the wire "+body);
             try{
-                body=angular.fromJson(body);
+                body= JSON.parse(body);
             }
             catch(e){
-                logInformation("Received object is not JSON");
+                logInformation("WARN", "Received object is not JSON");
             }
             messageReceivedFunc(body);
         });
@@ -113,7 +113,7 @@ var clientFunction=function(logInformation){
         logInformation("INFO","OPEN: Publish Channel");
         publishChannel = amqpClient.openChannel(publishChannelOpenHandler);
 
-        logInformation("OPEN: Consume Channel");
+        logInformation("INFO", "OPEN: Consume Channel");
         consumeChannel = amqpClient.openChannel(consumeChannelOpenHandler);
     }
     // Convert a string to an ArrayBuffer.
@@ -160,7 +160,7 @@ var clientFunction=function(logInformation){
 
     AmqpClient.sendMessage=function(msg){
         if (typeof msg ==="object"){
-            msg=angular.toJson(msg);
+            msg=JSON.stringify(msg);
         }
         var body = null;
         if (typeof(ArrayBuffer) === "undefined") {
@@ -181,6 +181,10 @@ var clientFunction=function(logInformation){
         props.setUserId(user);
 
         publishChannel.publishBasic({body: body, properties: props, exchange: topicPub, routingKey: routingKey});
+    }
+
+    AmqpClient.disconnect=function(){
+        amqpClient.disconnect();
     }
 
     return AmqpClient;
