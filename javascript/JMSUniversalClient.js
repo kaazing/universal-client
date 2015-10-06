@@ -31,15 +31,6 @@ var clientFunction=function(logInformation){
     var noLocalFlag=false;
     var user=null;
 
-    function setupSSO(webSocketFactory) {
-        /* Respond to authentication challenges with popup login dialog */
-        var basicHandler = new BasicChallengeHandler();
-        basicHandler.loginHandler = function (callback) {
-            popupLoginDialog(callback);
-        }
-        webSocketFactory.setChallengeHandler(basicHandler);
-    }
-
     var handleException = function (e) {
         logInformation("ERROR","Error! " + e);
     }
@@ -85,8 +76,6 @@ var clientFunction=function(logInformation){
 
         var jmsConnectionFactory = new JmsConnectionFactory(url);
 
-        //setup challenge handler
-        setupSSO(jmsConnectionFactory.getWebSocketFactory());
         try {
             var connectionFuture = jmsConnectionFactory.createConnection(username, password, function () {
                     if (!connectionFuture.exception) {
@@ -141,9 +130,9 @@ var clientFunction=function(logInformation){
     JMSClient.disconnect=function(){
         // Not sure what is the correct sequence!!!
         producer.close();
-        connection.close(function(){
+        consumer.close(function(){
             session.close(function(){
-                consumer.close(function(){
+                connection.close(function(){
 
                 });
             });
