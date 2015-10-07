@@ -1,5 +1,5 @@
 {
-   "name":"kaazing-universal-client",
+   "name":"kaazing-javascript-universal-client",
    "main":[
       "javascript/JavascriptUniversalClient.js",
       "javascript/AngularUniversalClient.js"
@@ -22,6 +22,7 @@
       "**/.*"
    ],
    "dependencies":{
-      "requirejs":""
+      "requirejs":">=2.0.0",
+      "kaazing-amqp-0-9-1-client-javascript":">=5.0.0"      
    }
 }
