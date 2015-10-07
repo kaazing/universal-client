@@ -3,7 +3,7 @@
   "main": [
   	"javascript/JavascriptUniversalClient.js",
   	"javascript/AngularUniversalClient.js"
-  ]
+  ],
   "homepage": "https://github.com/kaazing/universal-client",
   "author": "kaazing",
   "description": "Universal JavaScript/AngularJS Client for communication with Kaazing Gateways. Currently supports JMS and AMQP Gateways.",
