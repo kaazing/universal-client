@@ -47,14 +47,14 @@ KaazingClientService.factory('AngularUniversalClient', [function () {
                 console.trace(message);
         }
         if (protocol.toLowerCase() === "amqp") {
-            requirejs(['js/kaazing/library/WebSocket.js',"js/kaazing/library/AmqpClient.js", "js/kaazing/universal-client/AmqpUniversalClient.js"], function () {
+            requirejs(['js/kaazing/library/WebSocket.js',"js/kaazing/library/AmqpClient.js", "js/kaazing/universal-client/src/AmqpUniversalClient.js"], function () {
                 console.info("Using AMQP protocol!");
                 client = amqpClientFunction(logInformation);
                 client.connect(url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, loggerFuncHandle);
             });
         }
         else if (protocol.toLowerCase() === "jms") {
-            requirejs(['js/kaazing/library/WebSocket.js',/*"js/kaazing/library/JmsClient.js"*/, "js/kaazing/universal-client/JMSUniversalClient.js"], function () {
+            requirejs(['js/kaazing/library/WebSocket.js',/*"js/kaazing/library/src/JmsClient.js"*/, "js/kaazing/universal-client/src/JMSUniversalClient.js"], function () {
                 console.info("Using JMS protocol!");
                 client = jmsClientFunction(logInformation);
                 client.connect(url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, loggerFuncHandle);
