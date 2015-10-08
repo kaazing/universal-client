@@ -10,13 +10,13 @@ Kaazing Universal Clients provide the facade for Kaazing specific protocol/techn
 * Provide developers with the reference technology/protocol specific implementations
 
 ## Available Universal Clients
-- [JavaScript Universal Clients][1]
+- [Universal Clients for JavaScript applocations][1]
 
 ## Organization of the Universal Clients
 Regardless of the client technology, all the clients organized as shown on the following diagram
 
 ![][image-1]
 
-[1]:	javascript/README.MD
+[1]:	https://github.com/nemigaservices/universal-client/tree/develop/javascript "Universal Clients for JavaScript applications"
 
 [image-1]:	images/UniversalClients.png "Universal Clients"
