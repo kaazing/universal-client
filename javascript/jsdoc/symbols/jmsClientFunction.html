@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>JsDoc Reference - JMSClient</title>
+		<title>JsDoc Reference - jmsClientFunction</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -214,7 +214,7 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class JMSClient
+				Class jmsClientFunction
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
@@ -225,13 +225,13 @@ ul.inheritsList
 				
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/javascript_JMSUniversalClient.js.html">JMSUniversalClient.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/src_JMSUniversalClient.js.html">JMSUniversalClient.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class JMSClient.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class jmsClientFunction.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -244,9 +244,9 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/JMSClient.html#constructor">JMSClient</a></b>()
+								<b><a href="../symbols/jmsClientFunction.html#constructor">jmsClientFunction</a></b>(logInformation)
 							</div>
-							<div class="description">Provides communication services with JMS server.</div>
+							<div class="description">Facade function that implements Kaazing WebSocket communications via JMS server</div>
 						</td>
 					</tr>
 				</tbody>
@@ -257,51 +257,6 @@ ul.inheritsList
 			
 
 <!-- ============================== methods summary ======================== -->
-			
-				
-				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class JMSClient.">
-					<caption>Method Summary</caption>
-					<thead>
-						<tr>
-							<th scope="col">Method Attributes</th>
-							<th scope="col">Method Name and Description</th>
-						</tr>
-					</thead>
-					<tbody>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">JMSClient.<b><a href="../symbols/JMSClient.html#.connect">connect</a></b>(url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, loggerFuncHandle)
-								</div>
-								<div class="description">Connects to Kaazing WebSocket JMS Gateway</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">JMSClient.<b><a href="../symbols/JMSClient.html#.disconnect">disconnect</a></b>()
-								</div>
-								<div class="description">Disconnects from Kaazing WebSocket JMS Gateway</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">JMSClient.<b><a href="../symbols/JMSClient.html#.sendMessage">sendMessage</a></b>(msg)
-								</div>
-								<div class="description">Sends messages to a publishing endpoint.</div>
-							</td>
-						</tr>
-					
-					</tbody>
-				</table>
-				
-				
-				
 			
 <!-- ============================== events summary ======================== -->
 			
@@ -314,11 +269,11 @@ ul.inheritsList
 				</div>
 				
 				<div class="fixedFont">
-						<b>JMSClient</b>()
+						<b>jmsClientFunction</b>(logInformation)
 				</div>
 				
 				<div class="description">
-					Provides communication services with JMS server. Created within jmsClientFunction constructor.
+					Facade function that implements Kaazing WebSocket communications via JMS server
 					
 				</div>
 				
@@ -326,9 +281,27 @@ ul.inheritsList
 				
 				
 					
+						<dl class="detailList">
+						<dt class="heading">Parameters:</dt>
+						
+							<dt>
+								 <b>logInformation</b>
+								
+							</dt>
+								<dd>function that is used for logging events in a format of function(severity, message).</dd>
+						
+						</dl>
 					
 					
 					
+					
+					
+						<dl class="detailList">
+						<dt class="heading">Returns:</dt>
+						
+								<dd><span class="light fixedFont">{{<a href="../symbols/JMSClient.html">JMSClient</a> object that implements communication functions}}</span> </dd>
+						
+						</dl>
 					
 					
 					
@@ -341,150 +314,6 @@ ul.inheritsList
 
 <!-- ============================== method details ========================= -->		
 			
-				<div class="sectionTitle">
-					Method Detail
-				</div>
-				
-					<a name=".connect"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">JMSClient.</span><b>connect</b>(url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, loggerFuncHandle)
-					
-					</div>
-					<div class="description">
-						Connects to Kaazing WebSocket JMS Gateway
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>url</b>
-									
-								</dt>
-								<dd>Connection URL</dd>
-							
-								<dt>
-									<b>username</b>
-									
-								</dt>
-								<dd>User name to be used to establish connection</dd>
-							
-								<dt>
-									<b>password</b>
-									
-								</dt>
-								<dd>User password to be used to establish connection</dd>
-							
-								<dt>
-									<b>topicP</b>
-									
-								</dt>
-								<dd>Name of the publishing endpoint - JMS topic used for publishing.</dd>
-							
-								<dt>
-									<b>topicS</b>
-									
-								</dt>
-								<dd>Name of the subscription endpoint - AMQP topic used for subscription</dd>
-							
-								<dt>
-									<b>noLocal</b>
-									
-								</dt>
-								<dd>Flag indicating whether the client wants to receive its own messages (true) or not (false). That flag should be used when publishing and subscription endpoints are the same.</dd>
-							
-								<dt>
-									<b>messageDestinationFuncHandle</b>
-									
-								</dt>
-								<dd>Function that will be used to process received messages from subscription endpoint in a format: function(messageBody)</dd>
-							
-								<dt>
-									<b>loggerFuncHandle</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name=".disconnect"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">JMSClient.</span><b>disconnect</b>()
-					
-					</div>
-					<div class="description">
-						Disconnects from Kaazing WebSocket JMS Gateway
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name=".sendMessage"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">JMSClient.</span><b>sendMessage</b>(msg)
-					
-					</div>
-					<div class="description">
-						Sends messages to a publishing endpoint.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>msg</b>
-									
-								</dt>
-								<dd>Message to be sent. As messages are sent in a text format msg will be converted to JSON if it is not a string.</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					
-				
-			
 			
 <!-- ============================== event details ========================= -->		
 			
@@ -496,7 +325,7 @@ ul.inheritsList
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Wed Oct 07 2015 17:33:44 GMT-0700 (PDT)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Thu Oct 08 2015 14:49:35 GMT-0700 (PDT)
 		</div>
 	</body>
 </html>

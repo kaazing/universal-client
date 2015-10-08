@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>JsDoc Reference - JavascriptUniversalClient</title>
+		<title>JsDoc Reference - AmqpClient</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -214,7 +214,7 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class JavascriptUniversalClient
+				Class AmqpClient
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
@@ -225,13 +225,13 @@ ul.inheritsList
 				
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/javascript_JavascriptUniversalClient.js.html">JavascriptUniversalClient.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/src_AmqpUniversalClient.js.html">AmqpUniversalClient.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class JavascriptUniversalClient.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class AmqpClient.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -244,9 +244,9 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/JavascriptUniversalClient.html#constructor">JavascriptUniversalClient</a></b>()
+								<b><a href="../symbols/AmqpClient.html#constructor">AmqpClient</a></b>()
 							</div>
-							<div class="description">Provides communication services with JMS or AMQP server.</div>
+							<div class="description">Provides communication services with AMQP server.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -260,7 +260,7 @@ ul.inheritsList
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class JavascriptUniversalClient.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class AmqpClient.">
 					<caption>Method Summary</caption>
 					<thead>
 						<tr>
@@ -273,25 +273,25 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">JavascriptUniversalClient.<b><a href="../symbols/JavascriptUniversalClient.html#.connect">connect</a></b>(url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, loggerFuncHandle)
+								<div class="fixedFont">AmqpClient.<b><a href="../symbols/AmqpClient.html#.connect">connect</a></b>(url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle)
 								</div>
-								<div class="description">Connects to Kaazing WebSocket Gateway (AMQP or JMS)</div>
+								<div class="description">Connects to Kaazing WebSocket AMQP Gateway</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">JavascriptUniversalClient.<b><a href="../symbols/JavascriptUniversalClient.html#.disconnect">disconnect</a></b>()
+								<div class="fixedFont">AmqpClient.<b><a href="../symbols/AmqpClient.html#.disconnect">disconnect</a></b>()
 								</div>
-								<div class="description">Disconnects from Kaazing WebSocket Gateway</div>
+								<div class="description">Disconnects from Kaazing WebSocket AMQP Gateway</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">JavascriptUniversalClient.<b><a href="../symbols/JavascriptUniversalClient.html#.sendMessage">sendMessage</a></b>(msg)
+								<div class="fixedFont">AmqpClient.<b><a href="../symbols/AmqpClient.html#.sendMessage">sendMessage</a></b>(msg)
 								</div>
 								<div class="description">Sends messages to a publishing endpoint.</div>
 							</td>
@@ -314,11 +314,11 @@ ul.inheritsList
 				</div>
 				
 				<div class="fixedFont">
-						<b>JavascriptUniversalClient</b>()
+						<b>AmqpClient</b>()
 				</div>
 				
 				<div class="description">
-					Provides communication services with JMS or AMQP server. Created within UniversalClientDef constructor.
+					Provides communication services with AMQP server. Created within amqpClientFunction constructor.
 					
 				</div>
 				
@@ -349,11 +349,11 @@ ul.inheritsList
 					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<span class="light">JavascriptUniversalClient.</span><b>connect</b>(url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, loggerFuncHandle)
+					<span class="light">AmqpClient.</span><b>connect</b>(url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle)
 					
 					</div>
 					<div class="description">
-						Connects to Kaazing WebSocket Gateway (AMQP or JMS)
+						Connects to Kaazing WebSocket AMQP Gateway
 						
 						
 					</div>
@@ -406,12 +406,6 @@ ul.inheritsList
 								</dt>
 								<dd>Function that will be used to process received messages from subscription endpoint in a format: function(messageBody)</dd>
 							
-								<dt>
-									<b>loggerFuncHandle</b>
-									
-								</dt>
-								<dd>function that is used for logging events in a format of function(severity, message)</dd>
-							
 							</dl>
 						
 						
@@ -427,11 +421,11 @@ ul.inheritsList
 					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<span class="light">JavascriptUniversalClient.</span><b>disconnect</b>()
+					<span class="light">AmqpClient.</span><b>disconnect</b>()
 					
 					</div>
 					<div class="description">
-						Disconnects from Kaazing WebSocket Gateway
+						Disconnects from Kaazing WebSocket AMQP Gateway
 						
 						
 					</div>
@@ -452,7 +446,7 @@ ul.inheritsList
 					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<span class="light">JavascriptUniversalClient.</span><b>sendMessage</b>(msg)
+					<span class="light">AmqpClient.</span><b>sendMessage</b>(msg)
 					
 					</div>
 					<div class="description">
@@ -496,7 +490,7 @@ ul.inheritsList
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Wed Oct 07 2015 17:33:44 GMT-0700 (PDT)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Thu Oct 08 2015 14:49:35 GMT-0700 (PDT)
 		</div>
 	</body>
 </html>

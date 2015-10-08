@@ -24,8 +24,8 @@ KaazingClientService.factory('AngularUniversalClient', [function () {
      * @param url Connection URL
      * @param username User name to be used to establish connection
      * @param password User password to be used to establish connection
-     * @param topicP Name of the publishing endpoint - AMQP exchange used for publishing.
-     * @param topicS Name of the subscription endpoint - AMQP exchange used for subscription
+     * @param topicP Name of the publishing endpoint - AMQP exchange used for publishing or JMS Topic.
+     * @param topicS Name of the subscription endpoint - AMQP exchange used for subscription or JMS Topic.
      * @param noLocal Flag indicating whether the client wants to receive its own messages (true) or not (false). That flag should be used when publishing and subscription endpoints are the same.
      * @param messageDestinationFuncHandle Function that will be used to process received messages from subscription endpoint in a format: function(messageBody)
      * @param loggerFuncHandle function that is used for logging events in a format of function(severity, message)
@@ -47,14 +47,14 @@ KaazingClientService.factory('AngularUniversalClient', [function () {
                 console.trace(message);
         }
         if (protocol.toLowerCase() === "amqp") {
-            requirejs(['js/kaazing/library/WebSocket.js',"js/kaazing/library/AmqpClient.js", "js/kaazing/universal-client/AmqpUniversalClient.js"], function () {
+            requirejs(['js/kaazing/library/WebSocket.js',"js/kaazing/library/AmqpClient.js", "js/kaazing/universal-client/src/AmqpUniversalClient.js"], function () {
                 console.info("Using AMQP protocol!");
                 client = amqpClientFunction(logInformation);
                 client.connect(url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, loggerFuncHandle);
             });
         }
         else if (protocol.toLowerCase() === "jms") {
-            requirejs(['js/kaazing/library/WebSocket.js',/*"js/kaazing/library/JmsClient.js"*/, "js/kaazing/universal-client/JMSUniversalClient.js"], function () {
+            requirejs(['js/kaazing/library/WebSocket.js',/*"js/kaazing/library/src/JmsClient.js"*/, "js/kaazing/universal-client/src/JMSUniversalClient.js"], function () {
                 console.info("Using JMS protocol!");
                 client = jmsClientFunction(logInformation);
                 client.connect(url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, loggerFuncHandle);
