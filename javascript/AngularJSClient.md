@@ -8,8 +8,8 @@ This library is intended to be used with AngularJS application; it provides Angu
 	
 	<head>  
 	....    
-	<script src="bower\_components/kaazing-javascript-universal-client/javascript/src/AngularUniversalClient.js"></script>
-	<script src="bower\_components/kaazing-javascript-universal-client/javascript/src/JmsClient.js"></script>
+	<script src="bower_components/kaazing-javascript-universal-client/javascript/src/AngularUniversalClient.js"></script>
+	<script src="bower_components/kaazing-javascript-universal-client/javascript/src/JmsClient.js"></script>
 	....  
 	</head>
 	```
