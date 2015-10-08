@@ -15,7 +15,7 @@ This library is intended to be used with AngularJS application; it provides Angu
 	```
 - Register KaazingClientService module with your main controller  
 	```javascript
-	angular.module("\<your module name", 'KaazingClientService')
+	angular.module("<your module name", 'KaazingClientService')
 		.controller("<your controller name", function ($scope, ...,AngularUniversalClient) {  
 	
 	...  
@@ -24,7 +24,7 @@ This library is intended to be used with AngularJS application; it provides Angu
 	```
 - Establish connection within your controller
 	```javascript
-	angular.module("\<your module name", 'KaazingClientService')
+	angular.module("<your module name", 'KaazingClientService')
 		.controller("<your controller name", function ($scope, ...,AngularUniversalClient) {  
 	
 	
@@ -47,12 +47,12 @@ This library is intended to be used with AngularJS application; it provides Angu
 	- **loggerFuncHandle**: function that is used for logging events in a format of function(severity, message)
 - Add disconnect on window close (shown method uses JQuery):
 	```javascript
-	angular.module("\<your module name", 'KaazingClientService')
+	angular.module("<your module name", 'KaazingClientService')
 		.controller("<your controller name", function ($scope, ...,AngularUniversalClient) {  
 		...  
 	
 	
-		AngularUniversalClient.connect(proitocol,url,username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, loggerFuncHandle );  
+		AngularUniversalClient.connect(protocol,url,username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, loggerFuncHandle );  
 	
 	
 		...  
@@ -67,7 +67,7 @@ This library is intended to be used with AngularJS application; it provides Angu
 - To send messages use AngularUniversalClient.sendMessage(msg)  
 	where _**msg**_ is message to be sent. If _**msg**_ is not a string it will be converted to JSON.
 	```javascript
-	angular.module("\<your module name", 'KaazingClientService')
+	angular.module("<your module name", 'KaazingClientService')
 		.controller("<your controller name", function ($scope, ...,AngularUniversalClient) {  
 	
 	
@@ -100,7 +100,7 @@ This library is intended to be used with AngularJS application; it provides Angu
 - When message is received, service will call a function registered as **messageDestinationFuncHandle** as shown above. E.g.  
 
 	```javascript
-	angular.module("\<your module name", 'KaazingClientService')
+	angular.module("<your module name", 'KaazingClientService')
 		.controller("<your controller name", function ($scope, ...,AngularUniversalClient) {  
 	
 	
@@ -112,7 +112,7 @@ This library is intended to be used with AngularJS application; it provides Angu
 		}  
 	
 	
-		AngularUniversalClient.connect(proitocol,url,username, password, topicP, topicS, noLocal,$scope.processReceivedCommand, loggerFuncHandle );  
+		AngularUniversalClient.connect(protocol,url,username, password, topicP, topicS, noLocal,$scope.processReceivedCommand, loggerFuncHandle );  
 	
 	
 		...  
@@ -148,7 +148,7 @@ This library is intended to be used with AngularJS application; it provides Angu
 		    // Log WebSocket message   
 		}  
 		
-		AngularUniversalClient.connect(proitocol,url,username, password, topicP, topicS, noLocal,$scope.processReceivedCommand, $scope.logWebSocketMessage );  
+		AngularUniversalClient.connect(protocol,url,username, password, topicP, topicS, noLocal,$scope.processReceivedCommand, $scope.logWebSocketMessage );  
 		
 		...
 		  
@@ -168,6 +168,7 @@ This library is intended to be used with AngularJS application; it provides Angu
 	```
 
 ## Organization of Kaazing JavaScript Universal Client for AngularJS  
+![][image-1]
 
 As shown on the diagram above, Kaazing AngularJS Universal Client works as following:
 - Determine Client Library Facade based on the specified protocol
@@ -182,3 +183,4 @@ For more information about Client Facade libraries see
 [1]:	README.md
 [2]:	KaazingAMQPClientLibrariesFacade.md
 [3]:	KaazingJMSClientLibrariesFacade.md
+[image-1]:	images/AngularJSUniversalClient.png "AngularJS Universal Client"
