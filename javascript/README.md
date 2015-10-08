@@ -1,4 +1,4 @@
-# Kaazing JavaScript Universal Clients
+# Universal Clients for JavaScript Applications
 Kaazing JavaScript Universal Clients library contains implementation of the Universal Clients as
 - [AngularJS Service][1]
 - [JavaScript library][2]
