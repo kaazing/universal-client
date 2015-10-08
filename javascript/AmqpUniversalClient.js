@@ -1,7 +1,14 @@
 /**
  * Created by romans on 9/15/15.
  */
-var clientFunction=function(logInformation){
+
+/**
+ * Facade function that implements Kaazing WebSocket communications via AMQP server
+  * @param logInformation function that is used for logging events in a format of function(severity, message).
+ * @returns {{AmqpClient object that implements communication functions}}
+ * @constructor
+ */
+var amqpClientFunction=function(logInformation){
     var queueName="client" + Math.floor(Math.random() * 1000000);
     var routingKey="broadcastkey";
     function getRandomInt(min, max) {
@@ -10,7 +17,6 @@ var clientFunction=function(logInformation){
     var messageIdCounter = getRandomInt(1, 100000);
 
     var appId = (function () {
-        /**! http://stackoverflow.com/a/2117523/377392 */
         var fmt = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
         var ret=fmt.replace(/[xy]/g, function (c) {
             var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
@@ -21,6 +27,11 @@ var clientFunction=function(logInformation){
 
     var initialized=false;
 
+    /**
+     * Provides communication services with AMQP server. Created within amqpClientFunction constructor.
+     * @class
+     * @name AmqpClient
+     */
     var AmqpClient = {};
 
     var loggerFunction=null;
@@ -132,6 +143,17 @@ var clientFunction=function(logInformation){
     var arrayBufferToString = function(buf) {
         return String.fromCharCode.apply(null, new Uint8Array(buf));
     }
+
+    /**
+     * Connects to Kaazing WebSocket AMQP Gateway
+     * @param url Connection URL
+     * @param username User name to be used to establish connection
+     * @param password User password to be used to establish connection
+     * @param topicP Name of the publishing endpoint - AMQP exchange used for publishing.
+     * @param topicS Name of the subscription endpoint - AMQP exchange used for subscription
+     * @param noLocal Flag indicating whether the client wants to receive its own messages (true) or not (false). That flag should be used when publishing and subscription endpoints are the same.
+     * @param messageDestinationFuncHandle Function that will be used to process received messages from subscription endpoint in a format: function(messageBody)
+     */
     AmqpClient.connect=function(url,username, password, topicP, topicS, noLocal, messageDestinationFuncHandle){
         topicPub=topicP;
         topicSub=topicS;
@@ -158,6 +180,10 @@ var clientFunction=function(logInformation){
         amqpClient.connect(options, openHandler);
     }
 
+    /**
+     * Sends messages to a publishing endpoint.
+     * @param msg Message to be sent. As messages are sent in a text format msg will be converted to JSON if it is not a string.
+     */
     AmqpClient.sendMessage=function(msg){
         if (typeof msg ==="object"){
             msg=JSON.stringify(msg);
@@ -183,6 +209,9 @@ var clientFunction=function(logInformation){
         publishChannel.publishBasic({body: body, properties: props, exchange: topicPub, routingKey: routingKey});
     }
 
+    /**
+     * Disconnects from Kaazing WebSocket AMQP Gateway
+     */
     AmqpClient.disconnect=function(){
         amqpClient.disconnect();
     }

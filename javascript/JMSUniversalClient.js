@@ -1,7 +1,13 @@
 /**
  * Created by romans on 9/15/15.
  */
-var clientFunction=function(logInformation){
+/**
+ * Facade function that implements Kaazing WebSocket communications via JMS server
+ * @param logInformation function that is used for logging events in a format of function(severity, message).
+ * @returns {{JMSClient object that implements communication functions}}
+ * @constructor
+ */
+var jmsClientFunction=function(logInformation){
     var queueName="client" + Math.floor(Math.random() * 1000000);
     var routingKey="broadcastkey";
     function getRandomInt(min, max) {
@@ -10,7 +16,6 @@ var clientFunction=function(logInformation){
     var messageIdCounter = getRandomInt(1, 100000);
 
     var appId = (function () {
-        /**! http://stackoverflow.com/a/2117523/377392 */
         var fmt = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
         var ret=fmt.replace(/[xy]/g, function (c) {
             var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
@@ -19,7 +24,13 @@ var clientFunction=function(logInformation){
         return ret;
     })();
 
+
     var initialized=false;
+     /**
+     * Provides communication services with JMS server. Created within jmsClientFunction constructor.
+     * @class
+     * @name JMSClient
+     */
 
     var JMSClient = {};
 
@@ -65,6 +76,16 @@ var clientFunction=function(logInformation){
         logInformation("INFO","Consumer is ready!");
     }
 
+    /**
+     * Connects to Kaazing WebSocket JMS Gateway
+     * @param url Connection URL
+     * @param username User name to be used to establish connection
+     * @param password User password to be used to establish connection
+     * @param topicP Name of the publishing endpoint - JMS topic used for publishing.
+     * @param topicS Name of the subscription endpoint - AMQP topic used for subscription
+     * @param noLocal Flag indicating whether the client wants to receive its own messages (true) or not (false). That flag should be used when publishing and subscription endpoints are the same.
+     * @param messageDestinationFuncHandle Function that will be used to process received messages from subscription endpoint in a format: function(messageBody)
+     */
     JMSClient.connect=function(url,username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, loggerFuncHandle){
         topicPub=topicP;
         topicSub=topicS;
@@ -107,6 +128,10 @@ var clientFunction=function(logInformation){
         }
     }
 
+    /**
+     * Sends messages to a publishing endpoint.
+     * @param msg Message to be sent. As messages are sent in a text format msg will be converted to JSON if it is not a string.
+     */
     JMSClient.sendMessage=function(msg){
         if (typeof msg ==="object"){
             msg=JSON.stringify(msg);
@@ -127,6 +152,9 @@ var clientFunction=function(logInformation){
         logInformation("sent","Send command " + msg, "sent");
     }
 
+    /**
+     * Disconnects from Kaazing WebSocket JMS Gateway
+     */
     JMSClient.disconnect=function(){
         // Not sure what is the correct sequence!!!
         producer.close();
