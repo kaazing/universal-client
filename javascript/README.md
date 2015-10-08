@@ -14,16 +14,16 @@ Please, refer to the links above for the details about the details of the usage 
 	- Go to _\<your installation directory\>/kaazing-websocket-gateway-amqp-4.0.6/conf _
 	- Open __gateway\_config.xml__
 	- Locate lines  
-		\`<allow-origin>http://${gateway.hostname}:${gateway.extras.port}</allow-origin>
-		\`and replace them with 
-		\`<allow-origin></allow-origin>
-		\`
+		_\<allow-origin>http://${gateway.hostname}:${gateway.extras.port}\</allow-origin>_
+		and replace them with 
+		_\<allow-origin>\*\</allow-origin>_
+
 	- Make sure that you have Java 7 or greater installed
-	- Open terminal window at \_\<your installation directory\>/kaazing-websocket-gateway-amqp-4.0.6/bin \_and start gateway  
-		\`./gateway.start
-		`- Open terminal window at _\<your installation directory\>/qpid-java-broker-0.28/bin _ and start Apache QPID AMQP server  
-		`./qpid-server
-		\`- **Note** to stop both Gateway and AMQP server just execute _Ctrl-C_ on the relevant terminal windows or just close them.  
+	- Open terminal window at _\<your installation directory\>/kaazing-websocket-gateway-amqp-4.0.6/bin_ and start gateway  
+		`./gateway.start`
+	- Open terminal window at _\<your installation directory\>/qpid-java-broker-0.28/bin_ and start Apache QPID AMQP server  
+		`./qpid-server`
+	- **Note**: to stop both Gateway and AMQP server just execute _Ctrl-C_ on the relevant terminal windows or just close them.  
 
 ### JMS
 - Download JMS Gateway (Gateway + Demos) from  [JMS Gateway Download Site][7] as a ZIP file
@@ -33,16 +33,17 @@ Please, refer to the links above for the details about the details of the usage 
 	- Goto _\<your installation directory\>/kaazing-websocket-gateway-jms-4.0.9/conf _
 	- Open __gateway\_config.xml__
 	- Locate lines  
-		\`<allow-origin>http://${gateway.hostname}:${gateway.extras.port}</allow-origin>
-		\`and replace them with 
-		\`<allow-origin></allow-origin>
-		\`
+		_\<allow-origin>http://${gateway.hostname}:${gateway.extras.port}\</allow-origin>_
+and replace them with 
+		_\<allow-origin>
+		\*\</allow-origin>_
+
 	- Make sure that you have Java 7 or greater installed
 	- Open terminal window at _\<your installation directory\>/kaazing-websocket-gateway-jms-4.0.9/bin _ and start gateway  
-		\`./gateway.start
-		`- Open terminal window at  _\<your installation directory\>/apache-activemq-5.10.0/bin _ and start Apache Active MQ JMS server  
-		`./activemq start\`
-	- **Note** to stop:
+		`./gateway.start`
+	- Open terminal window at  _\<your installation directory\>/apache-activemq-5.10.0/bin _ and start Apache Active MQ JMS server  
+		`./activemq start`
+	- **Note**: to stop:
 		- Gateway: execute _Ctrl-C_ on the relevant terminal windows or just close it.
 		- Apache ActiveMQ JMS Server: open terminal window at  _\<your installation directory\>/apache-activemq-5.10.0/bin _ and execute  
 			`./activemq stop`
@@ -50,10 +51,11 @@ Please, refer to the links above for the details about the details of the usage 
 ## Obtaining Client Libraries with Bower
 - Install NodeJS - see [NodeJS downloads page][9] for the installer that is appropriate for your OS
 - Update npm  
-	\`sudo npm install npm -g
-	`- Install bower:  
-	`sudo npm install -g bower\`
+	`sudo npm install npm -g`
+- Install bower:  
+	`sudo npm install -g bower`
 - Install Kaazing Universal Javascript client libraries
+
 	`bower install kaazing-javascript-univeral-client`
 
 ## Important Notes
