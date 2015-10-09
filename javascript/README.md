@@ -36,6 +36,10 @@ and replace them with
 		`./qpid-server`
 	- **Note**: to stop both Gateway and AMQP server just execute _Ctrl-C_ on the relevant terminal windows or just close them.  
 
+#### Documentation
+- [How to Build JavaScript Clients Using Kaazing  WebSocket Gateway][10]
+- [Use the Kaazing WebSocket Gateway JavaScript AMQP Client Library][11]
+
 ### JMS
 - Download JMS Gateway (Gateway + Demos) from  [JMS Gateway Download Site][7] as a ZIP file
 	**This package also contains JMS server Apache ActiveMQ** see - [Apache ActiveMQ][8] for more information.
@@ -59,10 +63,12 @@ and replace them with
 		- Apache ActiveMQ JMS Server: open terminal window at  _\<your installation directory\>/apache-activemq-5.10.0/bin _ and execute  
 			`./activemq stop`
 
+#### Documentation
+- [Build JavaScript JMS Clients Using Kaazing WebSocket Gateway - JMS Edition](http://developer.kaazing.com/documentation/jms/4.0/dev-js/o_dev_js.html)
+- [Use the Kaazing WebSocket Gateway JavaScript JMS Client API][13]
+
 ## Important Notes
 - Libraries provide basic functionality for both AMQP and JMS protocol; for more advanced features refer to Kaazing Documentation:
-	- For AMQP: [How to Build JavaScript Clients Using Kaazing  WebSocket Gateway][10] and [Use the Kaazing WebSocket Gateway JavaScript AMQP Client Library][11]
-	- For JMS: [Build JavaScript JMS Clients Using Kaazing WebSocket Gateway - JMS Edition]() and [Use the Kaazing WebSocket Gateway JavaScript JMS Client API][13]
 - AMQP Facade library uses Fanout Exchange as the publishing endpoint which does not user Routing Key. Queue is automatically generated based on the unique client ID and is bound to the Exchange. For more information about Exchanges,  Routing and Queues refer to [RabbitMQ AMQP 0-9-1 Model Explained][14]
 - JMS Subscription created by the Facade Library is not durable - the client will not receive any messages that were sent before the subscription started. More information about durable subscriptions can be found at [Messaging Patterns][15].
 - Due to the blocking nature of JMS, application that use JMS client may receive an exception when sending large number of messages _IllegalStateException: Message send already in progress_
