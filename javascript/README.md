@@ -40,6 +40,9 @@ and replace them with
 - [How to Build JavaScript Clients Using Kaazing  WebSocket Gateway][10]
 - [Use the Kaazing WebSocket Gateway JavaScript AMQP Client Library][11]
 
+#### Important AMQP Notes
+- AMQP Facade library uses Fanout Exchange as the publishing endpoint which does not user Routing Key. Queue is automatically generated based on the unique client ID and is bound to the Exchange. For more information about Exchanges,  Routing and Queues refer to [RabbitMQ AMQP 0-9-1 Model Explained][14]
+
 ### JMS
 - Download JMS Gateway (Gateway + Demos) from  [JMS Gateway Download Site][7] as a ZIP file
 	**This package also contains JMS server Apache ActiveMQ** see - [Apache ActiveMQ][8] for more information.
@@ -67,9 +70,7 @@ and replace them with
 - [Build JavaScript JMS Clients Using Kaazing WebSocket Gateway - JMS Edition](http://developer.kaazing.com/documentation/jms/4.0/dev-js/o_dev_js.html)
 - [Use the Kaazing WebSocket Gateway JavaScript JMS Client API][13]
 
-## Important Notes
-- Libraries provide basic functionality for both AMQP and JMS protocol; for more advanced features refer to Kaazing Documentation:
-- AMQP Facade library uses Fanout Exchange as the publishing endpoint which does not user Routing Key. Queue is automatically generated based on the unique client ID and is bound to the Exchange. For more information about Exchanges,  Routing and Queues refer to [RabbitMQ AMQP 0-9-1 Model Explained][14]
+#### Important JMS Notes
 - JMS Subscription created by the Facade Library is not durable - the client will not receive any messages that were sent before the subscription started. More information about durable subscriptions can be found at [Messaging Patterns][15].
 - Due to the blocking nature of JMS, application that use JMS client may receive an exception when sending large number of messages _IllegalStateException: Message send already in progress_
 
