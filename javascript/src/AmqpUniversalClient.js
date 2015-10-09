@@ -144,6 +144,15 @@ var amqpClientFunction=function(logInformation){
         return String.fromCharCode.apply(null, new Uint8Array(buf));
     }
 
+    // Create a WebSocketFactory which can be used for multiple AMQP clients if
+    // required. This lets you defined the attributes of a WebSocket connection
+    // just once – such as a ChallengeHandler – and reuse it.
+    //
+    var createWebSocketFactory = function() {
+
+        webSocketFactory = new $gatewayModule.WebSocketFactory();
+        return webSocketFactory;
+    }
     /**
      * Connects to Kaazing WebSocket AMQP Gateway
      * @param url Connection URL
@@ -161,7 +170,11 @@ var amqpClientFunction=function(logInformation){
         messageReceivedFunc=messageDestinationFuncHandle;
         noLocalFlag=noLocal;
         var amqpClientFactory = new AmqpClientFactory();
-        var webSocketFactory = new WebSocketFactory();
+        var webSocketFactory;
+        if ($gatewayModule && typeof($gatewayModule.WebSocketFactory) === "function") {
+            webSocketFactory = createWebSocketFactory();
+            amqpClientFactory.setWebSocketFactory(webSocketFactory);
+        }
         amqpClientFactory.setWebSocketFactory(webSocketFactory);
         amqpClient = amqpClientFactory.createAmqpClient();
         amqpClient.addEventListener("close", function() {
