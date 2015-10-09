@@ -1,21 +1,34 @@
 # Universal Clients for JavaScript Applications
-Kaazing JavaScript Universal Clients library contains implementation of the Universal Clients as
+The Kaazing JavaScript WebSocket Universal Clients library contains implementation of the Universal Clients including:
 - [AngularJS Service][1]
 - [JavaScript library][2]
 
 Both implementation use the same underlying [AMQP Client Libraries Facade][3] and [JMS Client Libraries Facade][4] scripts for interaction with Kaazing AMQP and JMS client libraries. 
 Please, refer to the links above for the details about the details of the usage and implementations.
+
+## Obtaining Client Libraries with Bower
+- Install NodeJS - please refer to the [NodeJS downloads page][9] for the installer that is appropriate for your OS
+- Update npm  
+	`sudo npm install npm -g`
+- Install bower:  
+	`sudo npm install -g bower`
+- Install Kaazing Universal Javascript client libraries
+	`bower install kaazing-javascript-univeral-client`
+
 ## Obtaining and configuring Kaazing Gateways and related Servers
+The Kaazing Universal WebSocket clients depend on the Kaazing WebSocket Gateway (KWG) being installed on one or more servers. KWG supports two protocols, AMQP and JMS.
+
 ### AMQP
 - Download AMQP Gateway (Gateway + Documentation + Demos) from  [AMQP Gateway downloads page][5] as a ZIP file
 	**This package also contains AMQP server Apache QPID** see - [Apache QPID][6] for more information.
 - Unzip downloaded package to _\<your installation directory\>_
 - **_By default Gateway is configured not to restrict communications only from the scripts that are running on its embedded servers_** which may not be convenient for Web Development. In order to disable it
 	- Go to _\<your installation directory\>/kaazing-websocket-gateway-amqp-4.0.6/conf _
-	- Open __gateway\_config.xml__
+	- Edit __gateway\_config.xml__
 	- Locate lines  
 		_\<allow-origin>http://${gateway.hostname}:${gateway.extras.port}\</allow-origin>_
-		and replace them with 
+	
+and replace them with 
 		_\<allow-origin>\*\</allow-origin>_
 
 	- Make sure that you have Java 7 or greater installed
@@ -47,16 +60,6 @@ and replace them with
 		- Gateway: execute _Ctrl-C_ on the relevant terminal windows or just close it.
 		- Apache ActiveMQ JMS Server: open terminal window at  _\<your installation directory\>/apache-activemq-5.10.0/bin _ and execute  
 			`./activemq stop`
-
-## Obtaining Client Libraries with Bower
-- Install NodeJS - see [NodeJS downloads page][9] for the installer that is appropriate for your OS
-- Update npm  
-	`sudo npm install npm -g`
-- Install bower:  
-	`sudo npm install -g bower`
-- Install Kaazing Universal Javascript client libraries
-
-	`bower install kaazing-javascript-univeral-client`
 
 ## Important Notes
 - Libraries provide basic functionality for both AMQP and JMS protocol; for more advanced features refer to Kaazing Documentation:
