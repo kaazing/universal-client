@@ -27,10 +27,8 @@ The Kaazing Universal WebSocket clients depend on the Kaazing WebSocket Gateway 
 	- Edit __gateway\_config.xml__
 	- Locate lines  
 		_\<allow-origin>http://${gateway.hostname}:${gateway.extras.port}\</allow-origin>_
-	
 and replace them with 
 		_\<allow-origin>\*\</allow-origin>_
-
 	- Make sure that you have Java 7 or greater installed
 	- Open terminal window at _\<your installation directory\>/kaazing-websocket-gateway-amqp-4.0.6/bin_ and start gateway  
 		`./gateway.start`
@@ -68,8 +66,6 @@ and replace them with
 - AMQP Facade library uses Fanout Exchange as the publishing endpoint which does not user Routing Key. Queue is automatically generated based on the unique client ID and is bound to the Exchange. For more information about Exchanges,  Routing and Queues refer to [RabbitMQ AMQP 0-9-1 Model Explained][14]
 - JMS Subscription created by the Facade Library is not durable - the client will not receive any messages that were sent before the subscription started. More information about durable subscriptions can be found at [Messaging Patterns][15].
 - Due to the blocking nature of JMS, application that use JMS client may receive an exception when sending large number of messages _IllegalStateException: Message send already in progress_
-
-
 
 [1]:	AngularJSClient.md "AngularJS Service"
 [2]:	JavaScriptClient.md "JavaScript library"
