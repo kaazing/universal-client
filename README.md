@@ -20,6 +20,6 @@ Regardless of the client technology, all the clients organized as shown on the f
 
 ![][image-1]
 
-[1]:	https://github.com/nemigaservices/universal-client/tree/develop/javascript "Universal Clients for JavaScript applications"
+[1]:	https://github.com/kaazing/universal-client/tree/develop/javascript "Universal Clients for JavaScript applications"
 
 [image-1]:	images/UniversalClients.png "Universal Clients"
