@@ -8,8 +8,8 @@ This library is intended to be used with 'plain JavaScript' application; it prov
 	
 	<head>  
 	....    
-	<script src="bower\_components/kaazing-javascript-universal-client/javascript/src/JavascriptUniversalClient.js"></script>
-	<script src="bower\_components/kaazing-javascript-universal-client/javascript/src/JmsClient.js"></script>
+	<script src="bower_components/kaazing-javascript-universal-client/javascript/src/JavascriptUniversalClient.js"></script>
+	<script src="bower_components/kaazing-javascript-universal-client/javascript/src/JmsClient.js"></script>
 	....  
 	</head>
 	```
