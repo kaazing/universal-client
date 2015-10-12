@@ -173,7 +173,19 @@ This library is intended to be used with AngularJS application; it provides Angu
 As shown on the diagram above, Kaazing AngularJS Universal Client works as following:
 - Determine Client Library Facade based on the specified protocol
 - Download all necessary JavaScript libraries including the needed Client Library Facade using RequireJS.
-	- **Note** Due to certain limitations, RequireJS cannot download Kaazing JMSClient.js library - hence it has to be included in the \<head\> section
+	- <font color='red'> **Notes:** </font>
+		- Kaazing AMQP client libraries require Kaazing WebSocket library to be downloaded and instantiated first, to achieve it Universal Client uses the following code:
+			
+			```javascript
+			 ...
+			 requirejs(['bower_components/kaazing-amqp-0-9-1-client-javascript/javascript/WebSocket.js'],function(){
+                    requirejs(['bower_components/kaazing-amqp-0-9-1-client-javascript/javascript/Amqp-0-9-1.js', 'bower_components/kaazing-javascript-universal-client/javascript/src/AmqpUniversalClient.js'], function () {
+                    ...
+              });              
+            });
+            ...
+            ```
+		- <font color='orange'> Due to certain limitations, RequireJS cannot download Kaazing JMSClient.js library - hence it has to be included in the \<head\> section </font>
 - Instantiate required Client Facade Library that will interact with necessary Kaazing Javascript Client Libraries
 - Pass the data to and from the Kaazing Javascript Client libraries via instantiated Client Facade Library
 
