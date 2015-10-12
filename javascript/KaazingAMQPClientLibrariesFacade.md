@@ -14,6 +14,7 @@ Library consists of amqpClientFunction that creates AmqpClient object. AmqpClien
 
 ### **connect** function
 Connect function implements the following sequence:
+
 1. Create WebSocket and AMQP client factories
 
 ```javascript
