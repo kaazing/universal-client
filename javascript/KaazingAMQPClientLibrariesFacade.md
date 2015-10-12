@@ -7,10 +7,10 @@ For more information see:
 - [Use the Kaazing WebSocket Gateway JavaScript AMQP Client Library][3]
 
 ## Organization of the library
-Library consists of amqpClientFunction that creates AmqpClient object. AmqpClient objects provides the following functionaliy:
-- **connect** function - connects client to Kaazing WebSocket AMQP gateway, creates publishing endpoint and subscribes to a subscription enpoint
+Library consists of amqpClientFunction that creates AmqpClient object. AmqpClient objects provides the following functionality:
+- **connect** function - connects client to Kaazing WebSocket AMQP gateway, creates publishing endpoint and subscribes to a subscription endpoint
 - **disconnect** function - disconnects client from Kaazing WebSocket AMQP gateway
-- **sendMessage** function - sends the message to a publishing  endpoint
+- **sendMessage** function - sends the message to a publishing endpoint
 
 ### **connect** function
 Connect function implements the following sequence:
@@ -64,6 +64,7 @@ amqpClient.connect(options, openHandler);
 	3. Binds the queue to a subscription exchange with “broadcastkey” routing key. 
 		**Note** For fanout exchanges routing key is not used. For more information about exchanges and routing keys see: [https://www.rabbitmq.com/tutorials/amqp-concepts.html][1] 
 	4. Starts basic consumer. Basic consumer is started with noAck=true parameter so the client does not need to implement explicit acknowledgement. Another parameter - noLocal - controls whether the client wants to receive its own messages.
+	
 	```javascript
 	var consumeChannelOpenHandler=function(){  
 	    consumeChannel.addEventListener("message", function(message) {  
