@@ -16,16 +16,14 @@ Library consists of amqpClientFunction that creates AmqpClient object. AmqpClien
 Connect function implements the following sequence:
 
 1. Create WebSocket and AMQP client factories
-
-```javascript
-var amqpClientFactory = new AmqpClientFactory();  
-var webSocketFactory;  
-if ($gatewayModule && typeof($gatewayModule.WebSocketFactory) === "function") {  
-    webSocketFactory = createWebSocketFactory();  
-    amqpClientFactory.setWebSocketFactory(webSocketFactory);  
-}
-```
-
+	```javascript
+	var amqpClientFactory = new AmqpClientFactory();  
+	var webSocketFactory;  
+	if ($gatewayModule && typeof($gatewayModule.WebSocketFactory) === "function") {  
+	    webSocketFactory = createWebSocketFactory();  
+	    amqpClientFactory.setWebSocketFactory(webSocketFactory);  
+	}
+	```
 
 2. Create AMQP client
 ```javascript
