@@ -1,4 +1,4 @@
-/**
+                                                                                                                                                                                                                                                                            /**
  * Created by romans on 9/15/15.
  */
 
@@ -17,7 +17,6 @@ KaazingClientService.factory('AngularUniversalClient', [function () {
      */
     var AngularUniversalClient = {};
     var client = null;
-
     /**
      * Connects to Kaazing WebSocket Gateway (AMQP or JMS)
      * @param protocol Specifies protocol that should be used for communications: jms - for communication with Kaazing JMS Gateway, amqp - for communication with Kaazing AMQP Gateway.
@@ -47,10 +46,12 @@ KaazingClientService.factory('AngularUniversalClient', [function () {
                 console.trace(message);
         }
         if (protocol.toLowerCase() === "amqp") {
-            requirejs(['bower_components/kaazing-amqp-0-9-1-client-javascript/javascript/WebSocket.js',"bower_components/kaazing-amqp-0-9-1-client-javascript/javascript/Amqp-0-9-1.js", "bower_components/kaazing-javascript-universal-client/javascript/src/AmqpUniversalClient.js"], function () {
-                console.info("Using AMQP protocol!");
-                client = amqpClientFunction(logInformation);
-                client.connect(url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, loggerFuncHandle);
+            requirejs(['bower_components/kaazing-amqp-0-9-1-client-javascript/javascript/WebSocket-debug.js'], function(){
+                requirejs(["bower_components/kaazing-amqp-0-9-1-client-javascript/javascript/Amqp-0-9-1-debug.js", "bower_components/kaazing-javascript-universal-client/javascript/src/AmqpUniversalClient.js"], function (websocket, amqp) {
+                    console.info("Using AMQP protocol!");
+                    client = amqpClientFunction(logInformation);
+                    client.connect(url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle);
+                });
             });
         }
         else if (protocol.toLowerCase() === "jms") {
