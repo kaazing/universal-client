@@ -156,12 +156,12 @@ var jmsClientFunction=function(logInformation){
      * Disconnects from Kaazing WebSocket JMS Gateway
      */
     JMSClient.disconnect=function(){
-        // Not sure what is the correct sequence!!!
-        producer.close();
-        consumer.close(function(){
-            session.close(function(){
-                connection.close(function(){
+        producer.close(function(){
+            consumer.close(function(){
+                session.close(function(){
+                    connection.close(function(){
 
+                    });
                 });
             });
         });
