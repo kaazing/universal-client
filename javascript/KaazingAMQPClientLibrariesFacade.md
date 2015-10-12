@@ -26,23 +26,23 @@ Connect function implements the following sequence:
 	```
 
 2. Create AMQP client
-```javascript
-amqpClient = amqpClientFactory.createAmqpClient();
-```
+	```javascript
+	amqpClient = amqpClientFactory.createAmqpClient();
+	```
 
 3. Connect to Gateway using amqpClient connect function. Connect function uses has the following parameters:
 	- Connection options. In most common cases it contains of URL, credentials and virtual host (set to ‘/‘) hat specifies the namespace for entities (exchanges and queues) referred to by the protocol. Note that this is not virtual hosting in the HTTP sense.
 	- Callback function that will be called once connection is established. 
 
-```javascript
-var credentials = {username: username, password: password};  
-var options = {  
-    url: url,  
-    virtualHost: "/",  
-    credentials: credentials  
-};  
-amqpClient.connect(options, openHandler);
-```
+	```javascript
+	var credentials = {username: username, password: password};  
+	var options = {  
+	    url: url,  
+	    virtualHost: "/",  
+	    credentials: credentials  
+	};  
+	amqpClient.connect(options, openHandler);
+	```
 4. Once the connection is established and callback function is called, it opens publishing and consumption (subscription) channels using amqpClient openChannel function that will call on success the callback function that is passed as a parameter:  
 	```javascript
 	var openHandler=function(){  
