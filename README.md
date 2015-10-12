@@ -2,9 +2,9 @@
 
 Welcome to the Kaazing WebSocket Universal Clients Repository!
 
-This repository contains the code of the Kaazing Open Source WebSocket Universal Client as well as the 'under the hood' explanations with the details how the protocol/technology clients are created.
+This repository contains the code of the Kaazing Open Source WebSocket Universal Client as well as the *under the hood* explanations with the details how the protocol/technology clients are created.
 
-The goal is to provide developers with a simple, "universal" WebSocket client that can communicate with either the JMS or AMQP editions of the Kaazing WebSocket Gateway without changes. This should simplify the development of websocket client applications.
+The goal is to provide developers with a simple, *universal* WebSocket client that can communicate with either the JMS or AMQP editions of the Kaazing WebSocket Gateway without changes. This should simplify the development of websocket client applications.
 
 ## Introduction
 Kaazing Universal Clients provide the facade for Kaazing specific protocol/technology libraries; these clients:
