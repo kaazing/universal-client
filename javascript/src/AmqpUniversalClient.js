@@ -25,8 +25,6 @@ var amqpClientFunction=function(logInformation){
         return ret;
     })();
 
-    var initialized=false;
-
     /**
      * Provides communication services with AMQP server. Created within amqpClientFunction constructor.
      * @class
@@ -34,7 +32,6 @@ var amqpClientFunction=function(logInformation){
      */
     var AmqpClient = {};
 
-    var loggerFunction=null;
     var messageReceivedFunc=null;
     var amqpClient=null;
     var publishChannel=null;
@@ -62,7 +59,6 @@ var amqpClientFunction=function(logInformation){
         publishChannel.addEventListener("close", function() {
             logInformation("INFO","CHANNEL CLOSED: Publish Channel");
         });
-        initialized=true;
     }
 
     var consumeChannelOpenHandler=function(){
@@ -175,7 +171,9 @@ var amqpClientFunction=function(logInformation){
             webSocketFactory = createWebSocketFactory();
             amqpClientFactory.setWebSocketFactory(webSocketFactory);
         }
-        amqpClientFactory.setWebSocketFactory(webSocketFactory);
+        else{
+            throw "Cannot create WebSocket factory - module is not loaded!";
+        }
         amqpClient = amqpClientFactory.createAmqpClient();
         amqpClient.addEventListener("close", function() {
             logInformation("INFO","Connection closed.");
