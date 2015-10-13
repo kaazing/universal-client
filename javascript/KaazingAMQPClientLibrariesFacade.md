@@ -49,8 +49,11 @@ Connect function implements the following sequence:
 	    publishChannel = amqpClient.openChannel(publishChannelOpenHandler);  
 	    consumeChannel = amqpClient.openChannel(consumeChannelOpenHandler);  
 	}
+
 	```
+	
 5. Publishing channel open handler declares AMQP Exchange of a _fanout_ type thus creating publishing endpoint.
+
 	```javascript
 	var publishChannelOpenHandler=function(){  
 	    logInformation("INFO","OPENED: Publish Channel");  
