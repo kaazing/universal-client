@@ -67,7 +67,7 @@ Connect function implements the following sequence:
 
 		```javascript
 		var prepareReceive = function (rcvFunction) {
-	        	var dest = session.createTopic(topicSub);
+			var dest = session.createTopic(topicSub);
 			if (noLocalFlag)
 				consumer = session.createConsumer(dest, "appId<>'" + appId + "'");
 	        	else
@@ -106,10 +106,10 @@ JMSClient.sendMessage=function(msg){
 		var future = producer.send(textMsg, function () {
 		if (future.exception) {
 			handleException(future.exception);
-        	}	
-    	});
+		}	
+	});
 	} catch (e) {
-    	handleException(e);
+		handleException(e);
 	}
 }
 ```
