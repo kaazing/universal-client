@@ -1,7 +1,8 @@
 # Kaazing JMS Client Libraries Facade
 Kaazing JMS Client Libraries Facade:
-• Implements basic publish-subscribe functionality for JMS to help developers in getting started with their JMS WebSocket projects 
-• Provide developers with the reference implementations for using Kaazing AMQP JavaScript client libraries
+	• Implements basic publish-subscribe functionality for JMS to help developers in getting started with their JMS WebSocket projects 
+	• Provide developers with the reference implementations for using Kaazing AMQP JavaScript client libraries
+
 For more information see:
 - [Build JavaScript JMS Clients Using Kaazing WebSocket Gateway - JMS Edition](http://developer.kaazing.com/documentation/jms/4.0/dev-js/o_dev_js.html)
 - [Use the Kaazing WebSocket Gateway JavaScript JMS Client API][2]
@@ -74,9 +75,8 @@ Connect function implements the following sequence:
 	        	});
 	    	}
 	    	```
+	    	
 		_In order to prevent client from receiving its own messages consumer may be created with the query that will filter out the messages with the 'appId' string property set to this client application ID - a randomly generated GUID._
-
-
 		Once consumer is created, setMessageListener function is used to specify the function to be called when new message is received.
 
 		
