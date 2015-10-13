@@ -20,8 +20,8 @@ Connect function implements the following sequence:
 	var amqpClientFactory = new AmqpClientFactory();  
 	var webSocketFactory;  
 	if ($gatewayModule && typeof($gatewayModule.WebSocketFactory) === "function") {  
-	    webSocketFactory = createWebSocketFactory();  
-	    amqpClientFactory.setWebSocketFactory(webSocketFactory);  
+		webSocketFactory = createWebSocketFactory();  
+		amqpClientFactory.setWebSocketFactory(webSocketFactory);  
 	}
 	```
 
@@ -37,17 +37,17 @@ Connect function implements the following sequence:
 	```javascript
 	var credentials = {username: username, password: password};  
 	var options = {  
-	    url: url,  
-	    virtualHost: "/",  
-	    credentials: credentials  
+		url: url,  
+		virtualHost: "/",  
+		credentials: credentials  
 	};  
 	amqpClient.connect(options, openHandler);
 	```
 4. Once the connection is established and callback function is called, it opens publishing and consumption (subscription) channels using amqpClient openChannel function that will call on success the callback function that is passed as a parameter:  
 	```javascript
 	var openHandler=function(){  
-	    publishChannel = amqpClient.openChannel(publishChannelOpenHandler);  
-	    consumeChannel = amqpClient.openChannel(consumeChannelOpenHandler);  
+		publishChannel = amqpClient.openChannel(publishChannelOpenHandler);  
+		consumeChannel = amqpClient.openChannel(consumeChannelOpenHandler);  
 	}
 
 	```
@@ -56,7 +56,6 @@ Connect function implements the following sequence:
 
 	```javascript
 	var publishChannelOpenHandler=function(){  
-	    logInformation("INFO","OPENED: Publish Channel");  
 		publishChannel.declareExchange({exchange: topicPub, type: "fanout"});  
 	}
 	```
@@ -69,21 +68,21 @@ Connect function implements the following sequence:
 	
 	```javascript
 	var consumeChannelOpenHandler=function(){  
-	    consumeChannel.addEventListener("message", function(message) {  
-	        var body = null;  
-		    // Check how the payload was packaged since older browsers like IE7 don't  
-		    // support ArrayBuffer. In those cases, a Kaazing ByteBuffer was used instead.  
-		    if (typeof(ArrayBuffer) === "undefined") {  
-		        body = message.getBodyAsByteBuffer().getString(Charset.UTF8);  
-		    }  
-		    else {  
-		        body = arrayBufferToString(message.getBodyAsArrayBuffer())  
-		    }  
-		    messageReceivedFunc(body);  
+		consumeChannel.addEventListener("message", function(message) {  
+			var body = null;  
+			// Check how the payload was packaged since older browsers like IE7 don't  
+			// support ArrayBuffer. In those cases, a Kaazing ByteBuffer was used instead.  
+			if (typeof(ArrayBuffer) === "undefined") {  
+				body = message.getBodyAsByteBuffer().getString(Charset.UTF8);  
+			}  
+			else {  
+				body = arrayBufferToString(message.getBodyAsArrayBuffer())  
+			}  
+			messageReceivedFunc(body);  
 		});  
 		consumeChannel.declareQueue({queue: queueName})  
-		    .bindQueue({queue: queueName, exchange: topicSub, routingKey: routingKey })  
-		    .consumeBasic({queue: queueName, consumerTag: appId, noAck: true, noLocal:noLocalFlag });  
+			.bindQueue({queue: queueName, exchange: topicSub, routingKey: routingKey })  
+		.consumeBasic({queue: queueName, consumerTag: appId, noAck: true, noLocal:noLocalFlag });  
 	}
 	```
 		
@@ -98,25 +97,25 @@ Function sets AMQP properties and sends the message to a publishing exchange usi
 **Note:** As mentioned earlier, library creates a fanout type of exchange that does not use routing keys; thus library sets the value of the routing key to 'broadcast'.
 ```javascript
 AmqpClient.sendMessage=function(msg){  
-    var body = null;  
-    if (typeof(ArrayBuffer) === "undefined") {  
-        body = new ByteBuffer();  
-        body.putString(msg, Charset.UTF8);  
-        body.flip();  
-    }  
-    else {  
-        body = stringToArrayBuffer(msg);  
-    }  
-    var props = new AmqpProperties();  
-    props.setContentType("text/plain");  
-    props.setContentEncoding("UTF-8");  
-    props.setDeliveryMode("1");  
-    props.setMessageId((messageIdCounter++).toString());  
-    props.setPriority("6");  
-    props.setTimestamp(new Date());  
-    props.setUserId(user);  
+	var body = null;  
+	if (typeof(ArrayBuffer) === "undefined") {  
+		body = new ByteBuffer();  
+		body.putString(msg, Charset.UTF8);  
+		body.flip();  
+	}  
+    	else {  
+		body = stringToArrayBuffer(msg);  
+	}  
+	var props = new AmqpProperties();  
+	props.setContentType("text/plain");  
+	props.setContentEncoding("UTF-8");  
+	props.setDeliveryMode("1");  
+	props.setMessageId((messageIdCounter++).toString());  
+	props.setPriority("6");  
+	props.setTimestamp(new Date());  
+	props.setUserId(user);  
   
-    publishChannel.publishBasic({body: body, properties: props, exchange: topicPub, routingKey: routingKey});  
+	publishChannel.publishBasic({body: body, properties: props, exchange: topicPub, routingKey: routingKey});  
 }
 ```
 
