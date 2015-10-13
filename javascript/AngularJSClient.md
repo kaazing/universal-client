@@ -185,7 +185,7 @@ requirejs(['bower_components/kaazing-amqp-0-9-1-client-javascript/javascript/Web
 	});
 ...
 ```
-		- <font color='orange'> Due to certain limitations, RequireJS cannot download Kaazing JMSClient.js library - hence it has to be included in the \<head\> section </font>
+		- Due to certain limitations, RequireJS cannot download Kaazing JMSClient.js library - hence it has to be included in the \<head\> section
 - Instantiate required Client Facade Library that will interact with necessary Kaazing Javascript Client Libraries
 - Pass the data to and from the Kaazing Javascript Client libraries via instantiated Client Facade Library
 
