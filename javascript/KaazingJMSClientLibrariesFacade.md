@@ -76,8 +76,8 @@ Connect function implements the following sequence:
 	    	}
 	    	```
 	    	
-		_In order to prevent client from receiving its own messages consumer may be created with the query that will filter out the messages with the 'appId' string property set to this client application ID - a randomly generated GUID._
-		Once consumer is created, setMessageListener function is used to specify the function to be called when new message is received.
+	_In order to prevent client from receiving its own messages consumer may be created with the query that will filter out the messages with the 'appId' string property set to this client application ID - a randomly generated GUID._
+	Once consumer is created, setMessageListener function is used to specify the function to be called when new message is received.
 
 		
 ### **disconnect** function
