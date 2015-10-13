@@ -1,25 +1,24 @@
 # Kaazing Universal Clients
 
-Welcome to the Kaazing WebSocket Universal Clients Repository!
+Welcome to the Kaazing Universal Clients Repository!
 
-This repository contains the code of the Kaazing Open Source WebSocket Universal Client as well as the *under the hood* explanations with the details how the protocol/technology clients are created.
+This repository contains the code of the Open Source Kaazing Universal Client and *under the hood* explanations with details on how the protocol/technology clients are created.
 
 ## Introduction
-Creating real-time application requires the use of a publish/subscribe message bus to push messages to the clients. Such message bus may be a JMS server; another popular choice is the AMQP protocol. The WebSocket gateway, connected to a message bus, enables these messages to be delivered over Web protocols (HTTP/HTTPS).
+Creating real-time applications requires the use of a publish/subscribe message bus to push messages to clients. This message bus might be a JMS server, or another popular choice, the AMQP protocol. The Kaazing WebSocket Gateway, when connected to a message bus, enables these messages to be delivered over Web protocols (HTTP/HTTPS/WS/WSS).
 
-The goal of these libraries is to provide developers with a simple, *universal* WebSocket client library that is called exactly the same way regardles of the underlying message protocol and/or technology. This should simplify the development of websocket client applications communicating with JMS or AMQP editions of the Kaazing gateway
+The goal of these libraries is to provide developers with a simple, *universal* WebSocket client library that is accessed the same way regardles of the underlying message protocol/technology. This library simplifies the development of Websocket client applications communicating with JMS or AMQP editions of the Kaazing WebSocket Gateway.
 
-
-The Kaazing Universal Clients provide the facade for Kaazing specific protocol/technology libraries; these clients:
-* Implement basic publish-subscribe functionality to help developers in getting started with their WebSocket projects
-* Provide developers with reference technology/protocol specific implementations
+The Kaazing Universal Clients provide the facade for Kaazing-specific protocol/technology libraries. These clients:
+* Implement basic publish-subscribe functionality to help developers get started with their WebSocket projects
+* Provide developers with protocol/technology specific implementations for reference
 
 ## Available Universal Clients
-(This list will grow as clients are added)
+(This list will grow as clients are added.)
 - [Universal Clients for JavaScript applications][1]
 
 ## Organization of the Universal Clients
-Regardless of the client technology, all the clients organized as shown on the following diagram
+Regardless of the client technology, all of the clients are organized as shown on the following diagram:
 
 ![][image-1]
 
