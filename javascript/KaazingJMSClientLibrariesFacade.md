@@ -45,8 +45,7 @@ Connect function implements the following sequence:
 	                })
 	```
 	
-3.Once connection is created, callback function does the following:
-
+3. Once connection is created, callback function does the following:
 	1. Obtains the connection from the connectionFuture that was returned by createConection.
 	2. Sets exception listener to handle exceptions.
 	3. Creates session using createSession method. Session is created with auto-acknowledgement. 
