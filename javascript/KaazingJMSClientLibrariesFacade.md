@@ -24,26 +24,26 @@ Connect function implements the following sequence:
 2. Create connection. createConnection function of JmsConnectionFactory takes three parameters: login, password and a callback function that will be called upon completion. Function returns the future that is checked in a callback function for exceptions.
 	```javascript
 	var connectionFuture = jmsConnectionFactory.createConnection(username, password, function () {
-	                    if (!connectionFuture.exception) {
-	                        try {
-	                            connection = connectionFuture.getValue();
-	                            connection.setExceptionListener(handleException);
-	
-	                            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-	
-	                            connection.start(function () {
-	                                prepareSend();
-	                                prepareReceive(messageReceivedFunc);
-	                            });
-	                        }
-	                        catch (e) {
-	                            handleException(e);
-	                        }
-	                    }
-	                    else {
-	                        handleException(connectionFuture.exception);
-	                    }
-	                })
+		if (!connectionFuture.exception) {
+			try {
+				connection = connectionFuture.getValue();
+				connection.setExceptionListener(handleException);
+		
+				session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+		
+				connection.start(function () {
+					prepareSend();
+					prepareReceive(messageReceivedFunc);
+				});
+			}
+			catch (e) {
+				handleException(e);
+			}
+		}
+		else {
+			handleException(connectionFuture.exception);
+		}
+	})
 	```
 	
 3. Once connection is created, callback function does the following:
@@ -68,8 +68,8 @@ Connect function implements the following sequence:
 		```javascript
 		var prepareReceive = function (rcvFunction) {
 	        	var dest = session.createTopic(topicSub);
-	        	if (noLocalFlag)
-	        	    	consumer = session.createConsumer(dest, "appId<>'" + appId + "'");
+			if (noLocalFlag)
+				consumer = session.createConsumer(dest, "appId<>'" + appId + "'");
 	        	else
 	            		consumer = session.createConsumer(dest);
 	        	consumer.setMessageListener(function (message) {
@@ -98,20 +98,20 @@ Closes, producer, consumer and connection in a chain of callbacks.
 ### **sendMessage** function	
 Function creates text message and sends it. In order to prevent client from receiving its own messages 'appId' string property may be set to this client application ID - a randomly generated GUID.
 ```javascript
-	JMSClient.sendMessage=function(msg){
-        var textMsg = session.createTextMessage(msg);
-        if (noLocalFlag)
-            textMsg.setStringProperty("appId", appId);
-        try {
-            var future = producer.send(textMsg, function () {
-                if (future.exception) {
-                    handleException(future.exception);
-                }
-            });
-        } catch (e) {
-            handleException(e);
-        }
-    }
+JMSClient.sendMessage=function(msg){
+	var textMsg = session.createTextMessage(msg);
+	if (noLocalFlag)
+		textMsg.setStringProperty("appId", appId);
+	try {
+		var future = producer.send(textMsg, function () {
+		if (future.exception) {
+			handleException(future.exception);
+        	}	
+    	});
+	} catch (e) {
+    	handleException(e);
+	}
+}
 ```
 
 [1]:	https://www.rabbitmq.com/tutorials/amqp-concepts.html
