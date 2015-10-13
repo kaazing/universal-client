@@ -104,10 +104,10 @@ JMSClient.sendMessage=function(msg){
 		textMsg.setStringProperty("appId", appId);
 	try {
 		var future = producer.send(textMsg, function () {
-		if (future.exception) {
-			handleException(future.exception);
-		}	
-	});
+			if (future.exception) {
+				handleException(future.exception);
+			}	
+		});
 	} catch (e) {
 		handleException(e);
 	}
