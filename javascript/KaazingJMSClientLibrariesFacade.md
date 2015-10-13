@@ -16,34 +16,34 @@ Library consists of jmsClientFunction that creates JMSClient object. JMSClient o
 Connect function implements the following sequence:
 
 1. Create JMS connection factory
-```javascript
-var jmsConnectionFactory = new JmsConnectionFactory(url);
-```
+	```javascript
+	var jmsConnectionFactory = new JmsConnectionFactory(url);
+	```
 
 2. Create connection. createConnection function of JmsConnectionFactory takes three parameters: login, password and a callback function that will be called upon completion. Function returns the future that is checked in a callback function for exceptions.
-```javascript
-var connectionFuture = jmsConnectionFactory.createConnection(username, password, function () {
-                    if (!connectionFuture.exception) {
-                        try {
-                            connection = connectionFuture.getValue();
-                            connection.setExceptionListener(handleException);
-
-                            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-
-                            connection.start(function () {
-                                prepareSend();
-                                prepareReceive(messageReceivedFunc);
-                            });
-                        }
-                        catch (e) {
-                            handleException(e);
-                        }
-                    }
-                    else {
-                        handleException(connectionFuture.exception);
-                    }
-                })
-```
+	```javascript
+	var connectionFuture = jmsConnectionFactory.createConnection(username, password, function () {
+	                    if (!connectionFuture.exception) {
+	                        try {
+	                            connection = connectionFuture.getValue();
+	                            connection.setExceptionListener(handleException);
+	
+	                            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+	
+	                            connection.start(function () {
+	                                prepareSend();
+	                                prepareReceive(messageReceivedFunc);
+	                            });
+	                        }
+	                        catch (e) {
+	                            handleException(e);
+	                        }
+	                    }
+	                    else {
+	                        handleException(connectionFuture.exception);
+	                    }
+	                })
+	```
 3.Once connection is created, callback function does the following:
 	1. Obtains the connection from the connectionFuture that was returned by createConection.
 	2. Sets exception listener to handle exceptions.
@@ -54,25 +54,25 @@ var connectionFuture = jmsConnectionFactory.createConnection(username, password,
 	1. Creates publishing topic and producer to send messages
 	
 	```javascript
-	  var prepareSend = function () {
-        var dest = session.createTopic(topicPub);
-        producer = session.createProducer(dest);
-    }
+	var prepareSend = function () {
+        	var dest = session.createTopic(topicPub);
+        	producer = session.createProducer(dest);
+	}
 	```
 	2. Creates subscription topic and consumer.
 
 	```javascript
 	var prepareReceive = function (rcvFunction) {
-        var dest = session.createTopic(topicSub);
-        if (noLocalFlag)
-            consumer = session.createConsumer(dest, "appId<>'" + appId + "'");
-        else
-            consumer = session.createConsumer(dest);
-        consumer.setMessageListener(function (message) {
-            rcvFunction(body);
-        });
-    }
-    ```
+        	var dest = session.createTopic(topicSub);
+        	if (noLocalFlag)
+        	    	consumer = session.createConsumer(dest, "appId<>'" + appId + "'");
+        	else
+            		consumer = session.createConsumer(dest);
+        	consumer.setMessageListener(function (message) {
+            		rcvFunction(body);
+        	});
+    	}
+    	```
 	_In order to prevent client from receiving its own messages consumer may be created with the query that will filter out the messages with the 'appId' string property set to this client application ID - a randomly generated GUID._
 
 
