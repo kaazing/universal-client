@@ -71,11 +71,11 @@ Connect function implements the following sequence:
 			if (noLocalFlag)
 				consumer = session.createConsumer(dest, "appId<>'" + appId + "'");
 			else
-	            		consumer = session.createConsumer(dest);
+				consumer = session.createConsumer(dest);
 				consumer.setMessageListener(function (message) {
-	            		rcvFunction(body);
-	        	});
-	    	}
+				rcvFunction(body);
+			});
+		}
 	    	
 	    	
 ### **disconnect** function
