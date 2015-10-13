@@ -57,7 +57,7 @@ Connect function implements the following sequence:
 	
 		```javascript
 		var prepareSend = function () {
-	        	var dest = session.createTopic(topicPub);
+			var dest = session.createTopic(topicPub);
 	        	producer = session.createProducer(dest);
 		}
 		```
@@ -70,9 +70,9 @@ Connect function implements the following sequence:
 			var dest = session.createTopic(topicSub);
 			if (noLocalFlag)
 				consumer = session.createConsumer(dest, "appId<>'" + appId + "'");
-	        	else
+			else
 	            		consumer = session.createConsumer(dest);
-	        	consumer.setMessageListener(function (message) {
+				consumer.setMessageListener(function (message) {
 	            		rcvFunction(body);
 	        	});
 	    	}
