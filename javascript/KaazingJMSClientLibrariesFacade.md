@@ -76,7 +76,7 @@ Connect function implements the following sequence:
 	            		rcvFunction(body);
 	        	});
 	    	}
-	    	```
+	    	
 	    	
 ### **disconnect** function
 Closes, producer, consumer and connection in a chain of callbacks.
