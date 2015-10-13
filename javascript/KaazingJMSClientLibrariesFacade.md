@@ -46,6 +46,7 @@ Connect function implements the following sequence:
 	```
 	
 3.Once connection is created, callback function does the following:
+
 	1. Obtains the connection from the connectionFuture that was returned by createConection.
 	2. Sets exception listener to handle exceptions.
 	3. Creates session using createSession method. Session is created with auto-acknowledgement. 
@@ -54,30 +55,30 @@ Connect function implements the following sequence:
 4. Once connection is started, callback function:
 	1. Creates publishing topic and producer to send messages
 	
-	```javascript
-	var prepareSend = function () {
-        	var dest = session.createTopic(topicPub);
-        	producer = session.createProducer(dest);
-	}
-	```
+		```javascript
+		var prepareSend = function () {
+	        	var dest = session.createTopic(topicPub);
+	        	producer = session.createProducer(dest);
+		}
+		```
 	2. Creates subscription topic and consumer.
 
-	```javascript
-	var prepareReceive = function (rcvFunction) {
-        	var dest = session.createTopic(topicSub);
-        	if (noLocalFlag)
-        	    	consumer = session.createConsumer(dest, "appId<>'" + appId + "'");
-        	else
-            		consumer = session.createConsumer(dest);
-        	consumer.setMessageListener(function (message) {
-            		rcvFunction(body);
-        	});
-    	}
-    	```
-	_In order to prevent client from receiving its own messages consumer may be created with the query that will filter out the messages with the 'appId' string property set to this client application ID - a randomly generated GUID._
+		```javascript
+		var prepareReceive = function (rcvFunction) {
+	        	var dest = session.createTopic(topicSub);
+	        	if (noLocalFlag)
+	        	    	consumer = session.createConsumer(dest, "appId<>'" + appId + "'");
+	        	else
+	            		consumer = session.createConsumer(dest);
+	        	consumer.setMessageListener(function (message) {
+	            		rcvFunction(body);
+	        	});
+	    	}
+	    	```
+		_In order to prevent client from receiving its own messages consumer may be created with the query that will filter out the messages with the 'appId' string property set to this client application ID - a randomly generated GUID._
 
 
-	Once consumer is created, setMessageListener function is used to specify the function to be called when new message is received.
+		Once consumer is created, setMessageListener function is used to specify the function to be called when new message is received.
 
 		
 ### **disconnect** function
