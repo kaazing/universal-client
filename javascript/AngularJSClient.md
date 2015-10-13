@@ -184,7 +184,6 @@ As shown on the diagram above, Kaazing AngularJS Universal Client works as follo
 				});              
 			});
             	...
-            	```
             	
 		- <font color='orange'> Due to certain limitations, RequireJS cannot download Kaazing JMSClient.js library - hence it has to be included in the \<head\> section </font>
 - Instantiate required Client Facade Library that will interact with necessary Kaazing Javascript Client Libraries
