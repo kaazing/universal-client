@@ -30,6 +30,8 @@ KaazingClientService.factory('AngularUniversalClient', [function () {
      * @param loggerFuncHandle function that is used for logging events in a format of function(severity, message)
      */
     AngularUniversalClient.connect = function (protocol, url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, loggerFuncHandle) {
+        if (client!=null && client.connected)
+            return;
         var logInformation = function (severity, message) {
             if (loggerFuncHandle !== null)
                 loggerFuncHandle(severity, message);

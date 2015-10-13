@@ -30,7 +30,7 @@ var amqpClientFunction=function(logInformation){
      * @class
      * @name AmqpClient
      */
-    var AmqpClient = {};
+    var AmqpClient = {connected:false};
 
     var messageReceivedFunc=null;
     var amqpClient=null;
@@ -63,6 +63,7 @@ var amqpClientFunction=function(logInformation){
 
     var consumeChannelOpenHandler=function(){
         logInformation("INFO","OPENED: Consume Channel");
+        AmqpClient.connected=true;
 
         consumeChannel.addEventListener("declarequeue", function() {
             logInformation("INFO","QUEUE DECLARED: " + queueName);

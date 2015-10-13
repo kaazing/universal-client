@@ -32,7 +32,7 @@ var jmsClientFunction=function(logInformation){
      * @name JMSClient
      */
 
-    var JMSClient = {};
+    var JMSClient = {connected:false};
 
     var loggerFunction=null;
     var messageReceivedFunc=null;
@@ -112,6 +112,7 @@ var jmsClientFunction=function(logInformation){
                                 logInformation("INFO","JMS session created");
                                 prepareSend();
                                 prepareReceive(messageReceivedFunc);
+                                JMSClient.connected=true;
                             });
                         }
                         catch (e) {
