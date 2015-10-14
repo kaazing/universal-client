@@ -24,6 +24,7 @@
    "dependencies":{
       "requirejs":">=2.0.0",
       "kaazing-amqp-0-9-1-client-javascript":"",
-      "kaazing-jms-client-javascript":""    
+      "kaazing-jms-client-javascript":"",
+      "jquery":""    
    }
 }
