@@ -47,7 +47,9 @@ This library is intended to be used with 'plain JavaScript' application; it prov
 	- **topicS**: Name of the subscription endpoint - AMQP exchange used for subscription or JMS Topic
 	- **noLocal**: Flag indicating whether the client wants to receive its own messages (true) or not (false). That flag should be used when publishing and subscription endpoints are the same.
 	- **messageDestinationFuncHandle**: Function that will be used to process received messages from subscription endpoint in a format: _function(messageBody)_
-	- **loggerFuncHandle**: function that is used for logging events in a format of function(severity, message)
+	- **errorFuncHandle**: function that is used for error handling in a format of _function(error)_
+	- **loggerFuncHandle**: function that is used for logging events in a format of _function(severity, message)_
+	- **connectFunctionHandle**: function this is called when connection is established in a format: _function()_
 - Add disconnect on window close (shown method uses JQuery):
 	```javascript
 	...
