@@ -46,6 +46,7 @@ var amqpClientFunction=function(logInformation){
 	var publishChannelOpened=$.Deferred();
 	var consumeChannelOpened=$.Deferred();
 
+
     var publishChannelOpenHandler=function(){
         logInformation("INFO","OPENED: Publish Channel");
 
@@ -54,6 +55,7 @@ var amqpClientFunction=function(logInformation){
         // Listen for these requests to return
         publishChannel.addEventListener("declareexchange", function() {
             logInformation("INFO","EXCHANGE DECLARED: " + topicPub);
+            publishChannelOpened.resolve();
         });
 
         publishChannel.addEventListener("error", function(e) {
@@ -63,7 +65,7 @@ var amqpClientFunction=function(logInformation){
         publishChannel.addEventListener("close", function() {
             logInformation("INFO","CHANNEL CLOSED: Publish Channel");
         });
-		publishChannelOpened.resolve();
+
     }
 
     var consumeChannelOpenHandler=function(){
@@ -79,6 +81,7 @@ var amqpClientFunction=function(logInformation){
 
         consumeChannel.addEventListener("consume", function() {
             logInformation("INFO","CONSUME FROM QUEUE: " + queueName);
+            consumeChannelOpened.resolve();
         });
 
         consumeChannel.addEventListener("flow", function(e) {
@@ -117,7 +120,6 @@ var amqpClientFunction=function(logInformation){
         consumeChannel.declareQueue({queue: queueName})
             .bindQueue({queue: queueName, exchange: topicSub, routingKey: routingKey })
             .consumeBasic({queue: queueName, consumerTag: appId, noAck: true, noLocal:noLocalFlag });
-		consumeChannelOpened.resolve();
     }
 
     var openHandler=function(){
