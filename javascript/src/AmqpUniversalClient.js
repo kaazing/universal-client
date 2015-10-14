@@ -25,6 +25,11 @@ var amqpClientFunction=function(logInformation){
         return ret;
     })();
 
+    var handleException = function (e) {
+        logInformation("ERROR","Error! " + e);
+        if (typeof (errorFunction)!="undefined" && errorFunction!=null)
+            errorFunction(e);
+    }
     /**
      * Provides communication services with AMQP server. Created within amqpClientFunction constructor.
      * @class
@@ -34,9 +39,11 @@ var amqpClientFunction=function(logInformation){
 
     var messageReceivedFunc=null;
 	var connectionEstablishedFunc=null;
+    var errorFunction=null;
     var amqpClient=null;
     var publishChannel=null;
     var consumeChannel=null;
+
 
     var topicPub=null;
     var topicSub=null;
@@ -59,7 +66,7 @@ var amqpClientFunction=function(logInformation){
         });
 
         publishChannel.addEventListener("error", function(e) {
-            logInformation("ERROR","CHANNEL ERROR: Publish Channel - " + e.message, "ERROR");
+            handleException("CHANNEL ERROR: Publish Channel - " + e.message);
         });
 
         publishChannel.addEventListener("close", function() {
@@ -172,14 +179,16 @@ var amqpClientFunction=function(logInformation){
      * @param topicS Name of the subscription endpoint - AMQP exchange used for subscription
      * @param noLocal Flag indicating whether the client wants to receive its own messages (true) or not (false). That flag should be used when publishing and subscription endpoints are the same.
      * @param messageDestinationFuncHandle Function that will be used to process received messages from subscription endpoint in a format: function(messageBody)
+     * @param errorFuncHandle function that is used for error handling in a format of function(error)
      * @param connectFunctionHandle function this is called when connection is established in a format: function()
      */
-    AmqpClient.connect=function(url,username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, connectFunctionHandle){
+    AmqpClient.connect=function(url,username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, errorFunctionHandle, connectFunctionHandle){
         topicPub=topicP;
         topicSub=topicS;
         user=username;
         messageReceivedFunc=messageDestinationFuncHandle;
 		connectionEstablishedFunc=connectFunctionHandle;
+        errorFunction=errorFunctionHandle;
         noLocalFlag=noLocal;
         var amqpClientFactory = new AmqpClientFactory();
         var webSocketFactory;
@@ -188,7 +197,7 @@ var amqpClientFunction=function(logInformation){
             amqpClientFactory.setWebSocketFactory(webSocketFactory);
         }
         else{
-            throw "Cannot create WebSocket factory - module is not loaded!";
+            handleException("Cannot create WebSocket factory - module is not loaded!");
         }
         amqpClient = amqpClientFactory.createAmqpClient();
         amqpClient.addEventListener("close", function() {
@@ -196,7 +205,7 @@ var amqpClientFunction=function(logInformation){
         });
 
         amqpClient.addEventListener("error", function(e) {
-            logInformation("ERROR","Connection error! "+ e.message);
+            handleException(e);
         });
         var credentials = {username: username, password: password};
         var options = {
@@ -204,7 +213,12 @@ var amqpClientFunction=function(logInformation){
             virtualHost: "/",
             credentials: credentials
         };
-        amqpClient.connect(options, openHandler);
+		try{
+			amqpClient.connect(options, openHandler);
+		}
+        catch(e){
+			handleException(e);
+		}
     }
 
     /**
