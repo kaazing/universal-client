@@ -26,8 +26,9 @@ var UniversalClientDef=function(protocol){
      * @param noLocal Flag indicating whether the client wants to receive its own messages (true) or not (false). That flag should be used when publishing and subscription endpoints are the same.
      * @param messageDestinationFuncHandle Function that will be used to process received messages from subscription endpoint in a format: function(messageBody)
      * @param loggerFuncHandle function that is used for logging events in a format of function(severity, message)
+     * @param connectFunctionHandle function this is called when connection is established in a format: function()
      */
-    JavascriptUniversalClient.connect = function (url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, loggerFuncHandle) {
+    JavascriptUniversalClient.connect = function (url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, loggerFuncHandle, connectFunctionHandle) {
         if (client!=null && client.connected)
             return;
 
@@ -48,10 +49,10 @@ var UniversalClientDef=function(protocol){
         }
         if (protocol.toLowerCase() === "amqp") {
                 requirejs(['bower_components/kaazing-amqp-0-9-1-client-javascript/javascript/WebSocket.js'],function(){
-                    requirejs(['bower_components/kaazing-amqp-0-9-1-client-javascript/javascript/Amqp-0-9-1.js', 'bower_components/kaazing-javascript-universal-client/javascript/src/AmqpUniversalClient.js'], function () {
+                    requirejs(['bower_components/jquery/dist/jquery.js','bower_components/kaazing-amqp-0-9-1-client-javascript/javascript/Amqp-0-9-1.js', 'bower_components/kaazing-javascript-universal-client/javascript/src/AmqpUniversalClient.js'], function () {
                         console.info("Using AMQP protocol!");
                         client = amqpClientFunction(logInformation);
-                        client.connect(url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, loggerFuncHandle);
+                        client.connect(url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, loggerFuncHandle, connectFunctionHandle);
                     });
                 });
         }
@@ -59,7 +60,7 @@ var UniversalClientDef=function(protocol){
                 requirejs(['bower_components/kaazing-jms-client-javascript/javascript/src/WebSocket.js',/*"js/kaazing/library/src/JmsClient.js"*/, 'bower_components/kaazing-javascript-universal-client/javascript/src/JMSUniversalClient.js'], function () {
                 console.info("Using JMS protocol!");
                 client = jmsClientFunction(logInformation);
-                client.connect(url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, loggerFuncHandle);
+                client.connect(url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, loggerFuncHandle, connectFunctionHandle);
             });
         }
         else {

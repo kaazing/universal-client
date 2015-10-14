@@ -36,6 +36,7 @@ var jmsClientFunction=function(logInformation){
 
     var loggerFunction=null;
     var messageReceivedFunc=null;
+	var connectionEstablishedFunc=null;
 
     var topicPub=null;
     var topicSub=null;
@@ -85,13 +86,16 @@ var jmsClientFunction=function(logInformation){
      * @param topicS Name of the subscription endpoint - AMQP topic used for subscription
      * @param noLocal Flag indicating whether the client wants to receive its own messages (true) or not (false). That flag should be used when publishing and subscription endpoints are the same.
      * @param messageDestinationFuncHandle Function that will be used to process received messages from subscription endpoint in a format: function(messageBody)
+     * @param connectFunctionHandle function this is called when connection is established in a format: function()
      */
-    JMSClient.connect=function(url,username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, loggerFuncHandle){
+    JMSClient.connect=function(url,username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, loggerFuncHandle, connectFunctionHandle){
         topicPub=topicP;
         topicSub=topicS;
         user=username;
         loggerFunction=loggerFuncHandle;
         messageReceivedFunc=messageDestinationFuncHandle;
+		connectionEstablishedFunc=connectFunctionHandle;
+
         noLocalFlag=noLocal;
         logInformation("INFO","CONNECTING TO: " + url);
 
@@ -113,6 +117,9 @@ var jmsClientFunction=function(logInformation){
                                 prepareSend();
                                 prepareReceive(messageReceivedFunc);
                                 JMSClient.connected=true;
+								if (typeof(connectionEstablishedFunc) != "undefined" && connectionEstablishedFunc!=null){
+									connectionEstablishedFunc();
+								}
                             });
                         }
                         catch (e) {

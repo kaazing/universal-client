@@ -33,6 +33,7 @@ var amqpClientFunction=function(logInformation){
     var AmqpClient = {connected:false};
 
     var messageReceivedFunc=null;
+	var connectionEstablishedFunc=null;
     var amqpClient=null;
     var publishChannel=null;
     var consumeChannel=null;
@@ -41,6 +42,9 @@ var amqpClientFunction=function(logInformation){
     var topicSub=null;
     var noLocalFlag=false;
     var user=null;
+
+	var publishChannelOpened=$.Deferred();
+	var consumeChannelOpened=$.Deferred();
 
     var publishChannelOpenHandler=function(){
         logInformation("INFO","OPENED: Publish Channel");
@@ -59,11 +63,11 @@ var amqpClientFunction=function(logInformation){
         publishChannel.addEventListener("close", function() {
             logInformation("INFO","CHANNEL CLOSED: Publish Channel");
         });
+		publishChannelOpened.resolve();
     }
 
     var consumeChannelOpenHandler=function(){
         logInformation("INFO","OPENED: Consume Channel");
-        AmqpClient.connected=true;
 
         consumeChannel.addEventListener("declarequeue", function() {
             logInformation("INFO","QUEUE DECLARED: " + queueName);
@@ -113,6 +117,7 @@ var amqpClientFunction=function(logInformation){
         consumeChannel.declareQueue({queue: queueName})
             .bindQueue({queue: queueName, exchange: topicSub, routingKey: routingKey })
             .consumeBasic({queue: queueName, consumerTag: appId, noAck: true, noLocal:noLocalFlag });
+		consumeChannelOpened.resolve();
     }
 
     var openHandler=function(){
@@ -123,6 +128,12 @@ var amqpClientFunction=function(logInformation){
 
         logInformation("INFO", "OPEN: Consume Channel");
         consumeChannel = amqpClient.openChannel(consumeChannelOpenHandler);
+		$.when(publishChannelOpened, consumeChannelOpened).done(function(){
+			AmqpClient.connected=true;
+			if (typeof(connectionEstablishedFunc) != "undefined" && connectionEstablishedFunc!=null){
+				connectionEstablishedFunc();
+			}
+		});
     }
     // Convert a string to an ArrayBuffer.
     //
@@ -159,12 +170,14 @@ var amqpClientFunction=function(logInformation){
      * @param topicS Name of the subscription endpoint - AMQP exchange used for subscription
      * @param noLocal Flag indicating whether the client wants to receive its own messages (true) or not (false). That flag should be used when publishing and subscription endpoints are the same.
      * @param messageDestinationFuncHandle Function that will be used to process received messages from subscription endpoint in a format: function(messageBody)
+     * @param connectFunctionHandle function this is called when connection is established in a format: function()
      */
-    AmqpClient.connect=function(url,username, password, topicP, topicS, noLocal, messageDestinationFuncHandle){
+    AmqpClient.connect=function(url,username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, connectFunctionHandle){
         topicPub=topicP;
         topicSub=topicS;
         user=username;
         messageReceivedFunc=messageDestinationFuncHandle;
+		connectionEstablishedFunc=connectFunctionHandle;
         noLocalFlag=noLocal;
         var amqpClientFactory = new AmqpClientFactory();
         var webSocketFactory;
