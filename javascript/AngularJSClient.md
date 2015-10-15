@@ -135,7 +135,77 @@ This library is intended to be used with AngularJS application; it provides Angu
 		});  
 	});
 	```
-- To log WebSocket related events, specify the function as **loggerFuncHandle**. E.g.:  
+- To handle WebSocket errors, specify the function as **errorFuncHandle** or pass null if not needed. E.g.:  
+	```javascript
+	angular.module("\<your module name", 'KaazingClientService')
+		.controller("<your controller name", function ($scope, ...,AngularUniversalClient) {  
+		
+		...  
+		
+		$scope.processReceivedCommand=function(cmd){  
+		    // Process received command  
+		}  
+		
+		$scope.logWebSocketMessage = function (cls, msg){    
+		    // Log WebSocket message   
+		}  
+
+		AngularUniversalClient.connect(protocol,url,username, password, topicP, topicS, noLocal,$scope.processReceivedCommand, $scope.handleWebSocketError, loggerFuncHandle, connectFuncHandle );  
+		
+		...
+		  
+		$scope.sendMessage = function(msg){  
+		    //Send the message  
+		    AngularUniversalClient.sendMessage(msg);  
+		}
+		  
+		
+		...  
+		
+		$( window ).unload(function() {  
+		    // Disconnect  
+		    AngularUniversalClient.disconnect();  
+		});  
+	});
+	```
+- To log WebSocket related events, specify the function as **loggerFuncHandle** or pass null if not needed. E.g.:  
+	```javascript
+	angular.module("\<your module name", 'KaazingClientService')
+		.controller("<your controller name", function ($scope, ...,AngularUniversalClient) {  
+		
+		...  
+		
+		$scope.processReceivedCommand=function(cmd){  
+		    // Process received command  
+		}  
+		
+		$scope.logWebSocketMessage = function (cls, msg){    
+		    // Log WebSocket message   
+		}  
+
+		$scope.handleWebSocketError = function (error){    
+		    // Handle WebSocket Error  
+		}  
+		
+		AngularUniversalClient.connect(protocol,url,username, password, topicP, topicS, noLocal,$scope.processReceivedCommand, $scope.handleWebSocketError, $scope.logWebSocketMessage, connectFuncHandle);  
+		
+		...
+		  
+		$scope.sendMessage = function(msg){  
+		    //Send the message  
+		    AngularUniversalClient.sendMessage(msg);  
+		}
+		  
+		
+		...  
+		
+		$( window ).unload(function() {  
+		    // Disconnect  
+		    AngularUniversalClient.disconnect();  
+		});  
+	});
+	```
+- To perform post-connect initialization, specify the function as **connectFuncHandle** or pass null if not needed. E.g.:  
 	```javascript
 	angular.module("\<your module name", 'KaazingClientService')
 		.controller("<your controller name", function ($scope, ...,AngularUniversalClient) {  
