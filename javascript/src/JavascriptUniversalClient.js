@@ -53,7 +53,7 @@ var UniversalClientDef=function(protocol){
                     requirejs(['bower_components/jquery/dist/jquery.js','bower_components/kaazing-amqp-0-9-1-client-javascript/javascript/Amqp-0-9-1.js', 'bower_components/kaazing-javascript-universal-client/javascript/src/AmqpUniversalClient.js'], function () {
                         console.info("Using AMQP protocol!");
                         client = amqpClientFunction(logInformation);
-                        client.connect(url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, errorFuncHandle, loggerFuncHandle, connectFunctionHandle);
+                        client.connect(url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, errorFuncHandle, connectFunctionHandle);
                     });
                 });
         }
@@ -61,7 +61,7 @@ var UniversalClientDef=function(protocol){
                 requirejs(['bower_components/kaazing-jms-client-javascript/javascript/src/WebSocket.js','bower_components/kaazing-javascript-universal-client/javascript/src/JMSUniversalClient.js'], function () {
                 console.info("Using JMS protocol!");
                 client = jmsClientFunction(logInformation);
-                client.connect(url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, errorFuncHandle, loggerFuncHandle, connectFunctionHandle);
+                client.connect(url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, errorFuncHandle, connectFunctionHandle);
             });
         }
         else {
