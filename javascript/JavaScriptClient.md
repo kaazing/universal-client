@@ -2,7 +2,7 @@
 This library is intended to be used with 'plain JavaScript' application; it provides JavaScript function that returns an object that can be used in the client application to interact with Kaazing Gateway.
 
 ## Using the Library
-- Install library with the Bower as specified [README document][1].
+- Install library with the Bower as specified in a [README document][1].
 - Add the following to the **\<head\>** section of your page:  
 	```html
 	
