@@ -31,7 +31,7 @@ This library is intended to be used with AngularJS application; it provides Angu
 		...  
 	
 	
-		AngularUniversalClient.connect(protocol,url,username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, loggerFuncHandle );  
+		AngularUniversalClient.connect(protocol,url,username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, errorFuncHandle, loggerFuncHandle, connectFuncHandle );  
 		...  
 	});
 	```
@@ -54,7 +54,7 @@ This library is intended to be used with AngularJS application; it provides Angu
 		...  
 	
 	
-		AngularUniversalClient.connect(protocol,url,username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, loggerFuncHandle );  
+		AngularUniversalClient.connect(protocol,url,username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, errorFuncHandle, loggerFuncHandle, connectFuncHandle  );  
 	
 	
 		...  
@@ -76,7 +76,7 @@ This library is intended to be used with AngularJS application; it provides Angu
 		...  
 	
 	
-		AngularUniversalClient.connect(proitocol,url,username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, loggerFuncHandle );  
+		AngularUniversalClient.connect(proitocol,url,username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, errorFuncHandle, loggerFuncHandle, connectFuncHandle  );  
 	
 	
 		...  
@@ -114,7 +114,7 @@ This library is intended to be used with AngularJS application; it provides Angu
 		}  
 	
 	
-		AngularUniversalClient.connect(protocol,url,username, password, topicP, topicS, noLocal,$scope.processReceivedCommand, loggerFuncHandle );  
+		AngularUniversalClient.connect(protocol,url,username, password, topicP, topicS, noLocal,$scope.processReceivedCommand, errorFuncHandle, loggerFuncHandle, connectFuncHandle  );  
 	
 	
 		...  
@@ -149,8 +149,16 @@ This library is intended to be used with AngularJS application; it provides Angu
 		$scope.logWebSocketMessage = function (cls, msg){    
 		    // Log WebSocket message   
 		}  
+
+		$scope.handleWebSocketError = function (error){    
+		    // Handle WebSocket Error  
+		}  
 		
-		AngularUniversalClient.connect(protocol,url,username, password, topicP, topicS, noLocal,$scope.processReceivedCommand, $scope.logWebSocketMessage );  
+		$scope.onWebSocketConnect = function (){    
+		    // Send some initial messages
+		}  
+		
+		AngularUniversalClient.connect(protocol,url,username, password, topicP, topicS, noLocal,$scope.processReceivedCommand, $scope.handleWebSocketError, $scope.logWebSocketMessage, $scope.onWebSocketConnect );  
 		
 		...
 		  
@@ -181,7 +189,7 @@ As shown on the diagram above, Kaazing AngularJS Universal Client works as follo
 			```javascript
 			...
 			requirejs(['bower_components/kaazing-amqp-0-9-1-client-javascript/javascript/WebSocket.js'],function(){
-				requirejs(['bower_components/kaazing-amqp-0-9-1-client-javascript/javascript/Amqp-0-9-1.js', 'bower_components/kaazing-javascript-universal-client/javascript/src/AmqpUniversalClient.js'], function () {
+				requirejs(['bower_components/jquery/dist/jquery.js','bower_components/kaazing-amqp-0-9-1-client-javascript/javascript/Amqp-0-9-1.js', 'bower_components/kaazing-javascript-universal-client/javascript/src/AmqpUniversalClient.js'], function () {
 					...
 					});              
 				});
