@@ -31,7 +31,7 @@ KaazingClientService.factory('AngularUniversalClient', [function () {
      * @param loggerFuncHandle function that is used for logging events in a format of function(severity, message)
      * @param connectFunctionHandle function this is called when connection is established in a format: function()
      */
-    AngularUniversalClient.connect = function (protocol, url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, loggerFuncHandle, errorFuncHandle, connectFunctionHandle) {
+    AngularUniversalClient.connect = function (protocol, url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, errorFuncHandle,loggerFuncHandle, connectFunctionHandle) {
         if (client!=null && client.connected)
             return;
         var logInformation = function (severity, message) {
@@ -62,7 +62,7 @@ KaazingClientService.factory('AngularUniversalClient', [function () {
             requirejs(['bower_components/kaazing-jms-client-javascript/javascript/src/WebSocket.js','bower_components/kaazing-javascript-universal-client/javascript/src/JMSUniversalClient.js'], function () {
                 console.info("Using JMS protocol!");
                 client = jmsClientFunction(logInformation);
-                client.connect(url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, loggerFuncHandle, errorFuncHandle, connectFunctionHandle);
+                client.connect(url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, errorFuncHandle, connectFunctionHandle);
             });
         }
         else {
