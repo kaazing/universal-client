@@ -205,7 +205,7 @@ var amqpClientFunction=function(logInformation){
         });
 
         amqpClient.addEventListener("error", function(e) {
-            handleException(e);
+            handleException(e.message);
         });
         var credentials = {username: username, password: password};
         var options = {
@@ -217,7 +217,7 @@ var amqpClientFunction=function(logInformation){
 			amqpClient.connect(options, openHandler);
 		}
         catch(e){
-			handleException(e);
+			handleException(e.message);
 		}
     }
 
