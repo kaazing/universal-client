@@ -1,4 +1,4 @@
-# Kaazing JavaScript Universal Client for JavaScript
+# Kaazing JavaScript Universal Client for Javascript
 This library is intended to be used with 'plain JavaScript' application; it provides JavaScript function that returns an object that can be used in the client application to interact with Kaazing Gateway.
 
 ## Using the Library
