@@ -58,7 +58,7 @@ This library is intended to be used with 'plain JavaScript' application; it prov
 	...
 
 	$(document).ready(function () {
-		client.connect(url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle,loggerFuncHandle);
+		client.connect(url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle,errorFuncHandle, loggerFuncHandle, connectFunctionHandle);
 		
 		...
 		$( window ).unload(function() {
@@ -84,7 +84,7 @@ This library is intended to be used with 'plain JavaScript' application; it prov
 
 
 	$(document).ready(function () {
-		client.connect(url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle,loggerFuncHandle);
+		client.connect(url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle,errorFuncHandle, loggerFuncHandle, connectFunctionHandle);
 		
 		...
 		$( window ).unload(function() {
@@ -112,7 +112,7 @@ This library is intended to be used with 'plain JavaScript' application; it prov
 	}	
 
 	$(document).ready(function () {
-		client.connect(url, username, password, topicP, topicS, noLocal, processReceivedCommand,loggerFuncHandle);
+		client.connect(url, username, password, topicP, topicS, noLocal, processReceivedCommand,errorFuncHandle, loggerFuncHandle, connectFunctionHandle);
 		
 		...
 		$( window ).unload(function() {
@@ -123,7 +123,7 @@ This library is intended to be used with 'plain JavaScript' application; it prov
 	}	
 
 	```
-- To log WebSocket related events, specify the function as **loggerFuncHandle**. E.g.:  
+- To handle WebSocket errors, specify the function **errorFuncHandle** or pass _null_ if not needed. E.g.:
 	```javascript
 	...
 	
@@ -139,12 +139,12 @@ This library is intended to be used with 'plain JavaScript' application; it prov
 		// Process received message
 	}	
 	
-	var logWebSocketMessage = function (cls, msg) {
-		// Log WebSocket messages
+	var handleWebSocketError = function (error) {
+		// Habdle WebSocket error
 	}
-
+	
 	$(document).ready(function () {
-		client.connect(url, username, password, topicP, topicS, noLocal, processReceivedCommand,logWebSocketMessage);
+		client.connect(url, username, password, topicP, topicS, noLocal, processReceivedCommand,handleWebSocketError, loggerFuncHandle, connectFunctionHandle);
 		
 		...
 		$( window ).unload(function() {
@@ -155,6 +155,82 @@ This library is intended to be used with 'plain JavaScript' application; it prov
 	}	
 	```
 
+- To log WebSocket related events, specify the function **loggerFuncHandle** or pass null if not needed. E.g.:  
+	```javascript
+	...
+	
+	var client=UniversalClientDef(protocol);
+	...
+	
+	var sendMessage=function(msg){
+		// Send message
+    	client.sendMessage(msg);
+	}
+
+	var processReceivedCommand=function(cmd){
+		// Process received message
+	}	
+	
+	var handleWebSocketError = function (error) {
+		// Habdle WebSocket error
+	}
+	
+	var logWebSocketMessage = function (cls, msg) {
+		// Log WebSocket messages
+	}
+	
+	$(document).ready(function () {
+		client.connect(url, username, password, topicP, topicS, noLocal, processReceivedCommand,handleWebSocketError, logWebSocketMessage, connectFunctionHandle);
+		
+		...
+		$( window ).unload(function() {
+            // Disconnect
+            client.disconnect();
+        });
+		
+	}	
+	```
+	
+- To perform post-connect initalizations, specify the function **connectFunctionHandle** or pass null if not needed. E.g.:  
+	```javascript
+	...
+	
+	var client=UniversalClientDef(protocol);
+	...
+	
+	var sendMessage=function(msg){
+		// Send message
+    	client.sendMessage(msg);
+	}
+
+	var processReceivedCommand=function(cmd){
+		// Process received message
+	}	
+	
+	var handleWebSocketError = function (error) {
+		// Habdle WebSocket error
+	}
+	
+	var logWebSocketMessage = function (cls, msg) {
+		// Log WebSocket messages
+	}
+	
+	var onWebSocketConnected = function () {
+		// Do some post-connect initialization
+	}
+
+
+	$(document).ready(function () {
+		client.connect(url, username, password, topicP, topicS, noLocal, processReceivedCommand,handleWebSocketError, logWebSocketMessage, onWebSocketConnected);
+		
+		...
+		$( window ).unload(function() {
+            // Disconnect
+            client.disconnect();
+        });
+		
+	}	
+	```
 ## Organization of Kaazing JavaScript Universal Client   
 
 ![][image-1]
