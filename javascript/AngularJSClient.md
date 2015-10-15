@@ -225,7 +225,7 @@ This library is intended to be used with AngularJS application; it provides Angu
 		}  
 		
 		$scope.onWebSocketConnect = function (){    
-		    // Send some initial messages
+		    // Perform some post-connect initialization
 		}  
 		
 		AngularUniversalClient.connect(protocol,url,username, password, topicP, topicS, noLocal,$scope.processReceivedCommand, $scope.handleWebSocketError, $scope.logWebSocketMessage, $scope.onWebSocketConnect );  
