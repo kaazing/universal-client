@@ -1,8 +1,8 @@
-# Kaazing JavaScript Universal Client for JavaScript
+# Kaazing JavaScript Universal Client for Javascript
 This library is intended to be used with 'plain JavaScript' application; it provides JavaScript function that returns an object that can be used in the client application to interact with Kaazing Gateway.
 
 ## Using the Library
-- Install library with the Bower as specified [README document][1].
+- Install library with the Bower as specified in a [README document][1].
 - Add the following to the **\<head\>** section of your page:  
 	```html
 	
@@ -47,7 +47,9 @@ This library is intended to be used with 'plain JavaScript' application; it prov
 	- **topicS**: Name of the subscription endpoint - AMQP exchange used for subscription or JMS Topic
 	- **noLocal**: Flag indicating whether the client wants to receive its own messages (true) or not (false). That flag should be used when publishing and subscription endpoints are the same.
 	- **messageDestinationFuncHandle**: Function that will be used to process received messages from subscription endpoint in a format: _function(messageBody)_
-	- **loggerFuncHandle**: function that is used for logging events in a format of function(severity, message)
+	- **errorFuncHandle**: function that is used for error handling in a format of _function(error)_
+	- **loggerFuncHandle**: function that is used for logging events in a format of _function(severity, message)_
+	- **connectFunctionHandle**: function this is called when connection is established in a format: _function()_
 - Add disconnect on window close (shown method uses JQuery):
 	```javascript
 	...
@@ -56,7 +58,7 @@ This library is intended to be used with 'plain JavaScript' application; it prov
 	...
 
 	$(document).ready(function () {
-		client.connect(url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle,loggerFuncHandle);
+		client.connect(url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle,errorFuncHandle, loggerFuncHandle, connectFunctionHandle);
 		
 		...
 		$( window ).unload(function() {
@@ -82,7 +84,7 @@ This library is intended to be used with 'plain JavaScript' application; it prov
 
 
 	$(document).ready(function () {
-		client.connect(url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle,loggerFuncHandle);
+		client.connect(url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle,errorFuncHandle, loggerFuncHandle, connectFunctionHandle);
 		
 		...
 		$( window ).unload(function() {
@@ -110,7 +112,7 @@ This library is intended to be used with 'plain JavaScript' application; it prov
 	}	
 
 	$(document).ready(function () {
-		client.connect(url, username, password, topicP, topicS, noLocal, processReceivedCommand,loggerFuncHandle);
+		client.connect(url, username, password, topicP, topicS, noLocal, processReceivedCommand,errorFuncHandle, loggerFuncHandle, connectFunctionHandle);
 		
 		...
 		$( window ).unload(function() {
@@ -121,7 +123,7 @@ This library is intended to be used with 'plain JavaScript' application; it prov
 	}	
 
 	```
-- To log WebSocket related events, specify the function as **loggerFuncHandle**. E.g.:  
+- To handle WebSocket errors, specify the function **errorFuncHandle** or pass _null_ if not needed. E.g.:
 	```javascript
 	...
 	
@@ -137,12 +139,12 @@ This library is intended to be used with 'plain JavaScript' application; it prov
 		// Process received message
 	}	
 	
-	var logWebSocketMessage = function (cls, msg) {
-		// Log WebSocket messages
+	var handleWebSocketError = function (error) {
+		// Habdle WebSocket error
 	}
-
+	
 	$(document).ready(function () {
-		client.connect(url, username, password, topicP, topicS, noLocal, processReceivedCommand,logWebSocketMessage);
+		client.connect(url, username, password, topicP, topicS, noLocal, processReceivedCommand,handleWebSocketError, loggerFuncHandle, connectFunctionHandle);
 		
 		...
 		$( window ).unload(function() {
@@ -153,6 +155,82 @@ This library is intended to be used with 'plain JavaScript' application; it prov
 	}	
 	```
 
+- To log WebSocket related events, specify the function **loggerFuncHandle** or pass null if not needed. E.g.:  
+	```javascript
+	...
+	
+	var client=UniversalClientDef(protocol);
+	...
+	
+	var sendMessage=function(msg){
+		// Send message
+    	client.sendMessage(msg);
+	}
+
+	var processReceivedCommand=function(cmd){
+		// Process received message
+	}	
+	
+	var handleWebSocketError = function (error) {
+		// Habdle WebSocket error
+	}
+	
+	var logWebSocketMessage = function (cls, msg) {
+		// Log WebSocket messages
+	}
+	
+	$(document).ready(function () {
+		client.connect(url, username, password, topicP, topicS, noLocal, processReceivedCommand,handleWebSocketError, logWebSocketMessage, connectFunctionHandle);
+		
+		...
+		$( window ).unload(function() {
+            // Disconnect
+            client.disconnect();
+        });
+		
+	}	
+	```
+	
+- To perform post-connect initalizations, specify the function **connectFunctionHandle** or pass null if not needed. E.g.:  
+	```javascript
+	...
+	
+	var client=UniversalClientDef(protocol);
+	...
+	
+	var sendMessage=function(msg){
+		// Send message
+    	client.sendMessage(msg);
+	}
+
+	var processReceivedCommand=function(cmd){
+		// Process received message
+	}	
+	
+	var handleWebSocketError = function (error) {
+		// Habdle WebSocket error
+	}
+	
+	var logWebSocketMessage = function (cls, msg) {
+		// Log WebSocket messages
+	}
+	
+	var onWebSocketConnected = function () {
+		// Do some post-connect initialization
+	}
+
+
+	$(document).ready(function () {
+		client.connect(url, username, password, topicP, topicS, noLocal, processReceivedCommand,handleWebSocketError, logWebSocketMessage, onWebSocketConnected);
+		
+		...
+		$( window ).unload(function() {
+            // Disconnect
+            client.disconnect();
+        });
+		
+	}	
+	```
 ## Organization of Kaazing JavaScript Universal Client   
 
 ![][image-1]
