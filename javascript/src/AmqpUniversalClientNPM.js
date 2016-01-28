@@ -128,7 +128,7 @@ var amqpClientFunction=function(logInformation){
         // explicit acknowledgement is required when the message is received.
         consumeChannel.declareQueue({queue: queueName})
             .bindQueue({queue: queueName, exchange: topicSub, routingKey: routingKey })
-            .consumeBasic({queue: queueName, consumerTag: appId, noAck: true, noLocal:noLocalFlag });
+            .consumeBasic({queue: queueName, consumerTag: clientId, noAck: true, noLocal:noLocalFlag });
     }
 
     var openHandler=function(){
@@ -169,7 +169,7 @@ var amqpClientFunction=function(logInformation){
     //
     var createWebSocketFactory = function() {
 
-        webSocketFactory = new $gatewayModule.WebSocketFactory();
+        webSocketFactory = new WebSocketFactory();
         return webSocketFactory;
     }
     /**
@@ -193,14 +193,8 @@ var amqpClientFunction=function(logInformation){
         errorFunction=errorFunctionHandle;
         noLocalFlag=noLocal;
         var amqpClientFactory = new AmqpClientFactory();
-        var webSocketFactory;
-        if ($gatewayModule && typeof($gatewayModule.WebSocketFactory) === "function") {
-            webSocketFactory = createWebSocketFactory();
-            amqpClientFactory.setWebSocketFactory(webSocketFactory);
-        }
-        else{
-            handleException("Cannot create WebSocket factory - module is not loaded!");
-        }
+        var webSocketFactory = createWebSocketFactory();
+        amqpClientFactory.setWebSocketFactory(webSocketFactory);
         amqpClient = amqpClientFactory.createAmqpClient();
         amqpClient.addEventListener("close", function() {
             logInformation("INFO","Connection closed.");
