@@ -3,17 +3,17 @@ The Kaazing JavaScript WebSocket Universal Clients library contains implementati
 - [AngularJS Service][1]
 - [JavaScript library][2]
 
-Both implementation use the same underlying [AMQP Client Libraries Facade][3] and [JMS Client Libraries Facade][4] scripts for interaction with Kaazing AMQP and JMS client libraries. 
+Both implementation use the same underlying [AMQP Client Libraries Facade][3] and [JMS Client Libraries Facade][4] scripts for interaction with Kaazing AMQP and JMS client libraries.
 Please, refer to the links above for the details about the details of the usage and implementations.
 
 ## Obtaining Client Libraries with Bower
 - Install NodeJS - please refer to the [NodeJS downloads page][9] for the installer that is appropriate for your OS
 - Update npm  
-	`sudo npm install npm -g`
+	`sudo npm update npm -g`
 - Install bower:  
 	`sudo npm install -g bower`
-- Install Kaazing Universal Javascript client libraries
-	`bower install kaazing-javascript-univeral-client`
+- Install Kaazing Universal JavaScript client libraries
+	`bower install kaazing-javascript-universal-client`
 
 ## Obtaining and configuring Kaazing Gateways and related Servers
 The Kaazing Universal WebSocket clients depend on the Kaazing WebSocket Gateway (KWG) being installed on one or more servers. KWG supports two protocols, AMQP and JMS.
@@ -21,13 +21,13 @@ The Kaazing Universal WebSocket clients depend on the Kaazing WebSocket Gateway 
 ### AMQP
 - Download AMQP Gateway (Gateway + Documentation + Demos) from  [AMQP Gateway downloads page][5] as a ZIP file
 	**This package also contains AMQP server Apache QPID** see - [Apache QPID][6] for more information.
-- Unzip downloaded package to _\<your installation directory\>_
-- **_By default Gateway is configured not to restrict communications only from the scripts that are running on its embedded servers_** which may not be convenient for Web Development. In order to disable it
+- Unzip the downloaded package to _\<your installation directory\>_
+- **_By default, the Kaazing Gateway is configured to restrict communications and accept requests only from scripts that are served by the embedded HTTP server_** which may not be convenient for Web Development. In order to disable it
 	- Go to _\<your installation directory\>/kaazing-websocket-gateway-amqp-4.0.6/conf _
 	- Edit __gateway\_config.xml__
 	- Locate lines  
 		_\<allow-origin>http://${gateway.hostname}:${gateway.extras.port}\</allow-origin>_
-and replace them with 
+and replace them with
 		_\<allow-origin>\*\</allow-origin>_
 	- Make sure that you have Java 7 or greater installed
 	- Open terminal window at _\<your installation directory\>/kaazing-websocket-gateway-amqp-4.0.6/bin_ and start gateway  
@@ -46,13 +46,13 @@ and replace them with
 ### JMS
 - Download JMS Gateway (Gateway + Demos) from  [JMS Gateway Download Site][7] as a ZIP file
 	**This package also contains JMS server Apache ActiveMQ** see - [Apache ActiveMQ][8] for more information.
-- Unzip downloaded package to _\<your installation directory\>_
-- **_By default Gateway is configured not to restrict communications only from the scripts that are running on its embedded servers_** which may not be convenient for Web Development. In order to disable it
+- Unzip the downloaded package to _\<your installation directory\>_
+- **_By default, the Kaazing Gateway is configured to restrict communications and accept requests only from scripts that are served by the embedded HTTP server_** which may not be convenient for Web Development. In order to disable it
 	- Goto _\<your installation directory\>/kaazing-websocket-gateway-jms-4.0.9/conf _
 	- Open __gateway\_config.xml__
 	- Locate lines  
 		_\<allow-origin>http://${gateway.hostname}:${gateway.extras.port}\</allow-origin>_
-and replace them with 
+and replace them with
 		_\<allow-origin>
 		\*\</allow-origin>_
 
