@@ -2,6 +2,9 @@
 This library is intended to be used with AngularJS application; it provides AngularJS Service that can be used in the client application to interact with Kaazing Gateway.
 
 ## Using the Library
+
+### Install the library
+#### Using Bower
 - Install library with the Bower as specified in a [README document][1].
 - Add the following to the **\<head\>** section of your page:  
 	```html
@@ -12,7 +15,27 @@ This library is intended to be used with AngularJS application; it provides Angu
 	<script src="bower_components/kaazing-javascript-universal-client/javascript/src/JmsClient.js"></script>
 	....  
 	</head>
+
 	```
+<font color='red'> **Note:** </font> Addition of JmsClient.js is not needed when using AMQP protocol.
+
+#### Using NPM
+- Install library with the NPM as specified in a [README document][1].
+- Add the following to the **\<head\>** section of your page:  
+	```html
+	
+	<head>  
+	....    
+    <script src="node_modules/kaazing-javascript-universal-client/node_modules/kaazing-javascript-jms-client/JmsClient.js"></script>
+    <script src="node_modules/kaazing-javascript-universal-client/AngularUniversalClientNPM.js"></script>
+	....  
+	</head>
+	```
+<font color='red'> **Note:** </font> Addition of JmsClient.js is not needed when using AMQP protocol.
+
+
+### Add the library to your application
+
 - Register KaazingClientService module with your main controller  
 	```javascript
 	angular.module("<your module name", 'KaazingClientService')
@@ -255,7 +278,9 @@ As shown on the diagram above, Kaazing AngularJS Universal Client works as follo
 - Download all necessary JavaScript libraries including the needed Client Library Facade using RequireJS.
 	- <font color='red'> **Notes:** </font>
 		- Kaazing AMQP client libraries require Kaazing WebSocket library to be downloaded and instantiated first, to achieve it Universal Client uses the following code:
-		
+			
+			For Bower
+
 			```javascript
 			...
 			requirejs(['bower_components/kaazing-amqp-0-9-1-client-javascript/javascript/WebSocket.js'],function(){
@@ -265,6 +290,19 @@ As shown on the diagram above, Kaazing AngularJS Universal Client works as follo
 				});
 			...
 			```
+			
+			For NPM
+
+			```javascript
+			...
+		  requirejs(['node_modules/kaazing-javascript-universal-client/node_modules/kaazing-javascript-gateway-client/WebSocket.js'],function(){
+                requirejs(['node_modules/jquery/dist/jquery.js','node_modules/kaazing-javascript-universal-client/node_modules/kaazing-javascript-amqp-client/AmqpClient.js', 'node_modules/kaazing-javascript-universal-client/AmqpUniversalClient.js'], function () {
+                ...
+                });
+            });			...
+			```
+		_The reason for different Bower and NPM implementations is the difference in path of the dependent packages installed via one or another._
+
 		- Due to certain limitations, RequireJS cannot download Kaazing JMSClient.js library - hence it has to be included in the \<head\> section
 - Instantiate required Client Facade Library that will interact with necessary Kaazing Javascript Client Libraries
 - Pass the data to and from the Kaazing Javascript Client libraries via instantiated Client Facade Library
