@@ -39,7 +39,7 @@ Add the following to your main html page (index.html):
 ### Obtaining Libraries
 - Install NodeJS - please refer to the [NodeJS downloads page][9] for the installer that is appropriate for your OS
 - Update npm  
-	`sudo npm install npm -g`
+	`sudo npm update npm -g`
 - Install Kaazing Universal Javascript client libraries
 	`npm install kaazing-javascript-universal-client`
 	
