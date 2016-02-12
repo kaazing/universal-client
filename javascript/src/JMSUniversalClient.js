@@ -52,6 +52,8 @@ var jmsClientFunction=function(logInformation){
     var session=null;
     var producer=null;
     var consumer=null;
+    var inSend=false;
+    var messagesToSend=[];
 
     var prepareSend = function () {
         var dest = session.createTopic(topicPub);
@@ -147,20 +149,32 @@ var jmsClientFunction=function(logInformation){
         if (typeof msg ==="object"){
             msg=JSON.stringify(msg);
         }
-
-        var textMsg = session.createTextMessage(msg);
-        if (noLocalFlag)
-            textMsg.setStringProperty("appId", appId);
+        
         try {
-            var future = producer.send(textMsg, function () {
-                if (future.exception) {
-                    handleException(future.exception);
-                }
-            });
+            messagesToSend.push(msg);
+            if (inSend == false) {
+                inSend = true;
+                var textMsg = session.createTextMessage(messagesToSend.pop());
+                if (noLocalFlag)
+                    textMsg.setStringProperty("appId", appId);
+                producer.send(textMsg, JMSClient.sendComplete);
+            }
         } catch (e) {
             handleException(e);
         }
-        logInformation("sent","Send command " + msg, "sent");
+        logInformation("sent","Sending command " + msg, "sent");
+    }
+
+    /**
+     * Callback function for send
+     */
+    JMSClient.sendComplete=function() {
+        inSend = false;
+        logInformation("INFO", "Send Complete");
+        if (messagesToSend.length > 0) {
+            logInformation("INFO", "Sending queued messages...");
+            JMSClient.sendMessage(messagesToSend.pop());        
+        }
     }
 
     /**
