@@ -3,13 +3,8 @@ The Kaazing JavaScript WebSocket Universal Clients library contains implementati
 - [AngularJS Service][1]
 - [JavaScript library][2]
 
-<<<<<<< HEAD
-Both implementation use the same underlying [AMQP Client Libraries Facade][3] and [JMS Client Libraries Facade][4] scripts for interaction with Kaazing AMQP and JMS client libraries. 
-Please, refer to the links above for the details about the details of the usage and implementations.z
-=======
 Both implementation use the same underlying [AMQP Client Libraries Facade][3] and [JMS Client Libraries Facade][4] scripts for interaction with Kaazing AMQP and JMS client libraries.
 Please, refer to the links above for the details about the details of the usage and implementations.
->>>>>>> kaazing/develop
 
 ## Using Client Libraries with Bower
 ### Obtaining Libraries
@@ -18,7 +13,7 @@ Please, refer to the links above for the details about the details of the usage 
 	`sudo npm update npm -g`
 - Install bower:  
 	`sudo npm install -g bower`
-<<<<<<< HEAD
+
 - Install Kaazing Universal Javascript client libraries
 	`bower install kaazing-javascript-univeral-client`
 	
@@ -63,13 +58,9 @@ Add the following to your main html page (index.html):
 
 ***Note***: When using JMS, add the following line to your main html page:
 ```
-<script src="node_modules/kaazing-javascript-universal-client/kaazing-jms-client/JmsClient.js"></script>	
+<script src="<script src="node_modules/kaazing-javascript-universal-client/node_modules/kaazing-javascript-jms-client/JmsClient.js"></script>"></script>	
 ```
 
-=======
-- Install Kaazing Universal JavaScript client libraries
-	`bower install kaazing-javascript-universal-client`
->>>>>>> kaazing/develop
 
 ## Obtaining and configuring Kaazing Gateways and related Servers
 The Kaazing Universal WebSocket clients depend on the Kaazing WebSocket Gateway (KWG) being installed on one or more servers. KWG supports two protocols, AMQP and JMS.

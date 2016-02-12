@@ -2,29 +2,38 @@
 This library is intended to be used with 'plain JavaScript' application; it provides JavaScript function that returns an object that can be used in the client application to interact with Kaazing Gateway.
 
 ## Using the Library
+### Install the library
+#### Using Bower
 - Install library with the Bower as specified in a [README document][1].
-- If using JMS, add the following to the **\<head\>** section of your page:  
+- Add the following to the **\<head\>** section of your page:  
 	```html
-
+	
 	<head>  
 	....    
-	<script src="bower_components/kaazing-javascript-universal-client/javascript/src/JavascriptUniversalClient.js"></script>
-	<script src="bower_components/kaazing-javascript-universal-client/javascript/src/JMSUniversalClient.js"></script>
+	<script src="bower_components/kaazing-javascript-universal-client/javascript/src/AngularUniversalClient.js"></script>
+	<script src="bower_components/kaazing-javascript-universal-client/javascript/src/JmsClient.js"></script>
+	....  
+	</head>
+
+	```
+<font color='red'> **Note:** </font> Addition of JmsClient.js is not needed when using AMQP protocol.
+
+#### Using NPM
+- Install library with the NPM as specified in a [README document][1].
+- Add the following to the **\<head\>** section of your page:  
+	```html
+	
+	<head>  
+	....    
+    <script src="node_modules/kaazing-javascript-universal-client/node_modules/kaazing-javascript-jms-client/JmsClient.js"></script>
+    <script src="node_modules/kaazing-javascript-universal-client/AngularUniversalClientNPM.js"></script>
 	....  
 	</head>
 	```
+<font color='red'> **Note:** </font> Addition of JmsClient.js is not needed when using AMQP protocol.
 
-- If using AMQP, add the following to the **\<head\>** section of your page:
-```html
 
-<head>  
-....    
-<script src="bower_components/kaazing-javascript-universal-client/javascript/src/JavascriptUniversalClient.js"></script>
-<script src="bower_components/kaazing-javascript-universal-client/javascript/src/AmqpUniversalClient.js"></script>
-....  
-</head>
-```
-
+### Add the library to your application
 - Create an instance of the Universal Client Library.
 	```javascript
 	...
@@ -254,15 +263,30 @@ As shown on the diagram above, Kaazing Universal Client works as following:
 
 		- Kaazing AMQP client libraries require Kaazing WebSocket library to be downloaded and instantiated first, to achieve it Universal Client uses the following code:
 
+			For Bower
+
 			```javascript
 			...
-			 requirejs(['bower_components/kaazing-amqp-0-9-1-client-javascript/javascript/WebSocket.js'],function(){
-                    requirejs(['bower_components/kaazing-amqp-0-9-1-client-javascript/javascript/Amqp-0-9-1.js', 'bower_components/kaazing-javascript-universal-client/javascript/src/AmqpUniversalClient.js'], function () {
-                    ...
-              });
-            });
-            ...
-            ```						
+			requirejs(['bower_components/kaazing-amqp-0-9-1-client-javascript/javascript/WebSocket.js'],function(){
+				requirejs(['bower_components/jquery/dist/jquery.js','bower_components/kaazing-amqp-0-9-1-client-javascript/javascript/Amqp-0-9-1.js', 'bower_components/kaazing-javascript-universal-client/javascript/src/AmqpUniversalClient.js'], function () {
+					...
+					});              
+				});
+			...
+			```
+			
+			For NPM
+
+			```javascript
+			...
+		  requirejs(['node_modules/kaazing-javascript-universal-client/node_modules/kaazing-javascript-gateway-client/WebSocket.js'],function(){
+                requirejs(['node_modules/jquery/dist/jquery.js','node_modules/kaazing-javascript-universal-client/node_modules/kaazing-javascript-amqp-client/AmqpClient.js', 'node_modules/kaazing-javascript-universal-client/AmqpUniversalClient.js'], function () {
+                ...
+                });
+            });			...
+			```
+		_The reason for different Bower and NPM implementation is the difference in path for the packages installed via one or another._
+				
 
 		- <font color='orange'> Due to certain limitations, RequireJS cannot download Kaazing JMSClient.js library - hence it has to be included in the \<head\> section </font>
 - Instantiate required Client Facade Library that will interact with necessary Kaazing Javascript Client Libraries

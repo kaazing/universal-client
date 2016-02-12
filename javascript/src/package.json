@@ -1,6 +1,6 @@
 {
   "name": "kaazing-javascript-universal-client",
-  "version": "0.1.11",
+  "version": "0.2.4",
   "description": "JavaScript universal client for communication with AMQP and JMS brokers via Kaazing Gateway",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -18,9 +18,9 @@
   "author": "Kaazing, Inc.",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/nemigaservices/universal-client/issues"
+    "url": "https://github.com/kaazing/universal-client/issues"
   },
-  "homepage": "https://github.com/nemigaservices/universal-client",
+  "homepage": "https://github.com/kaazing/universal-client",
   "dependencies": {
     "kaazing-javascript-amqp-client": "",
     "kaazing-javascript-gateway-client": "",

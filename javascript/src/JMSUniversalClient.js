@@ -141,6 +141,14 @@ var jmsClientFunction=function(logInformation){
         }
     }
 
+    JMSClient.sendMessageOverTheWire=function(){
+        var msg = messagesToSend.pop();
+        logInformation("sent","Sending command " + msg, "sent");
+        var textMsg = session.createTextMessage(msg);
+        if (noLocalFlag)
+            textMsg.setStringProperty("appId", appId);
+        producer.send(textMsg, JMSClient.sendComplete);
+    }
     /**
      * Sends messages to a publishing endpoint.
      * @param msg Message to be sent. As messages are sent in a text format msg will be converted to JSON if it is not a string.
@@ -153,27 +161,30 @@ var jmsClientFunction=function(logInformation){
         try {
             messagesToSend.push(msg);
             if (inSend == false) {
+                logInformation("sent","Sending command " + msg, "sent");
                 inSend = true;
-                var textMsg = session.createTextMessage(messagesToSend.pop());
-                if (noLocalFlag)
-                    textMsg.setStringProperty("appId", appId);
-                producer.send(textMsg, JMSClient.sendComplete);
+                JMSClient.sendMessageOverTheWire();
+            }
+            else{
+                logInformation("sent","Queing command " + msg, "sent");
             }
         } catch (e) {
             handleException(e);
         }
-        logInformation("sent","Sending command " + msg, "sent");
+
     }
 
     /**
      * Callback function for send
      */
     JMSClient.sendComplete=function() {
-        inSend = false;
         logInformation("INFO", "Send Complete");
         if (messagesToSend.length > 0) {
             logInformation("INFO", "Sending queued messages...");
-            JMSClient.sendMessage(messagesToSend.pop());        
+            JMSClient.sendMessageOverTheWire();
+        }
+        else{
+            inSend = false;
         }
     }
 

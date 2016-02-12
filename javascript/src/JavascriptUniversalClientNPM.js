@@ -58,7 +58,7 @@ var UniversalClientDef=function(protocol){
                 });
         }
         else if (protocol.toLowerCase() === "jms") {
-                requirejs(['node_modules/kaazing-javascript-universal-client/node_modules/kaazing-javascript-gateway-client/WebSocket.js','node_modules/kaazing-javascript-universal-client/javascript/src/JMSUniversalClient.js'], function () {
+                requirejs(['node_modules/kaazing-javascript-universal-client/node_modules/kaazing-javascript-gateway-client/WebSocket.js','node_modules/kaazing-javascript-universal-client/JMSUniversalClient.js'], function () {
                 console.info("Using JMS protocol!");
                 client = jmsClientFunction(logInformation);
                 client.connect(url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, errorFuncHandle, connectFunctionHandle);
