@@ -4,9 +4,10 @@ The Kaazing JavaScript WebSocket Universal Clients library contains implementati
 - [JavaScript library][2]
 
 Both implementation use the same underlying [AMQP Client Libraries Facade][3] and [JMS Client Libraries Facade][4] scripts for interaction with Kaazing AMQP and JMS client libraries. 
-Please, refer to the links above for the details about the details of the usage and implementations.
+Please, refer to the links above for the details about the details of the usage and implementations.z
 
-## Obtaining Client Libraries with Bower
+## Using Client Libraries with Bower
+### Obtaining Libraries
 - Install NodeJS - please refer to the [NodeJS downloads page][9] for the installer that is appropriate for your OS
 - Update npm  
 	`sudo npm install npm -g`
@@ -14,6 +15,51 @@ Please, refer to the links above for the details about the details of the usage 
 	`sudo npm install -g bower`
 - Install Kaazing Universal Javascript client libraries
 	`bower install kaazing-javascript-univeral-client`
+	
+### Using the library
+Add the following to your main html page (index.html):
+- To use with AngularJS
+```
+		<script src="bower_components/requirejs/require.js"></script>
+		<script src="bower_components/kaazing-javascript-universal-client/javascript/src/AngularUniversalClient.js"></script>
+```
+- To use with JavaScript/ReactJS
+```
+		<script src="bower_components/requirejs/require.js"></script>
+		<script src="bower_components/kaazing-javascript-universal-client/javascript/src/JavascriptUniversalClient.js"></script>
+```
+
+***Note***: When using JMS, add the following line to your main html page:
+```
+<script src="bower_components/kaazing-jms-client-javascript/javascript/src/JmsClient.js"></script>	
+```
+
+## Using Client Libraries with NPM
+### Obtaining Libraries
+- Install NodeJS - please refer to the [NodeJS downloads page][9] for the installer that is appropriate for your OS
+- Update npm  
+	`sudo npm install npm -g`
+- Install Kaazing Universal Javascript client libraries
+	`npm install kaazing-javascript-universal-client`
+	
+### Using the library
+Add the following to your main html page (index.html):
+- To use with AngularJS
+```
+		<script src="node_modules/requirejs/require.js"></script>
+		<script src="node_modules/kaazing-javascript-universal-client/javascript/src/AngularUniversalClientNPM.js"></script>
+```
+- To use with JavaScript/ReactJS
+```
+		<script src="node_modules/requirejs/require.js"></script>
+		<script src="node_modules/kaazing-javascript-universal-client/javascript/src/JavascriptUniversalClientNPM.js"></script>
+```
+
+***Note***: When using JMS, add the following line to your main html page:
+```
+<script src="node_modules/kaazing-javascript-universal-client/kaazing-jms-client/JmsClient.js"></script>	
+```
+
 
 ## Obtaining and configuring Kaazing Gateways and related Servers
 The Kaazing Universal WebSocket clients depend on the Kaazing WebSocket Gateway (KWG) being installed on one or more servers. KWG supports two protocols, AMQP and JMS.
