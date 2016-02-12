@@ -301,7 +301,7 @@ As shown on the diagram above, Kaazing AngularJS Universal Client works as follo
                 });
             });			...
 			```
-		_The reason for different Bower and NPM implementation is the difference in path for the packages installed via one or another._
+		_The reason for different Bower and NPM implementations is the difference in path of the dependent packages installed via one or another._
 
 		- Due to certain limitations, RequireJS cannot download Kaazing JMSClient.js library - hence it has to be included in the \<head\> section
 - Instantiate required Client Facade Library that will interact with necessary Kaazing Javascript Client Libraries
