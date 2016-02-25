@@ -116,9 +116,10 @@ var amqpClientFunction=function(logInformation){
                 body= JSON.parse(body);
             }
             catch(e){
-                logInformation("WARN", "Received object is not JSON");
+                handleException("Received message "+body+" was not an object!");
+                return;
             }
-            if (body.clientId!==clientId)
+            if (!noLocalFlag || body.clientId!==clientId)
                 messageReceivedFunc(body);
         });
 
@@ -204,7 +205,7 @@ var amqpClientFunction=function(logInformation){
         var amqpClientFactory = new AmqpClientFactory();
         var webSocketFactory = createWebSocketFactory();
         if (webSocketFactory==null){
-            andleException("Cannot create WebSocket factory - module is not loaded!");
+            handleException("Cannot create WebSocket factory - module is not loaded!");
         }
         amqpClientFactory.setWebSocketFactory(webSocketFactory);
         amqpClient = amqpClientFactory.createAmqpClient();
@@ -234,10 +235,13 @@ var amqpClientFunction=function(logInformation){
      * @param msg Message to be sent. As messages are sent in a text format msg will be converted to JSON if it is not a string.
      */
     AmqpClient.sendMessage=function(msg){
-        msg.clientId=clientId;
         if (typeof msg ==="object"){
             msg=JSON.stringify(msg);
         }
+        else{
+            handleException("Message "+msg+" should be an object!");
+        }
+        msg.clientId=clientId;
         var body = null;
         if (typeof(ArrayBuffer) === "undefined") {
             body = new ByteBuffer();
