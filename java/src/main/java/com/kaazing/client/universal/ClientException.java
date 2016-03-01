@@ -3,6 +3,11 @@
  */
 package com.kaazing.client.universal;
 
+/**
+ * Contains the exception reported by Universal Client
+ * @author romans
+ *
+ */
 public class ClientException extends Exception {
 
 	/**

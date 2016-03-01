@@ -3,11 +3,7 @@
  */
 package com.kaazing.client.universal;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
@@ -29,25 +25,28 @@ import javax.jms.Session;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.kaazing.gateway.jms.client.JmsConnectionFactory;
 import com.kaazing.gateway.jms.client.JmsInitialContext;
 import com.kaazing.net.http.HttpRedirectPolicy;
 import com.kaazing.net.ws.WebSocketFactory;
 
 /**
- * Universal client implementation for JMS
+ * JMS specific implementation of Universal Client
+ * @author romans
  *
  */
-public class JMSUniversalClient implements ExceptionListener, AutoCloseable {
+public class JMSUniversalClient implements ExceptionListener, UniversalClient {
 	private final ErrorsListener errorsListener;
 	private final InitialContext jndiInitialContext;
 	private final ConnectionFactory connectionFactory;
 	private Connection connection;
 	private Session session;
 	private List<JMSClentConnection> connections=new ArrayList<>();
-	//private MessageProducer producer;
-	//private MessageConsumer consumer;
 	private String url;
+	protected static Logger LOGGER=LoggerFactory.getLogger(JMSUniversalClient.class);
 
 	public JMSUniversalClient(URI url, String login, String password, ErrorsListener errorsListener) throws ClientException {
 		this.errorsListener = errorsListener;
@@ -91,8 +90,13 @@ public class JMSUniversalClient implements ExceptionListener, AutoCloseable {
 		} catch (JMSException e) {
 			throw new ClientException("Error starting connection: " + url.toString() + ", credentials " + login + "/" + password, e);
 		}
+		LOGGER.info("Connected to "+this.url);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.kaazing.client.universal.UniversalClientProtocolImpl#connect(java.lang.String, java.lang.String, com.kaazing.client.universal.MessagesListener, boolean)
+	 */
+	@Override
 	public ClientConnection connect(String pubTopicName, String subTopicName, MessagesListener messageListener, boolean noLocal) throws ClientException {
 		String clientId=null;
 		Destination subDestination;
@@ -113,7 +117,7 @@ public class JMSUniversalClient implements ExceptionListener, AutoCloseable {
 		} catch (JMSException e) {
 			throw new ClientException("Cannot create consumer for subscription topic " + subTopicName, e);
 		}
-		
+		LOGGER.info("Created subscription to "+subTopicName+" for connection to "+this.url);
 		try {
 			consumer.setMessageListener(new MessageListenerImpl(messageListener, this.errorsListener, subTopicName));
 		} catch (JMSException e) {
@@ -132,13 +136,15 @@ public class JMSUniversalClient implements ExceptionListener, AutoCloseable {
 		} catch (JMSException e) {
 			throw new ClientException("Cannot create producer for publishing topic " + pubTopicName, e);
 		}
-		JMSClentConnection clientConnection=new JMSClentConnection(clientId, "[url="+this.url+", pub="+pubTopicName+", sub="+subTopicName+"]", this.session, producer, consumer);
+		LOGGER.info("Connected to publishing topic "+pubTopicName+" for connection to "+this.url);
+		JMSClentConnection clientConnection=new JMSClentConnection(clientId, Utils.generateIdentifier(this.url, pubTopicName, subTopicName), this.session, producer, consumer);
 		this.connections.add(clientConnection);
 		return clientConnection;
 	}
 
 	@Override
 	public void onException(JMSException exception) {
+		LOGGER.error("JMS Exception occurred ", exception);
 		this.errorsListener.onException(new ClientException("JMS Exception!", exception));
 	}
 
@@ -158,31 +164,38 @@ public class JMSUniversalClient implements ExceptionListener, AutoCloseable {
 		public void onMessage(Message message) {
 			// GenericBytesMessageImpl m;
 			if (message instanceof BytesMessage) {
-				try {
+				try {					
 					BytesMessage bytesMessage = ((BytesMessage) message);
 					long len = bytesMessage.getBodyLength();
 					byte b[] = new byte[(int) len];
 					bytesMessage.readBytes(b);
 					Serializable object;
 					try {
-						object = Serializer.deserialize(b);
+						object = Utils.deserialize(b);
+						LOGGER.debug("Received message ["+object.toString()+"] on topic "+destination+", connection to "+url);
+						this.listener.onMessage(object);
 					} catch (ClassNotFoundException | IOException e) {
 						this.errorsListener.onException(new ClientException("Cannot deserialize an object from the message received from " + destination, e));
+						LOGGER.error("Cannot deserialize an object from the message received from " + destination+" connection to "+url, e);
 						return;
 					}
-					this.listener.onMessage(object);
+					
 				} catch (JMSException e) {
 					this.errorsListener.onException(new ClientException("Error receiving message from destination " + destination, e));
-
+					LOGGER.error("Error receiving message from destination " + destination+" connection to "+url, e);
 				}
 			} else {
 				this.errorsListener.onException(new ClientException("Received a message of unexpected type " + message.getClass().getName() + " for a destination " + destination));
+				LOGGER.error("Received a message of unexpected type " + message.getClass().getName()  + destination+" connection to "+url);
 			}
 
 		}
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.kaazing.client.universal.UniversalClientProtocolImpl#close()
+	 */
 	@Override
 	public void close() throws Exception {
 		for(JMSClentConnection connection: this.connections){
@@ -191,27 +204,6 @@ public class JMSUniversalClient implements ExceptionListener, AutoCloseable {
 		this.connection.stop();
 		this.session.close();
 		this.connection.close();
+		LOGGER.info("Connection to "+this.url+" is closed.");
 	}
-
-	public static class Serializer {
-
-		public static byte[] serialize(Serializable obj) throws IOException {
-			try (ByteArrayOutputStream b = new ByteArrayOutputStream()) {
-				try (ObjectOutputStream o = new ObjectOutputStream(b)) {
-					o.writeObject(obj);
-				}
-				return b.toByteArray();
-			}
-		}
-
-		public static Serializable deserialize(byte[] bytes) throws IOException, ClassNotFoundException {
-			try (ByteArrayInputStream b = new ByteArrayInputStream(bytes)) {
-				try (ObjectInputStream o = new ObjectInputStream(b)) {
-					return (Serializable) o.readObject();
-				}
-			}
-		}
-
-	}
-
 }

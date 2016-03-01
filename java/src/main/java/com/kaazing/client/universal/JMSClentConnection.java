@@ -1,3 +1,6 @@
+/**
+ * Kaazing Inc., Copyright (C) 2016. All rights reserved.
+ */
 package com.kaazing.client.universal;
 
 import java.io.IOException;
@@ -9,8 +12,11 @@ import javax.jms.MessageConsumer;
 import javax.jms.MessageProducer;
 import javax.jms.Session;
 
-import com.kaazing.client.universal.JMSUniversalClient.Serializer;
-
+/**
+ * Contains information specific to JMS connections
+ * @author romans
+ *
+ */
 public class JMSClentConnection extends ClientConnection {
 	private final MessageProducer producer;
 	private final MessageConsumer consumer;
@@ -35,7 +41,7 @@ public class JMSClentConnection extends ClientConnection {
 			throw new ClientException("Connection: "+this.getConnectionIdentifier()+" - Cannot create a BytesMessage for an object " + message.toString(), e);
 		}
 		try {
-			bytesMessage.writeBytes(Serializer.serialize(message));
+			bytesMessage.writeBytes(Utils.serialize(message));
 		} catch (JMSException e) {
 			throw new ClientException("Connection: "+this.getConnectionIdentifier()+" - Cannot write bytes to set the payload of a BytesMessage for an object " + message.toString(), e);
 		} catch (IOException e) {
@@ -50,6 +56,7 @@ public class JMSClentConnection extends ClientConnection {
 		}
 		try {
 			producer.send(bytesMessage);
+			JMSUniversalClient.LOGGER.debug("Sent message ["+message.toString()+"] to connection to "+this.getConnectionIdentifier());
 		} catch (JMSException e) {
 			throw new ClientException("Connection: "+this.getConnectionIdentifier()+" - Cannot sent and object message for an object " + message.toString(), e);
 		}
