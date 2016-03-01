@@ -175,6 +175,7 @@ public class AmqpUniversalClient implements UniversalClient {
 
 			@Override
 			public void onOpen(ChannelEvent e) {
+				// TODO: decide on what to do with noLocal
 				subChannel.declareQueue(queueName, false, false, false, false, false, null)
 				.bindQueue(queueName, subTopicName, ROUTING_KEY, false, null)
 				.consumeBasic(queueName, clientId, false, false, false, false, null);
