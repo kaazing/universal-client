@@ -76,7 +76,7 @@ public class AmqpUniversalClient implements UniversalClient {
 						LOGGER.error("Error closing client connection: "+conn.getConnectionIdentifier(), e1);
 					}
 				}
-				LOGGER.info("Connection to "+url+" is closed.");
+				LOGGER.info("Closed connection to "+url+".");
 			}
 
 			@Override
@@ -103,7 +103,7 @@ public class AmqpUniversalClient implements UniversalClient {
 			conn.disconnect();
 		}
 		this.amqpClient.disconnect();
-
+		LOGGER.info("Connection to "+this.url+" is closed.");
 	}
 
 	@Override
