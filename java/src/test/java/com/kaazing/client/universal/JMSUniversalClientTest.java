@@ -45,7 +45,7 @@ public class JMSUniversalClientTest {
 	@Test
 	public void testString() throws ClientException, InterruptedException {
 		
-		ClientConnection connection = jmsClient.connect("test", "test", new MessagesListener() {
+		ClientSubscription connection = jmsClient.connect("test", "test", new MessagesListener() {
 			
 			@Override
 			public void onMessage(Serializable message) {
@@ -64,7 +64,7 @@ public class JMSUniversalClientTest {
 	@Test
 	public void testObject() throws ClientException, InterruptedException {
 		
-		ClientConnection connection = jmsClient.connect("test", "test", new MessagesListener() {
+		ClientSubscription connection = jmsClient.connect("test", "test", new MessagesListener() {
 			
 			@Override
 			public void onMessage(Serializable message) {
@@ -83,7 +83,7 @@ public class JMSUniversalClientTest {
 	@Test
 	public void testNoLocal() throws ClientException, InterruptedException {
 		
-		ClientConnection connection = jmsClient.connect("test", "test", new MessagesListener() {
+		ClientSubscription connection = jmsClient.connect("test", "test", new MessagesListener() {
 			
 			@Override
 			public void onMessage(Serializable message) {

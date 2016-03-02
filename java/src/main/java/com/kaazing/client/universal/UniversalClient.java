@@ -18,5 +18,5 @@ public interface UniversalClient extends AutoCloseable{
 	 * @return connection information 
 	 * @throws ClientException indicates that error occurred
 	 */
-	public ClientConnection connect(String pubTopicName, String subTopicName, MessagesListener messageListener, boolean noLocal) throws ClientException;
+	public ClientSubscription connect(String pubTopicName, String subTopicName, MessagesListener messageListener, boolean noLocal) throws ClientException;
 }

@@ -13,18 +13,18 @@ import javax.jms.MessageProducer;
 import javax.jms.Session;
 
 /**
- * Contains information specific to JMS connections
+ * Contains information specific to JMS subscriptions
  * @author romans
  *
  */
-public class JMSClentConnection extends ClientConnection {
+public class SubscriptionConnection extends ClientSubscription {
 	private final MessageProducer producer;
 	private final MessageConsumer consumer;
 	private boolean opened=true;
 	private final Session session;
 	private String clientId;
 	
-	public JMSClentConnection(String clientId, String connectionIdentifier, Session session, MessageProducer producer, MessageConsumer consumer) {
+	public SubscriptionConnection(String clientId, String connectionIdentifier, Session session, MessageProducer producer, MessageConsumer consumer) {
 		super(connectionIdentifier);
 		this.producer=producer;
 		this.consumer=consumer;

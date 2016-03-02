@@ -6,18 +6,18 @@ package com.kaazing.client.universal;
 import java.io.Serializable;
 
 /**
- * Contains information about connection
+ * Contains information about subscription
  * @author romans
  *
  */
-public abstract class ClientConnection {
+public abstract class ClientSubscription {
 	private final String connectionIdentifier;
 
 	/**
 	 * Construct the connection object. The constructor should be overwritten by the implementation classes.
 	 * @param connectionIdentifier
 	 */
-	public ClientConnection(String connectionIdentifier){
+	public ClientSubscription(String connectionIdentifier){
 		this.connectionIdentifier=connectionIdentifier;
 	}
 	

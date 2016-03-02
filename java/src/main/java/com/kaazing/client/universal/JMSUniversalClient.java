@@ -44,7 +44,7 @@ public class JMSUniversalClient implements ExceptionListener, UniversalClient {
 	private final ConnectionFactory connectionFactory;
 	private Connection connection;
 	private Session session;
-	private List<JMSClentConnection> connections=new ArrayList<>();
+	private List<SubscriptionConnection> connections=new ArrayList<>();
 	private String url;
 	protected static Logger LOGGER=LoggerFactory.getLogger(JMSUniversalClient.class);
 
@@ -97,7 +97,7 @@ public class JMSUniversalClient implements ExceptionListener, UniversalClient {
 	 * @see com.kaazing.client.universal.UniversalClientProtocolImpl#connect(java.lang.String, java.lang.String, com.kaazing.client.universal.MessagesListener, boolean)
 	 */
 	@Override
-	public ClientConnection connect(String pubTopicName, String subTopicName, MessagesListener messageListener, boolean noLocal) throws ClientException {
+	public ClientSubscription connect(String pubTopicName, String subTopicName, MessagesListener messageListener, boolean noLocal) throws ClientException {
 		String clientId=null;
 		Destination subDestination;
 		try {
@@ -137,7 +137,7 @@ public class JMSUniversalClient implements ExceptionListener, UniversalClient {
 			throw new ClientException("Cannot create producer for publishing topic " + pubTopicName, e);
 		}
 		LOGGER.info("Connected to publishing topic "+pubTopicName+" for connection to "+this.url);
-		JMSClentConnection clientConnection=new JMSClentConnection(clientId, Utils.generateIdentifier(this.url, pubTopicName, subTopicName), this.session, producer, consumer);
+		SubscriptionConnection clientConnection=new SubscriptionConnection(clientId, Utils.generateIdentifier(this.url, pubTopicName, subTopicName), this.session, producer, consumer);
 		this.connections.add(clientConnection);
 		return clientConnection;
 	}
@@ -198,7 +198,7 @@ public class JMSUniversalClient implements ExceptionListener, UniversalClient {
 	 */
 	@Override
 	public void close() throws Exception {
-		for(JMSClentConnection connection: this.connections){
+		for(SubscriptionConnection connection: this.connections){
 			connection.disconnect();
 		}
 		this.connection.stop();

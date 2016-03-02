@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.net.URI;
 
-import com.kaazing.client.universal.ClientConnection;
+import com.kaazing.client.universal.ClientSubscription;
 import com.kaazing.client.universal.ClientException;
 import com.kaazing.client.universal.ErrorsListener;
 import com.kaazing.client.universal.MessagesListener;
@@ -39,7 +39,7 @@ public class KaazingJavaStarterApp {
 					}
 				});) {
 
-			ClientConnection connection = universalClient.connect("test", // publishing
+			ClientSubscription connection = universalClient.connect("test", // publishing
 																			// point
 					"test", // subscription point
 					new MessagesListener() { // Message listener - simply print

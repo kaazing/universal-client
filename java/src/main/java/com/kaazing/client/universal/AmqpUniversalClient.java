@@ -39,7 +39,7 @@ public class AmqpUniversalClient implements UniversalClient {
 	private boolean fConnected;
 	private boolean fPubOpened;
 	private boolean fSubOpened;
-	private final List<AmqpClientConnection> connections = new ArrayList<>();
+	private final List<AmqpClientSubscription> connections = new ArrayList<>();
 	private String login;
 
 	public AmqpUniversalClient(URI url, String login, String password, ErrorsListener errorsListener) throws ClientException {
@@ -68,7 +68,7 @@ public class AmqpUniversalClient implements UniversalClient {
 
 			@Override
 			public void onConnectionClose(ConnectionEvent e) {
-				for (AmqpClientConnection conn : connections) {
+				for (AmqpClientSubscription conn : connections) {
 					try {
 						conn.disconnect();
 					} catch (ClientException e1) {
@@ -99,7 +99,7 @@ public class AmqpUniversalClient implements UniversalClient {
 
 	@Override
 	public void close() throws Exception {
-		for (AmqpClientConnection conn : this.connections) {
+		for (AmqpClientSubscription conn : this.connections) {
 			conn.disconnect();
 		}
 		this.amqpClient.disconnect();
@@ -107,7 +107,7 @@ public class AmqpUniversalClient implements UniversalClient {
 	}
 
 	@Override
-	public ClientConnection connect(String pubTopicName, String subTopicName, MessagesListener messageListener, boolean noLocal) throws ClientException {
+	public ClientSubscription connect(String pubTopicName, String subTopicName, MessagesListener messageListener, boolean noLocal) throws ClientException {
 		CountDownLatch connectionsLatch = new CountDownLatch(2);
 		AmqpChannel pubChannel = this.amqpClient.openChannel();
 		fPubOpened = false;
@@ -164,8 +164,18 @@ public class AmqpUniversalClient implements UniversalClient {
 				e.getBody().get(bytes);
 				try {
 					Serializable object=Utils.deserialize(bytes);
-					LOGGER.debug("Received message ["+object.toString()+"] on topic "+subTopicName+", connection to "+url);
-					messageListener.onMessage(object);
+					if (!(object instanceof AmqpMessageEnvelope)){
+						errorsListener.onException(new ClientException("Received object is not an instance of AmqpMessageEnvelope;  received from " + subTopicName));
+						LOGGER.error("Received object is not an instance of AmqpMessageEnvelope;  received from " + subTopicName +" for url"+url);
+						return;
+					}
+					AmqpMessageEnvelope messageEnvelope=(AmqpMessageEnvelope)object;
+					if (noLocal && messageEnvelope.getClientId().equals(appId)){
+						LOGGER.debug("Received message ["+messageEnvelope.toString()+"] on topic "+subTopicName+", connection to "+url+" is ignored as it came from the same client and noLocal is set!");
+						return;
+					}
+					LOGGER.debug("Received message ["+messageEnvelope.getData().toString()+"] on topic "+subTopicName+", connection to "+url);
+					messageListener.onMessage(messageEnvelope.getData());
 				} catch (ClassNotFoundException | IOException e1) {
 					errorsListener.onException(new ClientException("Cannot deserialize an object from the message received from " + subTopicName, e1));
 					LOGGER.error("Cannot deserialize an object from the message received from " + subTopicName +" for url"+url);
@@ -178,7 +188,7 @@ public class AmqpUniversalClient implements UniversalClient {
 				// TODO: decide on what to do with noLocal
 				subChannel.declareQueue(queueName, false, false, false, false, false, null)
 				.bindQueue(queueName, subTopicName, ROUTING_KEY, false, null)
-				.consumeBasic(queueName, clientId, false, false, false, false, null);
+				.consumeBasic(queueName, clientId, noLocal, false, false, false, null);
 			}
 		});
 
@@ -196,7 +206,7 @@ public class AmqpUniversalClient implements UniversalClient {
 			throw new ClientException("Subscribing channel was not opened in 10 sec during creating channels for [" + pubChannel + "/" + subChannel);
 		}
 
-		AmqpClientConnection connection = new AmqpClientConnection(Utils.generateIdentifier(this.url, pubTopicName, subTopicName), appId, this.login, pubTopicName, queueName, pubChannel, subChannel);
+		AmqpClientSubscription connection = new AmqpClientSubscription(Utils.generateIdentifier(this.url, pubTopicName, subTopicName), appId, this.login, pubTopicName, queueName, pubChannel, subChannel);
 		this.connections.add(connection);
 
 		return connection;
