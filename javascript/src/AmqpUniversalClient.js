@@ -101,7 +101,6 @@ var amqpClientFunction=function(logInformation){
 
                 logInformation("INFO", "OPEN: Consume Channel");
                 this.consumeChannel = amqpClient.openChannel(function(){that.consumeChannelOpenHandler(that)});
-				var that=this;
                 $.when(this.publishChannelOpened, this.consumeChannelOpened).done(function(){
                     subscribedCallback(that);
                 });
