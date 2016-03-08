@@ -9,12 +9,11 @@
  * @constructor
  */
 var amqpClientFunction=function(logInformation){
-    var queueName="client" + Math.floor(Math.random() * 1000000);
     var routingKey="broadcastkey";
     function getRandomInt(min, max) {
         return Math.floor(Math.random() * (max - min)) + min;
     }
-    var messageIdCounter = getRandomInt(1, 100000);
+
 
     var appId = (function () {
         var fmt = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
@@ -35,118 +34,10 @@ var amqpClientFunction=function(logInformation){
      * @class
      * @name AmqpClient
      */
-    var AmqpClient = {connected:false};
-
-    var clientId=appId;
-    var messageReceivedFunc=null;
-	var connectionEstablishedFunc=null;
+    var AmqpClient = {};
     var errorFunction=null;
     var amqpClient=null;
-    var publishChannel=null;
-    var consumeChannel=null;
 
-
-    var topicPub=null;
-    var topicSub=null;
-    var noLocalFlag=false;
-    var user=null;
-
-	var publishChannelOpened=$.Deferred();
-	var consumeChannelOpened=$.Deferred();
-
-
-    var publishChannelOpenHandler=function(){
-        logInformation("INFO","OPENED: Publish Channel");
-
-        publishChannel.declareExchange({exchange: topicPub, type: "fanout"});
-
-        // Listen for these requests to return
-        publishChannel.addEventListener("declareexchange", function() {
-            logInformation("INFO","EXCHANGE DECLARED: " + topicPub);
-            publishChannelOpened.resolve();
-        });
-
-        publishChannel.addEventListener("error", function(e) {
-            handleException("CHANNEL ERROR: Publish Channel - " + e.message);
-        });
-
-        publishChannel.addEventListener("close", function() {
-            logInformation("INFO","CHANNEL CLOSED: Publish Channel");
-        });
-
-    }
-
-    var consumeChannelOpenHandler=function(){
-        logInformation("INFO","OPENED: Consume Channel");
-
-        consumeChannel.addEventListener("declarequeue", function() {
-            logInformation("INFO","QUEUE DECLARED: " + queueName);
-        });
-
-        consumeChannel.addEventListener("bindqueue", function() {
-            logInformation("INFO","QUEUE BOUND: " + topicSub+ " - " + queueName);
-        });
-
-        consumeChannel.addEventListener("consume", function() {
-            logInformation("INFO","CONSUME FROM QUEUE: " + queueName);
-            consumeChannelOpened.resolve();
-        });
-
-        consumeChannel.addEventListener("flow", function(e) {
-            logInformation("INFO","FLOW: " + (e.args.active ? "ON" : "OFF"));
-        });
-
-        consumeChannel.addEventListener("close", function() {
-            logInformation("INFO","CHANNEL CLOSED: Consume Channel");
-        });
-
-        consumeChannel.addEventListener("message", function(message) {
-            var body = null;
-
-            // Check how the payload was packaged since older browsers like IE7 don't
-            // support ArrayBuffer. In those cases, a Kaazing ByteBuffer was used instead.
-            if (typeof(ArrayBuffer) === "undefined") {
-                body = message.getBodyAsByteBuffer().getString(Charset.UTF8);
-            }
-            else {
-                body = arrayBufferToString(message.getBodyAsArrayBuffer())
-            }
-            logInformation("DEBUG","Received from the wire "+body);
-            try{
-                body= JSON.parse(body);
-            }
-            catch(e){
-                handleException("Received message "+body+" was not an object!");
-                return;
-            }
-            if (!noLocalFlag || body.clientId!==clientId)
-                messageReceivedFunc(body);
-        });
-
-        // The default value for noAck is true. Passing a false value for 'noAck' in
-        // the AmqpChannel.consumeBasic() function means there should be be explicit
-        // acknowledgement when the message is received. If set to true, then no
-        // explicit acknowledgement is required when the message is received.
-        consumeChannel.declareQueue({queue: queueName})
-            .bindQueue({queue: queueName, exchange: topicSub, routingKey: routingKey })
-            .consumeBasic({queue: queueName, consumerTag: clientId, noAck: true, noLocal:noLocalFlag });
-    }
-
-    var openHandler=function(){
-        logInformation("INFO","CONNECTED!!!");
-
-        logInformation("INFO","OPEN: Publish Channel");
-        publishChannel = amqpClient.openChannel(publishChannelOpenHandler);
-
-        logInformation("INFO", "OPEN: Consume Channel");
-        consumeChannel = amqpClient.openChannel(consumeChannelOpenHandler);
-		$.when(publishChannelOpened, consumeChannelOpened).done(function(){
-			AmqpClient.connected=true;
-			if (typeof(connectionEstablishedFunc) != "undefined" && connectionEstablishedFunc!=null){
-				connectionEstablishedFunc();
-			}
-		});
-    }
     // Convert a string to an ArrayBuffer.
     //
     var stringToArrayBuffer = function(str) {
@@ -182,26 +73,188 @@ var amqpClientFunction=function(logInformation){
         }
         return webSocketFactory;
     }
+    var createSubscriptionObject=function(amqpClient, topicPub, topicSub, noLocal, messageReceivedFunc, user){
+        /**
+         * Subscription object containing all information about subscription.
+         * @class
+         */
+        var SubscriptionObject = {
+            amqpClient:amqpClient,
+            topicPub:topicPub,
+            topicSub:topicSub,
+            noLocal:noLocal,
+            publishChannel:null,
+            consumeChannel:null,
+            publishChannelOpened:$.Deferred(),
+            consumeChannelOpened:$.Deferred(),
+            queueName:null,
+            clientId:null,
+            messageIdCounter:0,
+            user:user,
+            init:function(subscribedCallback){
+                this.queueName="client" + Math.floor(Math.random() * 1000000);
+                this.clientId=appId;
+                this.messageIdCounter = getRandomInt(1, 100000);
+                var that=this;
+                logInformation("INFO","OPEN: Publish Channel");
+                this.publishChannel = amqpClient.openChannel(function(){that.publishChannelOpenHandler(that)});
+
+                logInformation("INFO", "OPEN: Consume Channel");
+                this.consumeChannel = amqpClient.openChannel(function(){that.consumeChannelOpenHandler(that)});
+				var that=this;
+                $.when(this.publishChannelOpened, this.consumeChannelOpened).done(function(){
+                    subscribedCallback(that);
+                });
+
+            },
+            publishChannelOpenHandler:function(that){
+                logInformation("INFO","OPENED: Publish Channel "+this.topicPub);
+
+                that.publishChannel.declareExchange({exchange: this.topicPub, type: "fanout"});
+
+                // Listen for these requests to return
+                that.publishChannel.addEventListener("declareexchange", function() {
+                    logInformation("INFO","EXCHANGE DECLARED: " + that.topicPub);
+                    that.publishChannelOpened.resolve();
+                });
+
+                that.publishChannel.addEventListener("error", function(e) {
+                    handleException(that.topicPub+" CHANNEL ERROR: Publish Channel - " + e.message);
+                });
+
+                that.publishChannel.addEventListener("close", function() {
+                    logInformation("INFO",that.topicPub+" CHANNEL CLOSED: Publish Channel");
+                });
+
+            },
+            consumeChannelOpenHandler:function(that){
+                logInformation("INFO","OPENED: Consume Channel "+that.topicSub);
+
+                that.consumeChannel.addEventListener("declarequeue", function() {
+                    logInformation("INFO","QUEUE DECLARED: " + that.queueName+" for "+that.topicSub);
+                });
+
+                that.consumeChannel.addEventListener("bindqueue", function() {
+                    logInformation("INFO","QUEUE BOUND: " + that.topicSub+ " - " + that.queueName);
+                });
+
+                that.consumeChannel.addEventListener("consume", function() {
+                    logInformation("INFO","CONSUME FROM QUEUE: " + that.queueName+" for "+that.topicSub);
+                    that.consumeChannelOpened.resolve();
+                });
+
+                that.consumeChannel.addEventListener("close", function() {
+                    logInformation("INFO",that.topicSub+" CHANNEL CLOSED: Consume Channel");
+                });
+
+                that.consumeChannel.addEventListener("message", function(message) {
+                    var body = null;
+
+                    // Check how the payload was packaged since older browsers like IE7 don't
+                    // support ArrayBuffer. In those cases, a Kaazing ByteBuffer was used instead.
+                    if (typeof(ArrayBuffer) === "undefined") {
+                        body = message.getBodyAsByteBuffer().getString(Charset.UTF8);
+                    }
+                    else {
+                        body = arrayBufferToString(message.getBodyAsArrayBuffer())
+                    }
+                    logInformation("DEBUG",that.topicSub+" Received from the wire "+body);
+                    try{
+                        body= JSON.parse(body);
+                    }
+                    catch(e){
+                        handleException(that.topicSub+" Received message "+body+" was not an object!");
+                        return;
+                    }
+                    if (!that.noLocal || body.clientId!==that.clientId)
+                        that.messageReceivedFunc(body);
+					else{
+						logInformation("DEBUG",that.topicSub+" Message "+body+" is ignored!");
+					}
+                });
+
+                // The default value for noAck is true. Passing a false value for 'noAck' in
+                // the AmqpChannel.consumeBasic() function means there should be be explicit
+                // acknowledgement when the message is received. If set to true, then no
+                // explicit acknowledgement is required when the message is received.
+                that.consumeChannel.declareQueue({queue: that.queueName})
+                    .bindQueue({queue: that.queueName, exchange: that.topicSub, routingKey: routingKey })
+                    .consumeBasic({queue: that.queueName, consumerTag: that.clientId, noAck: true, noLocal:that.noLocal });
+            },
+            /**
+             * Sends messages to a publishing endpoint.
+             * @param msg Message to be sent. As messages are sent in a text format msg will be converted to JSON if it is not a string.
+             */
+            sendMessage:function(msg){
+                if (typeof msg ==="object"){
+					msg.clientId=this.clientId;
+                    msg=JSON.stringify(msg);
+                }
+                else{
+                    handleException("Message "+msg+" should be an object!");
+                }
+
+                var body = null;
+                if (typeof(ArrayBuffer) === "undefined") {
+                    body = new ByteBuffer();
+                    body.putString(msg, Charset.UTF8);
+                    body.flip();
+                }
+                else {
+                    body = stringToArrayBuffer(msg);
+                }
+                var props = new AmqpProperties();
+                props.setContentType("text/plain");
+                props.setContentEncoding("UTF-8");
+                props.setDeliveryMode("1");
+                props.setMessageId((this.messageIdCounter++).toString());
+                props.setPriority("6");
+                props.setTimestamp(new Date());
+                props.setUserId(this.user);
+				logInformation("sent","Sending message to "+this.topicPub+": "+ msg, "sent");
+                this.publishChannel.publishBasic({body: body, properties: props, exchange: this.topicPub, routingKey: routingKey});
+            }
+        };
+        return SubscriptionObject;
+
+    }
+
+    var createConnectionObject=function(amqpClient, user){
+        /**
+         * Contains infomration about established connection.
+         * @class
+         */
+        var ConnectionObject = {
+            user:user,
+            amqpClient:amqpClient,
+            /**
+             * Creates a subscription.
+             * @constructor
+             * @param topicPub {string} name of the topic to publish
+             * @param topicSub {string} name of the topic to subscribe
+             * @param messageReceivedFunc {function} callback to receive messages in a format function(msg) where msg is expected to be a valid JSON
+             * @param noLocal if set to true and publishing and subscription topics are the same, the client will not receive its own messages
+             * @param subscribedCallbackFunction callback function if a format function(SubcriptionObject) to be called when {SubsriptionObject} is created.
+             */
+            subscribe:function(topicPub, topicSub, messageReceivedFunc, noLocal, subscribedCallbackFunction){
+                logInformation("INFO","CONNECTED!!!");
+                var subscription=createSubscriptionObject(this.amqpClient, topicPub, topicSub, noLocal, messageReceivedFunc, this.user);
+                subscription.init(function(subscription){
+                    subscribedCallbackFunction(subscription);
+                });
+            }
+        };
+        return ConnectionObject;
+    }
     /**
-     * Connects to Kaazing WebSocket AMQP Gateway
-     * @param url Connection URL
-     * @param username User name to be used to establish connection
-     * @param password User password to be used to establish connection
-     * @param topicP Name of the publishing endpoint - AMQP exchange used for publishing.
-     * @param topicS Name of the subscription endpoint - AMQP exchange used for subscription
-     * @param noLocal Flag indicating whether the client wants to receive its own messages (true) or not (false). That flag should be used when publishing and subscription endpoints are the same.
-     * @param messageDestinationFuncHandle Function that will be used to process received messages from subscription endpoint in a format: function(messageBody)
+     * Connects to Kaazing WebSocket JMS Gateway
+     * @constructor
+     * @param connectionInfo Connection info object that should contain url, username and password properties
      * @param errorFuncHandle function that is used for error handling in a format of function(error)
-     * @param connectFunctionHandle function this is called when connection is established in a format: function()
+     * @param connectFunctionHandle function this is called when connection is established in a format: function(connection) called when {ConnectionObject} is created.
      */
-    AmqpClient.connect=function(url,username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, errorFunctionHandle, connectFunctionHandle){
-        topicPub=topicP;
-        topicSub=topicS;
-        user=username;
-        messageReceivedFunc=messageDestinationFuncHandle;
-		connectionEstablishedFunc=connectFunctionHandle;
+    AmqpClient.connect=function(connectionInfo, errorFunctionHandle, connectedFunctionHandle){
         errorFunction=errorFunctionHandle;
-        noLocalFlag=noLocal;
         var amqpClientFactory = new AmqpClientFactory();
         var webSocketFactory = createWebSocketFactory();
         if (webSocketFactory==null){
@@ -216,51 +269,21 @@ var amqpClientFunction=function(logInformation){
         amqpClient.addEventListener("error", function(e) {
             handleException(e.message);
         });
-        var credentials = {username: username, password: password};
+        var credentials = {username: connectionInfo.username, password: connectionInfo.password};
         var options = {
-            url: url,
+            url: connectionInfo.url,
             virtualHost: "/",
             credentials: credentials
         };
 		try{
-			amqpClient.connect(options, openHandler);
+			amqpClient.connect(options, function(){
+                var connection=createConnectionObject(amqpClient,connectionInfo.username);
+                connectedFunctionHandle(connection);
+            });
 		}
         catch(e){
 			handleException(e.message);
 		}
-    }
-
-    /**
-     * Sends messages to a publishing endpoint.
-     * @param msg Message to be sent. As messages are sent in a text format msg will be converted to JSON if it is not a string.
-     */
-    AmqpClient.sendMessage=function(msg){
-        if (typeof msg ==="object"){
-            msg=JSON.stringify(msg);
-        }
-        else{
-            handleException("Message "+msg+" should be an object!");
-        }
-        msg.clientId=clientId;
-        var body = null;
-        if (typeof(ArrayBuffer) === "undefined") {
-            body = new ByteBuffer();
-            body.putString(msg, Charset.UTF8);
-            body.flip();
-        }
-        else {
-            body = stringToArrayBuffer(msg);
-        }
-        var props = new AmqpProperties();
-        props.setContentType("text/plain");
-        props.setContentEncoding("UTF-8");
-        props.setDeliveryMode("1");
-        props.setMessageId((messageIdCounter++).toString());
-        props.setPriority("6");
-        props.setTimestamp(new Date());
-        props.setUserId(user);
-
-        publishChannel.publishBasic({body: body, properties: props, exchange: topicPub, routingKey: routingKey});
     }
 
     /**
