@@ -18,24 +18,36 @@ var UniversalClientDef=function(protocol){
 
     /**
      * Connects to Kaazing WebSocket Gateway (AMQP or JMS)
-     * @param url Connection URL
-     * @param username User name to be used to establish connection
-     * @param password User password to be used to establish connection
-     * @param topicP Name of the publishing endpoint - AMQP exchange used for publishing or JMS Topic.
-     * @param topicS Name of the subscription endpoint - AMQP exchange used for subscription or JMS Topic.
-     * @param noLocal Flag indicating whether the client wants to receive its own messages (true) or not (false). That flag should be used when publishing and subscription endpoints are the same.
-     * @param messageDestinationFuncHandle Function that will be used to process received messages from subscription endpoint in a format: function(messageBody)
-     * @param errorFuncHandle function that is used for error handling in a format of function(error)
-     * @param loggerFuncHandle function that is used for logging events in a format of function(severity, message)
-     * @param connectFunctionHandle function this is called when connection is established in a format: function()
+	 /**
+	 * Connects to Kaazing WebSocket JMS Gateway
+	 * @param connectionInfo Connection info object that should contain url, username and password properties
+	 * @param errorFuncHandle function that is used for error handling in a format of function(error)
+	 * @param connectFunctionHandle function this is called when connection is established in a format: function(connection). Connection can be either {JMSConnection} or {AmqpConnection}
      */
-    JavascriptUniversalClient.connect = function (url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, errorFuncHandle, loggerFuncHandle, connectFunctionHandle) {
-        if (client!=null && client.connected)
+    JavascriptUniversalClient.connect = function (connectionInfo, errorFunctionHandle, connectedFunctionHandle) {
+		if (!connectionInfo || (typeof connectionInfo!=='object')){
+			throw "Connection info is not an object!";
+		}
+
+		if (!connectionInfo.url){
+			throw "Connection info must contain url property!";
+		}
+
+		if (!errorFunctionHandle || (typeof errorFunctionHandle !=='function')){
+			throw "Error handling function must be defined via errorFunctionHandle";
+		}
+
+		if (!connectedFunctionHandle || (typeof connectedFunctionHandle !=='function')){
+			throw "Connection established callback must be defined via connectedFunctionHandle";
+		}
+
+
+		if (client!=null && client.connected)
             return;
 
         var logInformation = function (severity, message) {
-            if (loggerFuncHandle !== null)
-                loggerFuncHandle(severity, message);
+            if (JavascriptUniversalClient.loggerFuncHandle !== null)
+				JavascriptUniversalClient.loggerFuncHandle(severity, message);
             if (severity == "INFO") {
                 console.info(message);
             }
@@ -53,7 +65,7 @@ var UniversalClientDef=function(protocol){
                     requirejs(['node_modules/jquery/dist/jquery.js','node_modules/kaazing-javascript-universal-client/node_modules/kaazing-javascript-amqp-client/AmqpClient.js', 'node_modules/kaazing-javascript-universal-client/AmqpUniversalClient.js'], function () {
                         console.info("Using AMQP protocol!");
                         client = amqpClientFunction(logInformation);
-                        client.connect(url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, errorFuncHandle, connectFunctionHandle);
+                        client.connect(connectionInfo, errorFunctionHandle, connectedFunctionHandle);
                     });
                 });
         }
@@ -61,7 +73,7 @@ var UniversalClientDef=function(protocol){
                 requirejs(['node_modules/kaazing-javascript-universal-client/node_modules/kaazing-javascript-gateway-client/WebSocket.js','node_modules/kaazing-javascript-universal-client/JMSUniversalClient.js'], function () {
                 console.info("Using JMS protocol!");
                 client = jmsClientFunction(logInformation);
-                client.connect(url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, errorFuncHandle, connectFunctionHandle);
+                client.connect(connectionInfo, errorFunctionHandle, connectedFunctionHandle);
             });
         }
         else {
