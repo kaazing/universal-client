@@ -46,7 +46,7 @@ var UniversalClientDef=function(protocol){
             return;
 
         var logInformation = function (severity, message) {
-            if (JavascriptUniversalClient.loggerFuncHandle !== null)
+            if (JavascriptUniversalClient.loggerFuncHandle && JavascriptUniversalClient.loggerFuncHandle !== null)
 				JavascriptUniversalClient.loggerFuncHandle(severity, message);
             if (severity == "INFO") {
                 console.info(message);
