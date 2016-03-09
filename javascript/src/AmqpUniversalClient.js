@@ -91,6 +91,7 @@ var amqpClientFunction=function(logInformation){
             clientId:null,
             messageIdCounter:0,
             user:user,
+            messageReceivedFunc:messageReceivedFunc,
             init:function(subscribedCallback){
                 this.queueName="client" + Math.floor(Math.random() * 1000000);
                 this.clientId=appId;
