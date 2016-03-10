@@ -67,8 +67,9 @@ Connect function implements the following sequence:
 	During the creation of the channels:
 	- Publishing channel open handler declares AMQP Exchange of a _fanout_ type thus creating publishing endpoint.
 		```javascript
-		publishChannelOpenHandler:function(that){
-                that.publishChannel.declareExchange({exchange: that.topicPub, type: "fanout"});
+			publishChannelOpenHandler:function(that){
+                		that.publishChannel.declareExchange({exchange: that.topicPub, type: "fanout"});
+                	}
 		```		
 	- Consumption (or subscription) channel open handler:
 		1.  Adds an event listener for “message” event providing the ability to receive messages. 
