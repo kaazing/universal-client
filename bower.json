@@ -1,8 +1,7 @@
 {
    "name":"kaazing-javascript-universal-client",
    "main":[
-      "javascript/JavascriptUniversalClient.js",
-      "javascript/AngularUniversalClient.js"
+      "javascript/JavascriptUniversalClient.js"
    ],
    "homepage":"https://github.com/kaazing/universal-client",
    "author":"kaazing",
@@ -20,7 +19,7 @@
    ],
    "ignore":[
       "**/.*",
-      "java/*"
+      "java"
    ],
    "dependencies":{
       "requirejs":">=2.0.0",
