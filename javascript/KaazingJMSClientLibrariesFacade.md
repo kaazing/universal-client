@@ -5,7 +5,7 @@ Kaazing JavaScript JMS Client Libraries Facade:
 
 For more information see:
 - [Build JavaScript JMS Clients Using Kaazing WebSocket Gateway - JMS Edition](http://developer.kaazing.com/documentation/jms/4.0/dev-js/o_dev_js.html)
-- [Use the Kaazing WebSocket Gateway JavaScript JMS Client API][2]
+- [Use the Kaazing WebSocket Gateway JavaScript JMS Client API](http://developer.kaazing.com/documentation/jms/4.0/dev-js/p_dev_js_client.html)
 
 ## Organization of the library
 Library consists of jmsClientFunction that creates JMSClient object. JMSClient objects provides the following functionality:
@@ -58,12 +58,13 @@ Connect function implements the following sequence:
 
 ### **subscribe** method of connection object
 Method executed the following actions:
+
 1. Creates publishing topic and producer to send messages
 	
-	```javascript
+```javascript
 	var pubDest = session.createTopic(topicPub);
 	var producer = session.createProducer(dest);
-	```
+```
 2. Creates subscription topic and consumer.
 	_In order to prevent client from receiving its own messages consumer may be created with the query that will filter out the messages with the 'appId' string property set to this client application ID - a randomly generated GUID._
 	Once consumer is created, setMessageListener function is used to specify the function to be called when new message is received.
