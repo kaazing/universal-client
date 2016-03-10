@@ -18,13 +18,13 @@ Connect function implements the following sequence:
 
 1. Create JMS connection factory
 
-	```javascript
+```javascript
 	var jmsConnectionFactory = new JmsConnectionFactory(url);
-	```
+```
 
 2. Create connection. createConnection function of JmsConnectionFactory takes three parameters: login, password and a callback function that will be called upon completion. Function returns the future that is checked in a callback function for exceptions.
 
-	```javascript
+```javascript
 	var connectionFuture = jmsConnectionFactory.createConnection(username, password, function () {
 		if (!connectionFuture.exception) {
 			try {
@@ -46,7 +46,7 @@ Connect function implements the following sequence:
 			handleException(connectionFuture.exception);
 		}
 	})
-	```
+```
 	
 3. Once connection is created, callback function does the following:
 	1. Obtains the connection from the connectionFuture that was returned by createConection.
@@ -59,17 +59,17 @@ Connect function implements the following sequence:
 ### **subscribe** method of connection object
 Method executed the following actions:
 
-1. Creates publishing topic and producer to send messages
-	
-```javascript
+- Creates publishing topic and producer to send messages
+
+	```javascript
 	var pubDest = session.createTopic(topicPub);
 	var producer = session.createProducer(dest);
-```
-2. Creates subscription topic and consumer.
-_In order to prevent client from receiving its own messages consumer may be created with the query that will filter out the messages with the 'appId' string property set to this client application ID - a randomly generated GUID._
+	```
+- Creates subscription topic and consumer.
+	_In order to prevent client from receiving its own messages consumer may be created with the query that will filter out the messages with the 'appId' string property set to this client application ID - a randomly generated GUID._
 	Once consumer is created, setMessageListener function is used to specify the function to be called when new message is received.
 
-```javascript
+	```javascript
 	var subDest = session.createTopic(topicSub);			
 	if (noLocalFlag)
 		consumer = session.createConsumer(dest, "appId<>'" + appId + "'");
@@ -80,9 +80,9 @@ _In order to prevent client from receiving its own messages consumer may be crea
 
 		rcvFunction(body);
 	});
-```
+	```
 	
-3. Creates subscription object, adds it to the array of opened subscriptions and returns it via callback.
+- Creates subscription object, adds it to the array of opened subscriptions and returns it via callback.
 	   
 ### **sendMessage** function of a subscription object	
 Function creates text message and sends it. In order to prevent client from receiving its own messages 'appId' string property may be set to this client application ID - a randomly generated GUID.
