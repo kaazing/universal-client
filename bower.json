@@ -19,7 +19,8 @@
       }
    ],
    "ignore":[
-      "**/.*"
+      "**/.*",
+      "java/*"
    ],
    "dependencies":{
       "requirejs":">=2.0.0",
