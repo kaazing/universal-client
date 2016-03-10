@@ -1,0 +1,40 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+sourceCompatibility = 1.8
+version = '1.0'
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Kaazing Java Universal Client',
+                   'Implementation-Version': version
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven {
+		url "http://artifactory.kaazing.wan/artifactory/libs-releases-local"
+    }
+}
+
+dependencies {
+    compile group: 'com.kaazing.gateway', name: 'com.kaazing.gateway.client.java', version: '4.+'
+    compile group: 'com.kaazing.gateway.jms', name: 'com.kaazing.gateway.jms.client.java', version : '4.+'
+    compile group: 'com.kaazing.gateway.amqp', name: 'com.kaazing.gateway.amqp.client.java', version: '4.+'
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.+'    
+    testCompile group: 'junit', name: 'junit', version: '4.+'
+    testCompile group: 'org.slf4j', name: 'slf4j-jdk14', version: '1.7.18'
+    
+}
+
+test {
+    systemProperties 'property': 'value'
+}
+
+uploadArchives {
+    repositories {
+       flatDir {
+           dirs 'repos'
+       }
+    }
+}

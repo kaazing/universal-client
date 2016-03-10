@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: ConnectionObject</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Class: ConnectionObject</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>ConnectionObject</h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+
+    <h4 class="name" id="ConnectionObject"><span class="type-signature"></span>new ConnectionObject<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Contains infomration about established connection.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="JMSUniversalClient.js.html">JMSUniversalClient.js</a>, <a href="JMSUniversalClient.js.html#line118">line 118</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id=".subscribe"><span class="type-signature">(static) </span>subscribe<span class="signature">(topicPub, topicSub, messageReceivedFunc, noLocal, subscribedCallbackFunction)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Creates a subscription.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>topicPub</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">name of the topic to publish</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>topicSub</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">name of the topic to subscribe</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>messageReceivedFunc</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">callback to receive messages in a format function(msg) where msg is expected to be a valid JSON</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>noLocal</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">if set to true and publishing and subscription topics are the same, the client will not receive its own messages</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>subscribedCallbackFunction</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">callback function if a format function(SubcriptionObject) to be called when SubsriptionObject is created.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="JMSUniversalClient.js.html">JMSUniversalClient.js</a>, <a href="JMSUniversalClient.js.html#line129">line 129</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="amqpClientFunction-AmqpClient.html">AmqpClient</a></li><li><a href="amqpClientFunction-createConnectionObject-ConnectionObject.html">ConnectionObject</a></li><li><a href="amqpClientFunction-createSubscriptionObject-SubscriptionObject.html">SubscriptionObject</a></li><li><a href="jmsClientFunction-createConnectionObject-ConnectionObject.html">ConnectionObject</a></li><li><a href="jmsClientFunction-createSubscriptionObject-SubscriptionObject.html">SubscriptionObject</a></li><li><a href="jmsClientFunction-JMSClient.html">JMSClient</a></li><li><a href="UniversalClientDef-JavascriptUniversalClient.html">JavascriptUniversalClient</a></li></ul><h3>Global</h3><ul><li><a href="global.html#amqpClientFunction">amqpClientFunction</a></li><li><a href="global.html#jmsClientFunction">jmsClientFunction</a></li><li><a href="global.html#UniversalClientDef">UniversalClientDef</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Thu Mar 10 2016 14:40:22 GMT-0800 (PST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
