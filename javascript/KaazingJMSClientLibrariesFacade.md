@@ -134,7 +134,3 @@ Closes all subscriptions (causing closing of their producer and consumer), sessi
 
 ```
 
-
-
-[1]:	https://www.rabbitmq.com/tutorials/amqp-concepts.html
-[2]:	http://developer.kaazing.com/documentation/jms/4.0/dev-js/p_dev_js_client.html
