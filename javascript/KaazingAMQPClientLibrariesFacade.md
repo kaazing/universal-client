@@ -57,12 +57,12 @@ Connect function implements the following sequence:
 2. Initializes subscription object
 	- Opens publishing and consumption (subscription) channels using amqpClient openChannel function that will call on success the callback function that is passed as a parameter:  
 	
-	```javascript
-	var openHandler=function(){  
-		publishChannel = amqpClient.openChannel(this.publishChannelOpenHandler);  
-		consumeChannel = amqpClient.openChannel(this.consumeChannelOpenHandler);  
-	}		
-	```
+		```javascript
+		var openHandler=function(){  
+			publishChannel = amqpClient.openChannel(this.publishChannelOpenHandler);  
+			consumeChannel = amqpClient.openChannel(this.consumeChannelOpenHandler);  
+		}		
+		```
 		
 	Once the channels are created method returns the _subscription_ object via a callback.
 	During the creation of the channels:
@@ -82,25 +82,26 @@ Connect function implements the following sequence:
 		
 		4. Starts basic consumer. Basic consumer is started with noAck=true parameter so the client does not need to implement explicit acknowledgement. Another parameter - noLocal - controls whether the client wants to receive its own messages.
 	
-	```javascript
-	consumeChannelOpenHandler:function(that{  
-		consumeChannel.addEventListener("message", function(message) {  
-			var body = null;  
-			// Check how the payload was packaged since older browsers like IE7 don't  
-			// support ArrayBuffer. In those cases, a Kaazing ByteBuffer was used instead.  
-			if (typeof(ArrayBuffer) === "undefined") {  
-				body = message.getBodyAsByteBuffer().getString(Charset.UTF8);  
-			}  
-			else {  
-				body = arrayBufferToString(message.getBodyAsArrayBuffer())  
-			}  
-			that.messageReceivedFunc(body);;  
-		});  
-		 that.consumeChannel.declareQueue({queue: that.queueName})
-                    .bindQueue({queue: that.queueName, exchange: that.topicSub, routingKey: routingKey })
-                    .consumeBasic({queue: that.queueName, consumerTag: that.clientId, noAck: true, noLocal:that.noLocal })  
-	}
-	```
+			```javascript
+				consumeChannelOpenHandler:function(that{  
+					consumeChannel.addEventListener("message", function(message) {  
+						var body = null;  
+						// Check how the payload was packaged since older browsers like IE7 don't  
+						// support ArrayBuffer. In those cases, a Kaazing ByteBuffer was used instead.  
+						if (typeof(ArrayBuffer) === "undefined") {  
+							body = message.getBodyAsByteBuffer().getString(Charset.UTF8);  
+						}  
+						else {  
+							body = arrayBufferToString(message.getBodyAsArrayBuffer())  
+						}  
+						that.messageReceivedFunc(body);;  
+					});  
+		 			that.consumeChannel.declareQueue({queue: that.queueName})
+                    				.bindQueue({queue: that.queueName, exchange: that.topicSub, routingKey: routingKey })
+                    				.consumeBasic({queue: that.queueName, consumerTag: that.clientId, noAck: true, noLocal:that.noLocal })  
+				}
+			```
+			
 ### **sendMessage** function of a subscription object
 Function sets AMQP properties and sends the message to a publishing exchange using specified routing key.   
 **Note:** As mentioned earlier, library creates a fanout type of exchange that does not use routing keys; thus library sets the value of the routing key to 'broadcast'.
