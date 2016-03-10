@@ -19,6 +19,7 @@ Library consists of amqpClientFunction that creates AmqpClient object. AmqpClien
 Connect function implements the following sequence:
 
 1. Create WebSocket and AMQP client factories
+
 	```javascript
 	var amqpClientFactory = new AmqpClientFactory();  
 	var webSocketFactory;  
@@ -29,6 +30,7 @@ Connect function implements the following sequence:
 	```
 
 2. Create AMQP client
+
 	```javascript
 	amqpClient = amqpClientFactory.createAmqpClient();
 	```
@@ -55,21 +57,21 @@ Connect function implements the following sequence:
 2. Initializes subscription object
 	- Opens publishing and consumption (subscription) channels using amqpClient openChannel function that will call on success the callback function that is passed as a parameter:  
 	
-		```javascript
-		var openHandler=function(){  
-			publishChannel = amqpClient.openChannel(this.publishChannelOpenHandler);  
-			consumeChannel = amqpClient.openChannel(this.consumeChannelOpenHandler);  
-		}		
-	
-		```
+	```javascript
+	var openHandler=function(){  
+		publishChannel = amqpClient.openChannel(this.publishChannelOpenHandler);  
+		consumeChannel = amqpClient.openChannel(this.consumeChannelOpenHandler);  
+	}		
+	```
 		
 	Once the channels are created method returns the _subscription_ object via a callback.
 	During the creation of the channels:
 	- Publishing channel open handler declares AMQP Exchange of a _fanout_ type thus creating publishing endpoint.
+		
 		```javascript
-			publishChannelOpenHandler:function(that){
-                		that.publishChannel.declareExchange({exchange: that.topicPub, type: "fanout"});
-                	}
+		publishChannelOpenHandler:function(that){
+                	that.publishChannel.declareExchange({exchange: that.topicPub, type: "fanout"});
+                }
 		```		
 	- Consumption (or subscription) channel open handler:
 		1.  Adds an event listener for “message” event providing the ability to receive messages. 
@@ -102,6 +104,7 @@ Connect function implements the following sequence:
 ### **sendMessage** function of a subscription object
 Function sets AMQP properties and sends the message to a publishing exchange using specified routing key.   
 **Note:** As mentioned earlier, library creates a fanout type of exchange that does not use routing keys; thus library sets the value of the routing key to 'broadcast'.
+
 ```javascript
 sendMessage:function(msg){
                 if (typeof msg ==="object"){
