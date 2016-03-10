@@ -1,5 +1,5 @@
-# Kaazing JMS Client Libraries Facade
-Kaazing JMS Client Libraries Facade:
+# Kaazing Javascript JMS Client Libraries Facade
+Kaazing JavaScript JMS Client Libraries Facade:
 * Implements basic publish-subscribe functionality for JMS to help developers in getting started with their JMS WebSocket projects 
 * Provide developers with the reference implementations for using Kaazing AMQP JavaScript client libraries
 
@@ -16,7 +16,7 @@ Library consists of jmsClientFunction that creates JMSClient object. JMSClient o
 ### **connect** function
 Connect function implements the following sequence:
 
-1. Create JMS connection factory
+1. Creates JMS connection factory
 	```javascript
 	var jmsConnectionFactory = new JmsConnectionFactory(url);
 	```

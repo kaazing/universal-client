@@ -49,7 +49,7 @@ Add the following to your main html page (index.html):
 ```
 
 ### Obtaining and Configuring Kaazing Gateway
-The Kaazing Universal WebSocket clients depend on the Kaazing WebSocket Gateway (KWG) being installed on one or more servers. KWG supports two protocols, AMQP and JMS. Read [Obtaining and configuring Kaazing Gateways and related Servers]() for more information.
+The Kaazing Universal WebSocket clients depend on the Kaazing WebSocket Gateway (KWG) being installed on one or more servers. KWG supports two protocols, AMQP and JMS. Read [Obtaining and configuring Kaazing Gateways and related Servers](https://github.com/kaazing/universal-client/blob/develop/ObtainingGateways.md) for more information.
 
 ### Documentation
 
