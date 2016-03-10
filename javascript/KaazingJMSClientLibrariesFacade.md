@@ -66,10 +66,10 @@ Method executed the following actions:
 	var producer = session.createProducer(dest);
 ```
 2. Creates subscription topic and consumer.
-	_In order to prevent client from receiving its own messages consumer may be created with the query that will filter out the messages with the 'appId' string property set to this client application ID - a randomly generated GUID._
+_In order to prevent client from receiving its own messages consumer may be created with the query that will filter out the messages with the 'appId' string property set to this client application ID - a randomly generated GUID._
 	Once consumer is created, setMessageListener function is used to specify the function to be called when new message is received.
 
-	```javascript
+```javascript
 	var subDest = session.createTopic(topicSub);			
 	if (noLocalFlag)
 		consumer = session.createConsumer(dest, "appId<>'" + appId + "'");
@@ -80,14 +80,14 @@ Method executed the following actions:
 
 		rcvFunction(body);
 	});
-	```
+```
 	
 3. Creates subscription object, adds it to the array of opened subscriptions and returns it via callback.
 	   
 ### **sendMessage** function of a subscription object	
 Function creates text message and sends it. In order to prevent client from receiving its own messages 'appId' string property may be set to this client application ID - a randomly generated GUID.
 
-	```javascript
+```javascript
 	sendMessage:function(msg){
 		var textMsg = session.createTextMessage(msg);
 		if (noLocalFlag)
@@ -98,10 +98,10 @@ Function creates text message and sends it. In order to prevent client from rece
 				handleException(future.exception);
 			};	
 		});
-	} catch (e) {
-		handleException(e);
+		} catch (e) {
+			handleException(e);
+		}
 	}
-}
 ``` 	
 
 ### **close** function of a subscription object
