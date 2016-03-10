@@ -16,7 +16,7 @@ Library consists of jmsClientFunction that creates JMSClient object. JMSClient o
 ### **connect** function
 Connect function implements the following sequence:
 
-1. Creates JMS connection factory
+1. Create JMS connection factory
 	```javascript
 	var jmsConnectionFactory = new JmsConnectionFactory(url);
 	```
@@ -32,8 +32,8 @@ Connect function implements the following sequence:
 				session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 		
 				connection.start(function () {
-					prepareSend();
-					prepareReceive(messageReceivedFunc);
+					 var connectionObject=createConnectionObject(session, JMSClient);
+                     connectedFunctionHandle(connectionObject);
 				});
 			}
 			catch (e) {
@@ -52,53 +52,39 @@ Connect function implements the following sequence:
 	3. Creates session using createSession method. Session is created with auto-acknowledgement. 
 	4. Starts the connection using start function passing to it a callback function.
 
-4. Once connection is started, callback function:
-	1. Creates publishing topic and producer to send messages
+4. Once connection is started, connection object is returned for the subscription to be created using __subscribe__ method.
+
+### **subscribe** method of connection object
+Method executed the following actions:
+1. Creates publishing topic and producer to send messages
 	
-		```javascript
-		var prepareSend = function () {
-			var dest = session.createTopic(topicPub);
-	        	producer = session.createProducer(dest);
-		}
-		```
-	2. Creates subscription topic and consumer.
+	```javascript
+		var pubDest = session.createTopic(topicPub);
+	    var producer = session.createProducer(dest);
+	```
+2. Creates subscription topic and consumer.
 	_In order to prevent client from receiving its own messages consumer may be created with the query that will filter out the messages with the 'appId' string property set to this client application ID - a randomly generated GUID._
 	Once consumer is created, setMessageListener function is used to specify the function to be called when new message is received.
 
-		```javascript
-		var prepareReceive = function (rcvFunction) {
-			var dest = session.createTopic(topicSub);
-			if (noLocalFlag)
-				consumer = session.createConsumer(dest, "appId<>'" + appId + "'");
-			else
-				consumer = session.createConsumer(dest);
-				consumer.setMessageListener(function (message) {
-				rcvFunction(body);
-			});
-		}
-	    	
-	    	
-### **disconnect** function
-Closes, producer, consumer and connection in a chain of callbacks.
+	```javascript
+		var subDest = session.createTopic(topicSub);			
+		if (noLocalFlag)
+			consumer = session.createConsumer(dest, "appId<>'" + appId + "'");
+		else
+			consumer = session.createConsumer(dest);
+			consumer.setMessageListener(function (message) {
+			... obtain the message body ...			
+
+			rcvFunction(body);
+		});
+	```
 	
-```javascript
-    JMSClient.disconnect=function(){
-        producer.close(function(){
-            consumer.close(function(){
-                session.close(function(){
-                    connection.close(function(){
-
-                    });
-                });
-            });
-        });
-    }
-```
-
-### **sendMessage** function	
+3. Creates subscription object, adds it to the array of opened subscriptions and returns it via callback.
+	   
+### **sendMessage** function of a subscription object	
 Function creates text message and sends it. In order to prevent client from receiving its own messages 'appId' string property may be set to this client application ID - a randomly generated GUID.
 ```javascript
-JMSClient.sendMessage=function(msg){
+sendMessage:function(msg){
 	var textMsg = session.createTextMessage(msg);
 	if (noLocalFlag)
 		textMsg.setStringProperty("appId", appId);
@@ -112,7 +98,39 @@ JMSClient.sendMessage=function(msg){
 		handleException(e);
 	}
 }
+``` 	
+
+### **close** function of a subscription object
+Function closes producer and consumer that were created during the subscription call.
+
+```javascript
+	this.producer.close(function(){
+		this.consumer.close(function(){
+		});
+	})
 ```
+	    	
+### **disconnect** function
+Closes all subscriptions (causing closing of their producer and consumer), session and connection in a chain of callbacks.
+	
+```javascript
+	JMSClient.disconnect=function(){
+		for(var i=0;i<this.subscriptions.length;i++){
+			this.subscriptions[i].close();
+		}
+	
+		... Wait while all the subscriptions are closed...
+		
+		session.close(function () {
+			connection.close(function () {
+
+			});
+		});
+    }
+
+```
+
+
 
 [1]:	https://www.rabbitmq.com/tutorials/amqp-concepts.html
 [2]:	http://developer.kaazing.com/documentation/jms/4.0/dev-js/p_dev_js_client.html

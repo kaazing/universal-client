@@ -50,7 +50,7 @@ Connect function implements the following sequence:
             });
 	```
 	
-### **subscribe** metod of connection object
+### **subscribe** method of connection object
 1. Creates subscription object
 2. Initializes subscription object
 	- Opens publishing and consumption (subscription) channels using amqpClient openChannel function that will call on success the callback function that is passed as a parameter:  
