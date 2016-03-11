@@ -36,6 +36,10 @@ Add the following to your main html page (index.html):
 - Install NodeJS - please refer to the [NodeJS downloads page][9] for the installer that is appropriate for your OS
 - Update npm  
 	`sudo npm update npm -g`
+- Install RequireJS libraries
+	`npm install requirejs`
+- Install jQuery libraries
+	`npm install requirejs`	
 - Install Kaazing Universal Javascript client libraries
 	`npm install kaazing-javascript-universal-client`
 	
