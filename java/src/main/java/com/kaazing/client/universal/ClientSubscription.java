@@ -11,30 +11,30 @@ import java.io.Serializable;
  *
  */
 public abstract class ClientSubscription {
-	private final String connectionIdentifier;
+	private final String subscriptionIdentifier;
 
 	/**
-	 * Construct the connection object. The constructor should be overwritten by the implementation classes.
-	 * @param connectionIdentifier
+	 * Construct the subscription object. The constructor should be overwritten by the implementation classes.
+	 * @param subscriptionIdentifier Identification of the subscription that is automatically generated when subscription is created.
 	 */
-	public ClientSubscription(String connectionIdentifier){
-		this.connectionIdentifier=connectionIdentifier;
+	public ClientSubscription(String subscriptionIdentifier){
+		this.subscriptionIdentifier=subscriptionIdentifier;
 	}
 	
 	/**
-	 * Sends the message over established connection to the publishing point
+	 * Sends the message over established subscription to the publishing point
 	 * @param message message to send
 	 * @throws ClientException indicates that error occurred
 	 */
 	public abstract void sendMessage(Serializable message) throws ClientException;
 	
 	/**
-	 * Closes connection to both publishing and subscription endpoints
-	 * @throws ClientException
+	 * Closes both publishing and subscription endpoints
+	 * @throws ClientException indicates that error occurred
 	 */
 	public abstract void disconnect() throws ClientException;
 
-	public String getConnectionIdentifier() {
-		return connectionIdentifier;
+	public String getSubscriptionIdentifier() {
+		return subscriptionIdentifier;
 	}
 }

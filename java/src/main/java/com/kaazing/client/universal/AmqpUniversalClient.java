@@ -72,8 +72,8 @@ public class AmqpUniversalClient implements UniversalClient {
 					try {
 						conn.disconnect();
 					} catch (ClientException e1) {
-						errorsListener.onException(new ClientException("Error closing client connection: "+conn.getConnectionIdentifier(), e1));
-						LOGGER.error("Error closing client connection: "+conn.getConnectionIdentifier(), e1);
+						errorsListener.onException(new ClientException("Error closing client connection: "+conn.getSubscriptionIdentifier(), e1));
+						LOGGER.error("Error closing client connection: "+conn.getSubscriptionIdentifier(), e1);
 					}
 				}
 				LOGGER.info("Closed connection to "+url+".");
@@ -107,7 +107,7 @@ public class AmqpUniversalClient implements UniversalClient {
 	}
 
 	@Override
-	public ClientSubscription connect(String pubTopicName, String subTopicName, MessagesListener messageListener, boolean noLocal) throws ClientException {
+	public ClientSubscription subscribe(String pubTopicName, String subTopicName, MessagesListener messageListener, boolean noLocal) throws ClientException {
 		CountDownLatch connectionsLatch = new CountDownLatch(2);
 		AmqpChannel pubChannel = this.amqpClient.openChannel();
 		fPubOpened = false;

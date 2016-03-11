@@ -1,20 +1,21 @@
-# Kaazing Javascript JMS Client Libraries Facade
-Kaazing JavaScript JMS Client Libraries Facade:
+# Kaazing Javas JMS Client Libraries Facade
+Kaazing Javat JMS Client Libraries Facade:
 * Implements basic publish-subscribe functionality for JMS to help developers in getting started with their JMS WebSocket projects 
-* Provide developers with the reference implementations for using Kaazing JMS JavaScript client libraries
+* Provide developers with the reference implementations for using Kaazing AMQP Java client libraries
 
 For more information see:
-- [Build JavaScript JMS Clients Using Kaazing WebSocket Gateway - JMS Edition](http://developer.kaazing.com/documentation/jms/4.0/dev-js/o_dev_js.html)
-- [Use the Kaazing WebSocket Gateway JavaScript JMS Client API](http://developer.kaazing.com/documentation/jms/4.0/dev-js/p_dev_js_client.html)
+- [Build Java JMS Clients Using Kaazing WebSocket Gateway - JMS Edition](http://developer.kaazing.com/documentation/jms/4.0/dev-java/o_dev_java.html)
+- [Use the Kaazing WebSocket Gateway Java JMS Client API](http://developer.kaazing.com/documentation/jms/4.0/dev-java/p_dev_java_client.html)
 
 ## Organization of the library
-Library consists of jmsClientFunction that creates JMSClient object. JMSClient objects provides the following functionality:
-- **connect** function - connects client to Kaazing WebSocket JMS gateway and creates a __connection__ object
-- **disconnect** function - disconnects client from Kaazing WebSocket JMS gateway
-- **sendMessage** function - sends the message to a publishing endpoint
+UniversalClientFactory's create 
+Library contains JMSUniversalClient class (implementing UniversalClient interface) that is created by UniversalClientFactory's _createUniversalClient_ method. JMSClient objects provides the following functionality:
+- **constructor** connects client to Kaazing WebSocket JMS gateway 
+- **subscribe** function - subscribes to publishing and subscription endpoints and returns an instance of ClientSubscription object.
+- **close** function - close all subscriptions and connections
 
-### **connect** function
-Connect function implements the following sequence:
+### **constructor**
+Constructor implements the following sequence:
 
 1. Create JMS connection factory
 
