@@ -10,13 +10,14 @@ Please, refer to the links above for the details about the details of the usage 
 - Install NodeJS - please refer to the [NodeJS downloads page][9] for the installer that is appropriate for your OS
 - Update npm  
 	`sudo npm update npm -g`
-- Install bower:  
+
+- Install bower
 	`sudo npm install -g bower`
 
-- Install Kaazing Universal Javascript client libraries
+- Install Kaazing Universal Javascript client libraries  
 	`bower install kaazing-javascript-univeral-client`
 	
-__Note__: If you used prior versions of the library you may want to clean bower cache by running:
+__Note__: If you used prior versions of the library you may want to clean bower cache by running:  
 	`bower cache clean`
 	
 #### Using the library
@@ -36,11 +37,11 @@ Add the following to your main html page (index.html):
 - Install NodeJS - please refer to the [NodeJS downloads page][9] for the installer that is appropriate for your OS
 - Update npm  
 	`sudo npm update npm -g`
-- Install RequireJS libraries
+- Install RequireJS libraries  
 	`npm install requirejs`
-- Install jQuery libraries
-	`npm install requirejs`	
-- Install Kaazing Universal Javascript client libraries
+- Install jQuery libraries   
+	`npm install requirejs`	 
+- Install Kaazing Universal Javascript client libraries   
 	`npm install kaazing-javascript-universal-client`
 	
 #### Using the library
