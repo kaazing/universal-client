@@ -91,7 +91,7 @@ var jmsClientFunction=function(logInformation){
 			/**
 			 * Closes the subscrpiption and releases all the resources.
 			 */
-			close:function(){
+			disconnect:function(){
 				if (this.subscribed){
 					this.closed.resolve();
 				}
@@ -216,7 +216,7 @@ var jmsClientFunction=function(logInformation){
     /**
      * Disconnects from Kaazing WebSocket JMS Gateway, closes all the subscription and releases all the resources.
      */
-    JMSClient.disconnect=function(){
+    JMSClient.close=function(){
 		for(var i=0;i<this.subscriptions.length;i++){
 			this.subscriptions[i].close();
 		}
