@@ -1,7 +1,7 @@
 # Universal Clients for JavaScript Applications
 The [Kaazing JavaScript WebSocket Universal Clients][2] library that can be also used with AngularJS, ReactJS and so on.
 
-Both implementation use the same underlying [JavaScript AMQP Client Libraries Facade][3] and [JavaScript JMS Client Libraries Facade][4] scripts for interaction with Kaazing AMQP and JMS client libraries.
+The library uses [JavaScript AMQP Client Libraries Facade][3] and [JavaScript JMS Client Libraries Facade][4] scripts for interaction with Kaazing AMQP and JMS client libraries.
 Please, refer to the links above for the details about the details of the usage and implementations.
 
 ## Using the Client Libraries

@@ -1,5 +1,5 @@
 # Kaazing JavaScript Universal Client for Javascript
-This library is intended to be used with 'plain JavaScript' application; it provides JavaScript function that returns an object that can be used in the client application to interact with Kaazing Gateway.
+This library is intended to be used with 'plain JavaScript', AngularJS, ReactJS applications (see [Kaazing JavaScript Starter Applications](https://github.com/kaazing/javascript.getting.started) and [Kaazing Examples and Tutorials](https://github.com/kaazing/tutorials)); it provides JavaScript function that returns an object that can be used in the client application to interact with Kaazing Gateway.
 
 ## Using the Library
 ### Install the library
@@ -45,7 +45,7 @@ This library is intended to be used with 'plain JavaScript' application; it prov
 	Where:
 	- **protocol**: Specifies protocol that should be used for communications: jms - for communication with Kaazing JMS Gateway, amqp - for communication with Kaazing AMQP Gateway.
 
-- Establish a connection within your controller
+- Establish a connection
 	```javascript
 	...
 
@@ -53,24 +53,64 @@ This library is intended to be used with 'plain JavaScript' application; it prov
 	...
 
 	$(document).ready(function () {
-		client.connect(url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle,loggerFuncHandle);
-
-		...
+		client.connect(connectionInfo, // Connection info
+				onError, // callback function to process errors
+				function(connection){
+			...
+		}
 
 	}
 
 	```
 	Where:
-	- **url**: Connection URL (e.g. ws://localhost:8001/amqp or ws://localhost:8001/jms)
-	- **username**: User name to be used to establish connection
-	- **password**: User password to be used to establish connection
+	- **coonectionInfo**: Connection information that contains _URL_ (e.g. ws://localhost:8001/amqp or ws://localhost:8001/jms), _username_(user name to be used to establish connection) and _password_(user password to be used to establish connection)
+	- **onError**: function that is used for error handling in a format of _function(error)_. 
+	- _callback function_ to receive a connection object once connection is established.
+	
+	**Note:** If you want to add a logger to log library messages, add the following after creating the client:
+	```javascript
+	
+	var logWebSocketMessage = function (cls, msg) {
+ 		...
+	}
+	var client=UniversalClientDef(protocol);
+	// Set the logger function
+	client.loggerFuncHandle=logWebSocketMessage;
+
+	```
+- Subscribe to the topics of interest
+	```javascript
+	...
+
+	var client=UniversalClientDef(protocol);
+	...
+
+	$(document).ready(function () {
+		var subscription;
+		client.connect(connectionInfo, // Connection info
+				onError, // callback function to process errors
+				function(connection){
+					connection.subscribe(topicP, // Topic to send message
+										 topicS, // Topic to subscribe to receive messsages
+										 onMessage, // callback function to process received messages
+										 noLocal, // noLocal flag set to false - allow receiving your own messages
+						function(subscription){
+							subscription=subscr;
+						});
+					}		
+				}
+
+	}
+	
+	```	
+	
+	Where:
 	- **topicP**: Name of the publishing endpoint - AMQP exchange used for publishing or JMS Topic
 	- **topicS**: Name of the subscription endpoint - AMQP exchange used for subscription or JMS Topic
 	- **noLocal**: Flag indicating whether the client wants to receive its own messages (true) or not (false). That flag should be used when publishing and subscription endpoints are the same.
-	- **messageDestinationFuncHandle**: Function that will be used to process received messages from subscription endpoint in a format: _function(messageBody)_
-	- **errorFuncHandle**: function that is used for error handling in a format of _function(error)_
-	- **loggerFuncHandle**: function that is used for logging events in a format of _function(severity, message)_
-	- **connectFunctionHandle**: function this is called when connection is established in a format: _function()_
+	- **onMessage**: Function that will be used to process received messages from subscription endpoint in a format of _function(message)_
+	- _callback function_ to receive subscription object
+	**Note** Multiple subscriptions are allowed within single connection!
 - Add disconnect on window close (shown method uses JQuery):
 	```javascript
 	...
@@ -79,8 +119,19 @@ This library is intended to be used with 'plain JavaScript' application; it prov
 	...
 
 	$(document).ready(function () {
-		client.connect(url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, errorFuncHandle, loggerFuncHandle, connectFunctionHandle);
-
+		var subscription;
+		client.connect(connectionInfo, // Connection info
+				onError, // callback function to process errors
+				function(connection){
+					connection.subscribe(topicP, // Topic to send message
+										 topicS, // Topic to subscribe to receive messsages
+										 onMessage, // callback function to process received message
+										 noLocal, // noLocal flag set to false - allow receiving your own messages
+						function(subscription){
+							subscription=subscr;
+						});
+					}		
+				}
 		...
 		$( window ).unload(function() {
             // Disconnect
@@ -90,8 +141,8 @@ This library is intended to be used with 'plain JavaScript' application; it prov
 	}
 
 	```
-- To send messages use sendMessage(msg) method
-	where _**msg**_ is message to be sent. If _**msg**_ is not a string it will be converted to JSON. Be sure to send the message only after the connection has been successfully initialized (the connectFunctionHandle() callback is an ideal place for it).
+- To send messages use sendMessage(msg) method of a subscription object
+	where _**msg**_ JavaScript object to be sent (as a JSON string). 
 	```javascript
 	...
 
@@ -100,73 +151,24 @@ This library is intended to be used with 'plain JavaScript' application; it prov
 
 	var sendMessage=function(msg){
 		// Send message
-    	client.sendMessage(msg);
+    	subscrpiption.sendMessage(msg);
 	}
 
 
 	$(document).ready(function () {
-		client.connect(url, username, password, topicP, topicS, noLocal, messageDestinationFuncHandle, errorFuncHandle, loggerFuncHandle, connectFunctionHandle);
-
-		...
-		$( window ).unload(function() {
-            // Disconnect
-            client.disconnect();
-        });
-
-	}
-	```
-- When message is received, service will call a function registered as **messageDestinationFuncHandle** as shown above. E.g.  
-
-	```javascript
-	...
-
-	var client=UniversalClientDef(protocol);
-	...
-
-	var sendMessage=function(msg){
-		// Send message
-    	client.sendMessage(msg);
-	}
-
-	var processReceivedCommand=function(cmd){
-		// Process received message
-	}
-
-	$(document).ready(function () {
-		client.connect(url, username, password, topicP, topicS, noLocal, processReceivedCommand,errorFuncHandle, loggerFuncHandle, connectFunctionHandle);
-
-		...
-		$( window ).unload(function() {
-            // Disconnect
-            client.disconnect();
-        });
-
-	}
-
-	```
-- To handle WebSocket errors, specify the function **errorFuncHandle** or pass _null_ if not needed. E.g.:
-	```javascript
-	...
-
-	var client=UniversalClientDef(protocol);
-	...
-
-	var sendMessage=function(msg){
-		// Send message
-    	client.sendMessage(msg);
-	}
-
-	var processReceivedCommand=function(cmd){
-		// Process received message
-	}
-
-	var handleWebSocketError = function (error) {
-		// Habdle WebSocket error
-	}
-
-	$(document).ready(function () {
-		client.connect(url, username, password, topicP, topicS, noLocal, processReceivedCommand,handleWebSocketError, loggerFuncHandle, connectFunctionHandle);
-
+		var subscription;
+		client.connect(connectionInfo, // Connection info
+				onError, // callback function to process errors
+				function(connection){
+					connection.subscribe(topicP, // Topic to send message
+										 topicS, // Topic to subscribe to receive messsages
+										 onMessage, // callback function to process received message
+										 noLocal, // noLocal flag set to false - allow receiving your own messages
+						function(subscription){
+							subscription=subscr;
+						});
+					}		
+				}
 		...
 		$( window ).unload(function() {
             // Disconnect
@@ -176,82 +178,6 @@ This library is intended to be used with 'plain JavaScript' application; it prov
 	}
 	```
 
-- To log WebSocket related events, specify the function **loggerFuncHandle** or pass null if not needed. E.g.:  
-	```javascript
-	...
-
-	var client=UniversalClientDef(protocol);
-	...
-
-	var sendMessage=function(msg){
-		// Send message
-    	client.sendMessage(msg);
-	}
-
-	var processReceivedCommand=function(cmd){
-		// Process received message
-	}
-
-	var handleWebSocketError = function (error) {
-		// Habdle WebSocket error
-	}
-
-	var logWebSocketMessage = function (cls, msg) {
-		// Log WebSocket messages
-	}
-
-	$(document).ready(function () {
-		client.connect(url, username, password, topicP, topicS, noLocal, processReceivedCommand,handleWebSocketError, logWebSocketMessage, connectFunctionHandle);
-
-		...
-		$( window ).unload(function() {
-            // Disconnect
-            client.disconnect();
-        });
-
-	}
-	```
-
-- To perform post-connect initalizations, specify the function **connectFunctionHandle** or pass null if not needed. E.g.:  
-	```javascript
-	...
-
-	var client=UniversalClientDef(protocol);
-	...
-
-	var sendMessage=function(msg){
-		// Send message
-    	client.sendMessage(msg);
-	}
-
-	var processReceivedCommand=function(cmd){
-		// Process received message
-	}
-
-	var handleWebSocketError = function (error) {
-		// Habdle WebSocket error
-	}
-
-	var logWebSocketMessage = function (cls, msg) {
-		// Log WebSocket messages
-	}
-
-	var onWebSocketConnected = function () {
-		// Do some post-connect initialization
-	}
-
-
-	$(document).ready(function () {
-		client.connect(url, username, password, topicP, topicS, noLocal, processReceivedCommand,handleWebSocketError, logWebSocketMessage, onWebSocketConnected);
-
-		...
-		$( window ).unload(function() {
-            // Disconnect
-            client.disconnect();
-        });
-
-	}
-	```
 ## Organization of Kaazing JavaScript Universal Client   
 
 ![][image-1]

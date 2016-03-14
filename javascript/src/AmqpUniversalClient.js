@@ -286,7 +286,7 @@ var amqpClientFunction=function(logInformation){
     /**
      * Disconnects from Kaazing WebSocket AMQP Gateway
      */
-    AmqpClient.disconnect=function(){
+    AmqpClient.close=function(){
         amqpClient.disconnect();
     }
 
