@@ -24,12 +24,12 @@ Connect function implements the following sequence:
 
 - Create AMQP client factory and AMQP client
 
-	```java
+```java
 	amqpClientFactory = AmqpClientFactory.createAmqpClientFactory();
 	amqpClient = amqpClientFactory.createAmqpClient();
-	```
+```
 - Register connection listeners
-	```java
+```java
 	...
 	amqpClient.addConnectionListener(new ConnectionListener() {
 
@@ -66,10 +66,12 @@ Connect function implements the following sequence:
 
 			}
 		});
-	```
+	...	
+```
 	We use onConnectionOpen and onConnectionError listeners to wait until connection is either established or failed; we use the countdown latch to wait for either of these events. 
 - Establish connection using provided login and password
-	```java
+```java
+	...
 	amqpClient.connect(this.url, "/", login, password);
 		try {
 			latch.await(10, TimeUnit.SECONDS);
@@ -79,13 +81,16 @@ Connect function implements the following sequence:
 		if (!fConnected) {
 			throw new ClientException("Connection to " + this.url + " was not established in 10 sec.");
 		}
-	```
+	...
+```
 	
 ### **subscribe** method of of AmqpUniversalClient object
 Method executed the following actions:
 - Opens publishing channel
 ```java
+	...
 	AmqpChannel pubChannel = this.amqpClient.openChannel();
+	...
 ```
 - Adds publishing channel listeners
 ```java
@@ -122,9 +127,11 @@ Method executed the following actions:
 ```java
 	...
 	AmqpChannel subChannel = this.amqpClient.openChannel();
+	...
 ```
 - Registers subscription channel events listeners:
 ```java
+	...
 	subChannel.addChannelListener(new ChannelAdapter() {			
 			@Override
 			public void onError(final ChannelEvent e) {
@@ -153,6 +160,7 @@ Method executed the following actions:
 					.consumeBasic(queueName, clientId, noLocal, false, false, false, null);
 			}
 		});
+	...
 ```
 	
 Once the channel is successfully opened, onOpen event listener will be called where we:
@@ -168,27 +176,31 @@ onMessage event listener is called every time we will receive a message from an 
 	- calls onMessage method of MessagesListener object passing it received object. 
 	
 ```java
+	...
 	byte[] bytes = new byte[e.getBody().remaining()];
 	e.getBody().get(bytes);
-	try {
-			Serializable object=Utils.deserialize(bytes);
-			if (!(object instanceof AmqpMessageEnvelope)){
-				errorsListener.onException(new ClientException("Received object is not an instance of AmqpMessageEnvelope;  received from " + subTopicName));
-				LOGGER.error("Received object is not an instance of AmqpMessageEnvelope;  received from " + subTopicName +" for url"+url);
-				return;
-			}
-			AmqpMessageEnvelope messageEnvelope=(AmqpMessageEnvelope)object;
-			if (noLocal && messageEnvelope.getClientId().equals(appId)){
-				LOGGER.debug("Received message ["+messageEnvelope.toString()+"] on topic "+subTopicName+", connection to "+url+" is ignored as it came from the same client and noLocal is set!");
-				return;
-			}
-			LOGGER.debug("Received message ["+messageEnvelope.getData().toString()+"] on topic "+subTopicName+", connection to "+url);
-			messageListener.onMessage(messageEnvelope.getData());
-	} catch (ClassNotFoundException | IOException e1) {
-			errorsListener.onException(new ClientException("Cannot deserialize an object from the message received from " + subTopicName, e1));
-			LOGGER.error("Cannot deserialize an object from the message received from " + subTopicName +" for url"+url);
+	try 
+	{
+		Serializable object=Utils.deserialize(bytes);
+		if (!(object instanceof AmqpMessageEnvelope)){
+			errorsListener.onException(new ClientException("Received object is not an instance of AmqpMessageEnvelope;  received from " + subTopicName));
+			LOGGER.error("Received object is not an instance of AmqpMessageEnvelope;  received from " + subTopicName +" for url"+url);
 			return;
+			}
+		AmqpMessageEnvelope messageEnvelope=(AmqpMessageEnvelope)object;
+		if (noLocal && messageEnvelope.getClientId().equals(appId)){
+			LOGGER.debug("Received message ["+messageEnvelope.toString()+"] on topic "+subTopicName+", connection to "+url+" is ignored as it came from the same client and noLocal is set!");
+			return;
+		}
+		LOGGER.debug("Received message ["+messageEnvelope.getData().toString()+"] on topic "+subTopicName+", connection to "+url);
+		messageListener.onMessage(messageEnvelope.getData());
+	} 
+	catch (ClassNotFoundException | IOException e1) {
+		errorsListener.onException(new ClientException("Cannot deserialize an object from the message received from " + subTopicName, e1));
+		LOGGER.error("Cannot deserialize an object from the message received from " + subTopicName +" for url"+url);
+		return;
 	}
+	...
 ```				
 
 Once the channels are opened, they are stored in an AmqpClientSubscription object (subclass of ClientSubscription object) for future use. Created instance of ClientSubscription object is registered with AmqpUniversalClient.
@@ -223,15 +235,18 @@ Serialized object is stored in the ByteBuffer that is sent to the channel along 
 	props.setTimestamp(ts);
 
 	this.pubChannel.publishBasic(buffer, props, this.pubChannelName, AmqpUniversalClient.ROUTING_KEY, false, false);
+	...
 ```
 		
 ### **disconnect** method of AmqpClientSubscription object
 Deletes the declared subscription queue and closes the channels
 ```java
+	...
 	this.subChannel.deleteQueue(this.queueName, false, false, false);
 
 	this.pubChannel.closeChannel(0, "", 0, 0);
 	this.subChannel.closeChannel(0, "", 0, 0);
+	...
 ```
 
 ### **close** method of AmqpUniversalClient object
@@ -242,6 +257,7 @@ Disconnects all opened subscriptions, disconnects Amqp client.
 		conn.disconnect();
 	}
 	this.amqpClient.disconnect();
+	...
 ```
 
 
