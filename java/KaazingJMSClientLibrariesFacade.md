@@ -23,7 +23,7 @@ Constructor implements the following sequence:
 
 - Locate JMS connection factory using JNDI:
 
-	```java
+```java
 	Properties env = new Properties();
 	env.setProperty("java.naming.factory.initial", "com.kaazing.gateway.jms.client.JmsInitialContextFactory");
 
@@ -39,13 +39,13 @@ Constructor implements the following sequence:
 		throw new ClientException("Error locating connection factory for JMS!", e);
 	}
 	JmsConnectionFactory jmsConnectionFactory = (JmsConnectionFactory) connectionFactory;
-	```
+```
 
 - Create connection. To create connection: 
 	- Set the gateway URL connection for JMS connection factory.
 	- Create WebSocket factory
 	- Create connection passing login and password:
-	```java
+```java
 	...
 	jmsConnectionFactory.setGatewayLocation(url);
 	WebSocketFactory webSocketFactory = jmsConnectionFactory.getWebSocketFactory();
@@ -56,9 +56,9 @@ Constructor implements the following sequence:
 		throw new ClientException("Error connecting to gateway with " + url.toString() + ", credentials " + login + "/" + password, e);
 	}
 	...
-	``` 	
+``` 	
 - Register the ErrorsListener object that is passed to the constructor with the connection to be a listener for any errors and exceptions:
-	```java
+```java
 	...
 	try {
 		connection.setExceptionListener(this);
@@ -66,28 +66,30 @@ Constructor implements the following sequence:
 		throw new ClientException("Error setting exceptions listener. Connection: " + url.toString() + ", credentials " + login + "/" + password, e);
 	} 
 	...  
-	```
+```
 	
 - Create __session__ in auto-acknowledgement mode. In this mode session automatically acknowledges a client's receipt of a message either when the session has successfully returned from a call to receive or when the message listener the session has called to process the message successfully returns. 
-	```java
+```java
 	...
-	try 
-	{
+	try {
 		session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 	} catch (JMSException e) {
 		throw new ClientException("Error creating session. Connection: " + url.toString() + ", credentials " + login + "/" + password, e);
 	}
 	...	
-	```
+```
 - Start the connection
-	```java
-	try 
-	{
-			connection.start();
-	} catch (JMSException e) {
-			throw new ClientException("Error starting connection: " + url.toString() + ", credentials " + login + "/" + password, e);
+```java
+	...
+	try {
+		connection.start();
+	} 
+	catch (JMSException e) {
+		throw new ClientException("Error starting connection: " + url.toString() + ", credentials " + login + "/" + password, e);
 	}
-	```
+	...
+```
+
 Once object is successfully constructed it is ready to create subscriptions. 
 
 
@@ -96,21 +98,22 @@ Method executed the following actions:
 
 - Creates subscription destination
 
-	```java
+```java
+	...
 	Destination subDestination;
 	try {
 		subDestination = (Destination) jndiInitialContext.lookup("/topic/" + subTopicName);
 	} catch (NamingException e) {
 		throw new ClientException("Cannot locate subscription topic " + subTopicName, e);
 	}
-	```
+	...
+```
 - Creates message Consumer.
 	_In order to prevent client from receiving its own messages consumer may be created with the query that will filter out the messages with the 'appId' string property set to this client application ID - a randomly generated GUID._
-	```java
+```java
 	...
 	MessageConsumer consumer;
 	try {
-		
 		if (noLocal){
 			clientId=UUID.randomUUID().toString();
 			consumer = session.createConsumer(subDestination, "clientId<>'"+clientId+"'");
@@ -121,9 +124,9 @@ Method executed the following actions:
 		throw new ClientException("Cannot create consumer for subscription topic " + subTopicName, e);
 	}
 	...
-	```
+```
 - Registers an instance of ... passed to the method to be a message listener.
-	```java
+```java
 	...
 	try 
 	{
@@ -132,41 +135,42 @@ Method executed the following actions:
 		throw new ClientException("Cannot create messages listener for subscription topic " + subTopicName, e);
 	}
 	...
-	``` 
+``` 
 	
 	We use MessageLinstenerImpl wrapper class that implements MessageListener to convert the ByteMessage object received from the wire to an instance of Serializable object that was sent.
-	```java
+```java
 	...
 	if (message instanceof BytesMessage) {
-				try {					
-					BytesMessage bytesMessage = ((BytesMessage) message);
-					long len = bytesMessage.getBodyLength();
-					byte b[] = new byte[(int) len];
-					bytesMessage.readBytes(b);
-					Serializable object;
-					try {
-						object = Utils.deserialize(b);
-						LOGGER.debug("Received message ["+object.toString()+"] on topic "+destination+", connection to "+url);
-						this.listener.onMessage(object);
-					} catch (ClassNotFoundException | IOException e) {
-						this.errorsListener.onException(new ClientException("Cannot deserialize an object from the message received from " + destination, e));
-						LOGGER.error("Cannot deserialize an object from the message received from " + destination+" connection to "+url, e);
-						return;
-					}
-					
-				} catch (JMSException e) {
-					this.errorsListener.onException(new ClientException("Error receiving message from destination " + destination, e));
-					LOGGER.error("Error receiving message from destination " + destination+" connection to "+url, e);
-				}
-			} else {
-				this.errorsListener.onException(new ClientException("Received a message of unexpected type " + message.getClass().getName() + " for a destination " + destination));
-				LOGGER.error("Received a message of unexpected type " + message.getClass().getName()  + destination+" connection to "+url);
+		try {					
+			BytesMessage bytesMessage = ((BytesMessage) message);
+			long len = bytesMessage.getBodyLength();
+			byte b[] = new byte[(int) len];
+			bytesMessage.readBytes(b);
+			Serializable object;
+			try {
+				object = Utils.deserialize(b);
+				LOGGER.debug("Received message ["+object.toString()+"] on topic "+destination+", connection to "+url);
+				this.listener.onMessage(object);
+			} catch (ClassNotFoundException | IOException e) {
+				this.errorsListener.onException(new ClientException("Cannot deserialize an object from the message received from " + destination, e));
+				LOGGER.error("Cannot deserialize an object from the message received from " + destination+" connection to "+url, e);
+				return;
 			}
-		...
-		```
+		} catch (JMSException e) {
+			this.errorsListener.onException(new ClientException("Error receiving message from destination " + destination, e));
+			LOGGER.error("Error receiving message from destination " + destination+" connection to "+url, e);
+		}
+	} else {
+		this.errorsListener.onException(new ClientException("Received a message of unexpected type " + message.getClass().getName() + " for a destination " + destination));
+		LOGGER.error("Received a message of unexpected type " + message.getClass().getName()  + destination+" connection to "+url);
+	}
+	...
+```
 		
 - Create publishing destination and producer
-	```java
+
+```java
+	...
 	Destination pubDestination;
 	try {
 		pubDestination = (Destination) jndiInitialContext.lookup("/topic/" + pubTopicName);
@@ -179,7 +183,8 @@ Method executed the following actions:
 	} catch (JMSException e) {
 		throw new ClientException("Cannot create producer for publishing topic " + pubTopicName, e);
 	}
-	```
+	...
+```
 	
 	Session, producer and consumer are stored in an JMSClientSubscription object (subclass of ClientSubscription object) for future use. Created instance of ClientSubscription object is registered with JMSUniversalClient.
 	   
