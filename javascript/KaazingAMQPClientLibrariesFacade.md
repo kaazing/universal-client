@@ -109,7 +109,7 @@ Function sets AMQP properties and sends the message to a publishing exchange usi
 **Note:** As mentioned earlier, library creates a fanout type of exchange that does not use routing keys; thus library sets the value of the routing key to 'broadcast'.
 
 ```javascript
-sendMessage:function(msg){
+	sendMessage:function(msg){
                 if (typeof msg ==="object"){
 					msg.clientId=this.clientId;
                     msg=JSON.stringify(msg);
@@ -137,7 +137,7 @@ sendMessage:function(msg){
                 props.setUserId(this.user);
 				logInformation("sent","Sending message to "+this.topicPub+": "+ msg, "sent");
                 this.publishChannel.publishBasic({body: body, properties: props, exchange: this.topicPub, routingKey: routingKey});
-            }
+        }
 ```
 		
 ### **disconnect** function of a subscription object
