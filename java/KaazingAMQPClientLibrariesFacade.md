@@ -154,17 +154,19 @@ Method executed the following actions:
 			}
 		});
 ```
-	Once the channel is successfully opened, onOpen event listener will be call where we:
-		- declare a new queue 
-		- bind the queue to an exchange with 'broadcast' routing key
-		- start basic consumer for the queue.
-		**Note** For fanout exchanges routing key is not used. For more information about exchanges and routing keys see: [https://www.rabbitmq.com/tutorials/amqp-concepts.html](https://www.rabbitmq.com/tutorials/amqp-concepts.html). 
+	
+Once the channel is successfully opened, onOpen event listener will be called where we:
+	- declare a new queue 
+	- bind the queue to an exchange with 'broadcast' routing key
+	- start basic consumer for the queue.
+	**Note** For fanout exchanges routing key is not used. For more information about exchanges and routing keys see: [https://www.rabbitmq.com/tutorials/amqp-concepts.html](https://www.rabbitmq.com/tutorials/amqp-concepts.html). 
 		
-	Once consumer is started, onConsumeBasic event listener is called which is an indication that channel is successfully opened. onError listener is triggered in an event of any error. We use the countdown latch to wait for either of these events.  
-	onMessage event listener is called every time we will receive a message from an exchange. In this method we:
-		- Allocates the buffer and read the data from the event body that contains serialized object.
-		- Deserialize the object and make sure it an instance of our AmqpMessageEnvelope. The reason to use an envelope it contains application identifier that is used for messages filtering for the AMQP brokers that do not support noLocal functionality (functionality that prevents the client to received its own messages when publishing and subscription endpoints are the same).
-		- calls onMessage method of MessagesListener object passing it received object. 
+Once consumer is started, onConsumeBasic event listener is called which is an indication that channel is successfully opened. onError listener is triggered in an event of any error. We use the countdown latch to wait for either of these events.  
+onMessage event listener is called every time we will receive a message from an exchange. In this method we:
+	- Allocates the buffer and read the data from the event body that contains serialized object.
+	- Deserialize the object and make sure it an instance of our AmqpMessageEnvelope. The reason to use an envelope it contains application identifier that is used for messages filtering for the AMQP brokers that do not support noLocal functionality (functionality that prevents the client to received its own messages when publishing and subscription endpoints are the same).
+	- calls onMessage method of MessagesListener object passing it received object. 
+	
 ```java
 	byte[] bytes = new byte[e.getBody().remaining()];
 	e.getBody().get(bytes);
