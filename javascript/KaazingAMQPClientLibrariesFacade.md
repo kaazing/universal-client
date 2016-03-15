@@ -22,26 +22,26 @@ Connect function implements the following sequence:
 
 - Create WebSocket and AMQP client factories
 
-	```javascript
+```javascript
 	var amqpClientFactory = new AmqpClientFactory();  
 	var webSocketFactory;  
 	if ($gatewayModule && typeof($gatewayModule.WebSocketFactory) === "function") {  
 		webSocketFactory = createWebSocketFactory();  
 		amqpClientFactory.setWebSocketFactory(webSocketFactory);  
 	}
-	```
+```
 
 - Create AMQP client
 
-	```javascript
+```javascript
 	amqpClient = amqpClientFactory.createAmqpClient();
-	```
+```
 
 - Connect to Gateway using amqpClient connect function. Connect function uses has the following parameters:
 	- Connection options. In most common cases it contains of URL, credentials and virtual host (set to ‘/‘) hat specifies the namespace for entities (exchanges and queues) referred to by the protocol. Note that this is not virtual hosting in the HTTP sense.
 	- Callback function that will be called once connection is established. 
 
-	```javascript
+```javascript
 	var credentials = {username: username, password: password};  
 	var options = {  
 		url: url,  
@@ -52,28 +52,29 @@ Connect function implements the following sequence:
           var connection=createConnectionObject(amqpClient,connectionInfo.username);
                 connectedFunctionHandle(connection);
             });
-	```
+```
 	
 ### **subscribe** method of connection object
 - Creates and initializes subscription object
 - Opens publishing and consumption (subscription) channels using amqpClient openChannel function that will call on success the callback function that is passed as a parameter:  
 	
-	```javascript
+```javascript
 	var openHandler=function(){  
 		publishChannel = amqpClient.openChannel(this.publishChannelOpenHandler);  
 		consumeChannel = amqpClient.openChannel(this.consumeChannelOpenHandler);  
 	}		
-	```
+```
 		
 	Once the channels are created method returns the _subscription_ object via a callback.
 	During the creation of the channels:
 - Publishing channel open handler declares AMQP Exchange of a _fanout_ type thus creating publishing endpoint.
 		
-	```javascript
+```javascript
 	publishChannelOpenHandler:function(that){
-    	that.publishChannel.declareExchange({exchange: that.topicPub, type: "fanout"});
-    }
-	```		
+    		that.publishChannel.declareExchange({exchange: that.topicPub, type: "fanout"});
+    	}
+```
+
 - Consumption (or subscription) channel open handler:
 	1. Adds an event listener for “message” event providing the ability to receive messages. 
 	2. Declares subscription queue for the client. Library randomly generates the name for every client.
@@ -83,25 +84,25 @@ Connect function implements the following sequence:
 		
 	4. Starts basic consumer. Basic consumer is started with noAck=true parameter so the client does not need to implement explicit acknowledgement. Another parameter - noLocal - controls whether the client wants to receive its own messages.
 	
-	```javascript
-		consumeChannelOpenHandler:function(that{  
-			consumeChannel.addEventListener("message", function(message) {  
-				var body = null;  
-				// Check how the payload was packaged since older browsers like IE7 don't  
-				// support ArrayBuffer. In those cases, a Kaazing ByteBuffer was used instead.  
-					if (typeof(ArrayBuffer) === "undefined") {  
-						body = message.getBodyAsByteBuffer().getString(Charset.UTF8);  
-					}  
-					else {  
-						body = arrayBufferToString(message.getBodyAsArrayBuffer());  
-					}  
-					that.messageReceivedFunc(body);
-					});  
-		 		that.consumeChannel.declareQueue({queue: that.queueName})
+```javascript
+	consumeChannelOpenHandler:function(that{  
+		consumeChannel.addEventListener("message", function(message) {  
+			var body = null;  
+			// Check how the payload was packaged since older browsers like IE7 don't  
+			// support ArrayBuffer. In those cases, a Kaazing ByteBuffer was used instead.  
+			if (typeof(ArrayBuffer) === "undefined") {  
+				body = message.getBodyAsByteBuffer().getString(Charset.UTF8);  
+			}  
+			else {  
+				body = arrayBufferToString(message.getBodyAsArrayBuffer());  
+			}  
+			that.messageReceivedFunc(body);
+		});  
+		 that.consumeChannel.declareQueue({queue: that.queueName})
                     .bindQueue({queue: that.queueName, exchange: that.topicSub, routingKey: routingKey })
                     .consumeBasic({queue: that.queueName, consumerTag: that.clientId, noAck: true, noLocal:that.noLocal })  
-				}
-			```
+	}
+```
 			
 ### **sendMessage** function of a subscription object
 Function sets AMQP properties and sends the message to a publishing exchange using specified routing key.   
