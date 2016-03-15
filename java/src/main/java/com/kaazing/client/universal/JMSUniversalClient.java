@@ -128,7 +128,7 @@ public class JMSUniversalClient implements ExceptionListener, UniversalClient {
 		try {
 			pubDestination = (Destination) jndiInitialContext.lookup("/topic/" + pubTopicName);
 		} catch (NamingException e) {
-			throw new ClientException("Cannot locate publicshing topic " + pubTopicName, e);
+			throw new ClientException("Cannot locate publishing topic " + pubTopicName, e);
 		}
 		MessageProducer producer;
 		try {

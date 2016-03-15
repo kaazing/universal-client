@@ -1,28 +1,31 @@
 # Kaazing Javascript JMS Client Libraries Facade
+Kaazing JavaScript JMS Client Libraries Facade simplifies the interaction with Kaazing JavaScript JMS Client libraries that enable the developers to interact with [JMS](http://docs.oracle.com/javaee/6/tutorial/doc/bncdx.html) brokers via WebSockets.
+
 Kaazing JavaScript JMS Client Libraries Facade:
 * Implements basic publish-subscribe functionality for JMS to help developers in getting started with their JMS WebSocket projects 
 * Provide developers with the reference implementations for using Kaazing JMS JavaScript client libraries
 
 For more information see:
-- [Build JavaScript JMS Clients Using Kaazing WebSocket Gateway - JMS Edition](http://developer.kaazing.com/documentation/jms/4.0/dev-js/o_dev_js.html)
-- [Use the Kaazing WebSocket Gateway JavaScript JMS Client API](http://developer.kaazing.com/documentation/jms/4.0/dev-js/p_dev_js_client.html)
+- [Build JavaScript JMS Clients Using Kaazing WebSocket Gateway - JMS Edition](http://kaazing.com/doc/jms/4.0/dev-js/o_dev_js.html)
+- [Use the Kaazing WebSocket Gateway JavaScript JMS Client API](http://kaazing.com/doc/jms/4.0/dev-js/p_dev_js_client.html)
 
 ## Organization of the library
-Library consists of jmsClientFunction that creates JMSClient object. JMSClient objects provides the following functionality:
-- **connect** function - connects client to Kaazing WebSocket JMS gateway and creates a __connection__ object
-- **disconnect** function - disconnects client from Kaazing WebSocket JMS gateway
-- **sendMessage** function - sends the message to a publishing endpoint
+- **connect** function - connects client to Kaazing WebSocket JMS gateway and on success returns via callback a _connection_ object that will be used to create subscriptions.
+- ** subscribe ** method of a _connection_ object that creates publishing endpoint and subscribes to a subscription endpoint. Method returns via callback a _subscription_ object that is used for sending messages.
+- **sendMessage** method of a _subscription_ object - sends the message to a publishing endpoint
+- **disconnect** function of a _subscription_ object - closes both publishing and subscription.
+- **close** method - closes all subscriptions and disconnects client from Kaazing WebSocket AMQP gateway
 
 ### **connect** function
 Connect function implements the following sequence:
 
-1. Create JMS connection factory
+- Create JMS connection factory
 
 ```javascript
 	var jmsConnectionFactory = new JmsConnectionFactory(url);
 ```
 
-2. Create connection. createConnection function of JmsConnectionFactory takes three parameters: login, password and a callback function that will be called upon completion. Function returns the future that is checked in a callback function for exceptions.
+- Create connection. createConnection function of JmsConnectionFactory takes three parameters: login, password and a callback function that will be called upon completion. Function returns the future that is checked in a callback function for exceptions.
 
 ```javascript
 	var connectionFuture = jmsConnectionFactory.createConnection(username, password, function () {
@@ -48,13 +51,13 @@ Connect function implements the following sequence:
 	})
 ```
 	
-3. Once connection is created, callback function does the following:
+ Once connection is created, callback function does the following:
 	1. Obtains the connection from the connectionFuture that was returned by createConection.
 	2. Sets exception listener to handle exceptions.
 	3. Creates session using createSession method. Session is created with auto-acknowledgement. 
 	4. Starts the connection using start function passing to it a callback function.
 
-4. Once connection is started, connection object is returned for the subscription to be created using __subscribe__ method.
+- Once connection is started, connection object is returned for the subscription to be created using __subscribe__ method.
 
 ### **subscribe** method of connection object
 Method executed the following actions:
@@ -104,7 +107,7 @@ Function creates text message and sends it. In order to prevent client from rece
 	}
 ``` 	
 
-### **close** function of a subscription object
+### **disconnect** function of a subscription object
 Function closes producer and consumer that were created during the subscription call.
 
 ```javascript
@@ -114,8 +117,8 @@ Function closes producer and consumer that were created during the subscription 
 	})
 ```
 	    	
-### **disconnect** function
-Closes all subscriptions (causing closing of their producer and consumer), session and connection in a chain of callbacks.
+### **close** function
+Closes all subscriptions (causing closing of their producer and consumer), stops the connection and then closes session and connection in a chain of callbacks.
 	
 ```javascript
 	JMSClient.disconnect=function(){
@@ -125,11 +128,13 @@ Closes all subscriptions (causing closing of their producer and consumer), sessi
 	
 		... Wait while all the subscriptions are closed...
 		
-		session.close(function () {
-			connection.close(function () {
+		connection.stop(function(){
+				session.close(function () {
+					connection.close(function () {
 
+					});
+				});
 			});
-		});
     }
 
 ```

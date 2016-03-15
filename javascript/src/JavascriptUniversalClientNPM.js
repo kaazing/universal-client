@@ -88,8 +88,8 @@ var UniversalClientDef=function(protocol){
     /**
      * Disconnects from Kaazing WebSocket Gateway
      */
-    JavascriptUniversalClient.disconnect=function(){
-        client.disconnect();
+    JavascriptUniversalClient.close=function(){
+        client.close();
     }
 
     return JavascriptUniversalClient;

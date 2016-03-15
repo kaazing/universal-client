@@ -96,7 +96,7 @@ The Kaazing Universal WebSocket clients depend on the Kaazing WebSocket Gateway 
 ![][image-1]
 
 As shown on the diagram above, Kaazing Universal Client works as following:
-- Instantiate required Client Facade Library based on specified protocol that will interact with necessary Kaazing Java Client Libraries
+- Instantiates required Client Facade Library based on specified protocol that will interact with necessary Kaazing Java Client Libraries
 - Pass the data to and from the Kaazing Java Client libraries via instantiated Client Facade Library
 
 For more information about Client Facade libraries see

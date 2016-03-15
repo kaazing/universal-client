@@ -32,7 +32,7 @@ var amqpClientFunction=function(logInformation){
      * Provides communication services with AMQP server. Created within amqpClientFunction constructor.
      * @class
      */
-    var AmqpClient = {};
+    var AmqpClient = {subscriptions:[]};
     var errorFunction=null;
     var amqpClient=null;
 
@@ -89,7 +89,9 @@ var amqpClientFunction=function(logInformation){
             clientId:null,
             messageIdCounter:0,
             user:user,
+            closed:null,
             messageReceivedFunc:messageReceivedFunc,
+            subscribed:false,
             init:function(subscribedCallback){
                 this.queueName="client" + Math.floor(Math.random() * 1000000);
                 this.clientId=appId;
@@ -101,6 +103,8 @@ var amqpClientFunction=function(logInformation){
                 logInformation("INFO", "OPEN: Consume Channel");
                 this.consumeChannel = amqpClient.openChannel(function(){that.consumeChannelOpenHandler(that)});
                 $.when(this.publishChannelOpened, this.consumeChannelOpened).done(function(){
+                    that.closed=$.Deferred();
+                    that.subscribed=true;
                     subscribedCallback(that);
                 });
 
@@ -211,18 +215,40 @@ var amqpClientFunction=function(logInformation){
                 props.setUserId(this.user);
 				logInformation("sent","Sending message to "+this.topicPub+": "+ msg, "sent");
                 this.publishChannel.publishBasic({body: body, properties: props, exchange: this.topicPub, routingKey: routingKey});
+            },
+            disconnect:function(){
+                if (!this.subscribed){
+                    this.closed.resolve();
+                }
+                else{
+                    this.subscribed=false;
+                    var config = {
+                        replyCode: 0,
+                        replyText: '',
+                        classId: 0,
+                        methodId: 0
+                    };
+                    this.consumeChannel.deleteQueue({queue:this.queueName, ifEmpty: false}, function(){
+                        this.consumeChannel.closeChannel(config, function(){
+                            this.publishChannel.closeChannel(config, function(){
+                                this.closed.resolve();
+                            });
+                        });
+                    });
+                }
             }
         };
         return SubscriptionObject;
 
     }
 
-    var createConnectionObject=function(amqpClient, user){
+    var createConnectionObject=function(connection, amqpClient, user){
         /**
          * Contains infomration about established connection.
          * @class
          */
         var ConnectionObject = {
+            connection:connection,
             user:user,
             amqpClient:amqpClient,
             /**
@@ -236,7 +262,9 @@ var amqpClientFunction=function(logInformation){
             subscribe:function(topicPub, topicSub, messageReceivedFunc, noLocal, subscribedCallbackFunction){
                 logInformation("INFO","CONNECTED!!!");
                 var subscription=createSubscriptionObject(this.amqpClient, topicPub, topicSub, noLocal, messageReceivedFunc, this.user);
+				var that=this;
                 subscription.init(function(subscription){
+					that.connection.subscriptions.push(subscription);
                     subscribedCallbackFunction(subscription);
                 });
             }
@@ -273,8 +301,9 @@ var amqpClientFunction=function(logInformation){
             credentials: credentials
         };
 		try{
+			var that=this;
 			amqpClient.connect(options, function(){
-                var connection=createConnectionObject(amqpClient,connectionInfo.username);
+                var connection=createConnectionObject(that, amqpClient,connectionInfo.username);
                 connectedFunctionHandle(connection);
             });
 		}
@@ -287,7 +316,12 @@ var amqpClientFunction=function(logInformation){
      * Disconnects from Kaazing WebSocket AMQP Gateway
      */
     AmqpClient.close=function(){
-        amqpClient.disconnect();
+        for(var i=0;i<this.subscriptions.length;i++){
+            this.subscriptions[i].disconnect();
+        }
+        $.when.apply($,this.subscriptions).then(function() {
+            amqpClient.disconnect();
+        });
     }
 
     return AmqpClient;
