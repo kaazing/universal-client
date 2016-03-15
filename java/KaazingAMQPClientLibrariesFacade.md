@@ -259,5 +259,3 @@ Disconnects all opened subscriptions, disconnects Amqp client.
 	this.amqpClient.disconnect();
 	...
 ```
-
-
