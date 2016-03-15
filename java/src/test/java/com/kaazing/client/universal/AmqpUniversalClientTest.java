@@ -45,7 +45,7 @@ public class AmqpUniversalClientTest {
 	@Test
 	public void testString() throws ClientException, InterruptedException {
 		
-		ClientSubscription connection = amqpClient.connect("test", "test", new MessagesListener() {
+		ClientSubscription connection = amqpClient.subscribe("test", "test", new MessagesListener() {
 			
 			@Override
 			public void onMessage(Serializable message) {
@@ -64,7 +64,7 @@ public class AmqpUniversalClientTest {
 	@Test
 	public void testObject() throws ClientException, InterruptedException {
 		
-		ClientSubscription connection = amqpClient.connect("test", "test", new MessagesListener() {
+		ClientSubscription connection = amqpClient.subscribe("test", "test", new MessagesListener() {
 			
 			@Override
 			public void onMessage(Serializable message) {
@@ -82,7 +82,7 @@ public class AmqpUniversalClientTest {
 
 	@Test
 	public void testNoLocal() throws ClientException, InterruptedException {
-		ClientSubscription connection = amqpClient.connect("test", "test", new MessagesListener() {
+		ClientSubscription connection = amqpClient.subscribe("test", "test", new MessagesListener() {
 			
 			@Override
 			public void onMessage(Serializable message) {

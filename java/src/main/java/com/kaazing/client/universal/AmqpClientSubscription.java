@@ -27,8 +27,8 @@ public class AmqpClientSubscription extends ClientSubscription {
 	private String pubChannelName;
 	private String queueName;
 
-	public AmqpClientSubscription(String connectionIdentifier, String appId, String userId, String pubChannelName, String queueName, AmqpChannel pubChannel, AmqpChannel subChannel) {
-		super(connectionIdentifier);
+	public AmqpClientSubscription(String subscriptionIdentifier, String appId, String userId, String pubChannelName, String queueName, AmqpChannel pubChannel, AmqpChannel subChannel) {
+		super(subscriptionIdentifier);
 		this.pubChannel = pubChannel;
 		this.subChannel = subChannel;
 		this.pubChannelName = pubChannelName;
@@ -44,7 +44,7 @@ public class AmqpClientSubscription extends ClientSubscription {
 		try {
 			serializedObject = Utils.serialize(messageEnvelope);
 		} catch (IOException e) {
-			throw new ClientException("Cannot serialize message " + message + " to send over connection " + this.getConnectionIdentifier(), e);
+			throw new ClientException("Cannot serialize message " + message + " to send over subscription " + this.getSubscriptionIdentifier(), e);
 		}
 		ByteBuffer buffer = ByteBuffer.allocate(serializedObject.length);
 		buffer.put(serializedObject);
@@ -61,7 +61,7 @@ public class AmqpClientSubscription extends ClientSubscription {
 		props.setTimestamp(ts);
 
 		this.pubChannel.publishBasic(buffer, props, this.pubChannelName, AmqpUniversalClient.ROUTING_KEY, false, false);
-		AmqpUniversalClient.LOGGER.debug("Sent message [" + message.toString() + "] to connection to " + this.getConnectionIdentifier());
+		AmqpUniversalClient.LOGGER.debug("Sent message [" + message.toString() + "] to subscription to " + this.getSubscriptionIdentifier());
 	}
 
 	@Override

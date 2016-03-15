@@ -211,6 +211,21 @@ var amqpClientFunction=function(logInformation){
                 props.setUserId(this.user);
 				logInformation("sent","Sending message to "+this.topicPub+": "+ msg, "sent");
                 this.publishChannel.publishBasic({body: body, properties: props, exchange: this.topicPub, routingKey: routingKey});
+            },
+            disconnect:function(){
+                 var config = {
+                    replyCode: 0, 
+                    replyText, '', 
+                    classId: 0,
+                    methodId: 0
+                };
+                this.consumeChannel.deleteQueue({queue:this.queueName, ifEmpty: false}, function(){
+                    this.consumeChannel.closeChannel(config, function(){
+                        this.publishChannel.closeChannel(config, function(){
+
+                        });
+                    });
+                });
             }
         };
         return SubscriptionObject;
@@ -286,7 +301,7 @@ var amqpClientFunction=function(logInformation){
     /**
      * Disconnects from Kaazing WebSocket AMQP Gateway
      */
-    AmqpClient.disconnect=function(){
+    AmqpClient.close=function(){
         amqpClient.disconnect();
     }
 

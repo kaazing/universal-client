@@ -15,8 +15,8 @@ public interface UniversalClient extends AutoCloseable{
 	 * @param subTopicName name of subscription topic
 	 * @param messageListener callback to receive messages
 	 * @param noLocal if true client will not receive its own messages (applicable only when pub and sub points are the same)
-	 * @return connection information 
+	 * @return subscription information 
 	 * @throws ClientException indicates that error occurred
 	 */
-	public ClientSubscription connect(String pubTopicName, String subTopicName, MessagesListener messageListener, boolean noLocal) throws ClientException;
+	public ClientSubscription subscribe(String pubTopicName, String subTopicName, MessagesListener messageListener, boolean noLocal) throws ClientException;
 }
