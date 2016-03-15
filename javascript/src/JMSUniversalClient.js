@@ -40,7 +40,7 @@ var jmsClientFunction=function(logInformation){
 			noLocal:noLocal,
 			messagesToSend:[],
 			inSend:false,
-			subscribed:false,
+			subscribed:true,
 			closed:$.Deferred(),
 			sendMessageOverTheWire:function(){
 				var msg = this.messagesToSend.pop();
@@ -92,16 +92,15 @@ var jmsClientFunction=function(logInformation){
 			 * Closes the subscrpiption and releases all the resources.
 			 */
 			disconnect:function(){
-				if (this.subscribed){
+				if (!this.subscribed){
 					this.closed.resolve();
 				}
 				else{
-					this.producer.close(function(){
-						this.consumer.close(function(){
-							this.subscribed=false;
-							this.closed.resolve();
-						});
-					})
+					this.producer.close();
+					this.consumer.close(function(){
+						this.subscribed=false;
+						this.closed.resolve();
+					});
 				}
 			}
 		};
@@ -127,6 +126,13 @@ var jmsClientFunction=function(logInformation){
 			 * @param subscribedCallbackFunction {function} callback function if a format function(SubcriptionObject) to be called when SubsriptionObject is created.
 			 */
 			subscribe:function(topicPub, topicSub, messageReceivedFunc, noLocal, subscribedCallbackFunction){
+				if (!topicPub.startsWith("/topic/")){
+					topicPub="/topic/"+topicPub;
+				}
+				if (!topicSub.startsWith("/topic/")){
+					topicSub="/topic/"+topicSub;
+				}
+
 				var pubDest = this.session.createTopic(topicPub);
 				var producer = this.session.createProducer(pubDest);
 				logInformation("INFO","Producer for "+topicPub+" is ready! AppID=" + appId);
@@ -218,7 +224,7 @@ var jmsClientFunction=function(logInformation){
      */
     JMSClient.close=function(){
 		for(var i=0;i<this.subscriptions.length;i++){
-			this.subscriptions[i].close();
+			this.subscriptions[i].disconnect();
 		}
 		$.when.apply($,this.subscriptions).then(function() {
 			connection.stop(function(){
