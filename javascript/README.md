@@ -15,7 +15,7 @@ Please, refer to the links above for the details about the details of the usage 
 	`sudo npm install -g bower`
 
 - Install Kaazing Universal Javascript client libraries  
-	`bower install kaazing-javascript-univeral-client`
+	`bower install kaazing-javascript-universal-client`
 	
 __Note__: If you used prior versions of the library you may want to clean bower cache by running:  
 	`bower cache clean`
