@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.kaazing</groupId>
+        <artifactId>community</artifactId>
+        <version>2.17</version>
+    </parent>
+
+    <artifactId>universal.client</artifactId>
+    <name>Kaazing Java Universal Client</name>
+    <version>develop-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <url>https://github.com/kaazing/universal-client</url>
+    <description>Universal Client</description>
+
+    <scm>
+        <url>https://github.com/kaazing/gateway</url>
+        <connection>scm:git:https://github.com/kaazing/gateway.git</connection>
+    </scm>
+
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.testSource>1.8</maven.compiler.testSource>
+        <maven.compiler.testTarget>1.8</maven.compiler.testTarget>
+        <enforcer.skip>true</enforcer.skip>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.kaazing.gateway</groupId>
+            <artifactId>com.kaazing.gateway.client.java</artifactId>
+            <version>[4.0.0.0,5.0.0.0)</version>
+        </dependency>
+        <dependency>
+            <groupId>com.kaazing.gateway.jms</groupId>
+            <artifactId>com.kaazing.gateway.jms.client.java</artifactId>
+            <version>[4.0.0.0,5.0.0.0)</version>
+        </dependency>
+        <dependency>
+            <groupId>com.kaazing.gateway.amqp</groupId>
+            <artifactId>com.kaazing.gateway.amqp.client.java</artifactId>
+            <version>[4.0.0.0,5.0.0.0)</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>[1.7,2.0)</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>[4,5)</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+</project>
+
