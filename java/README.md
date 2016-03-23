@@ -2,6 +2,9 @@
 The [Kaazing Java WebSocket Universal Clients][2] library uses the same  [Java AMQP Client Libraries Facade][3] and [Java JMS Client Libraries Facade][4] for interaction with Kaazing AMQP and JMS client libraries.
 Please, refer to the links above for the details about the details of the usage and implementations.
 
+## Requirements
+Kaazing Universal Clients for Java Application requires Java version 8 or above.
+
 ## Using the Client Libraries
 - Using Gradle
 ```
