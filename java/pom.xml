@@ -18,8 +18,8 @@
     <description>Universal Client</description>
 
     <scm>
-        <url>https://github.com/kaazing/gateway</url>
-        <connection>scm:git:https://github.com/kaazing/gateway.git</connection>
+        <url>https://github.com/kaazing/universal-client</url>
+        <connection>scm:git:https://github.com/kaazing/universal-client.git</connection>
     </scm>
 
     <properties>
