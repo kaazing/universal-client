@@ -4,7 +4,8 @@ The Kaazing JavaScript AMQP Client Libraries Facade simplifies the interaction w
 The Kaazing AMQP Client Libraries Facade:
 - Implements basic publish-subscribe functionality for AMQP protocol to help developers in getting started with their AMQP WebSocket projects 
 - Provide developers with the reference implementations for using Kaazing AMQP JavaScript client libraries
-For more information see:
+
+`For more information see:
 - [How to Build JavaScript Clients Using Kaazing  WebSocket Gateway][2]
 - [Use the Kaazing WebSocket Gateway JavaScript AMQP Client Library][3]
 
@@ -75,11 +76,11 @@ The _connect_ function implements the following sequence:
 ```
 
 - Consumption (or subscription) channel open handler:
-1. Adds an event listener for “message” event providing the ability to receive messages. 
-1. Declares subscription queue for the client. Library randomly generates the name for every client.
-1. Binds the queue to a subscription exchange with “broadcastkey” routing key. 
-	**Note** For fanout exchanges routing key is not used. For more information about exchanges and routing keys see: [https://www.rabbitmq.com/tutorials/amqp-concepts.html][1] 
-1. Starts basic consumer. Basic consumer is started with noAck=true parameter so the client does not need to implement explicit acknowledgement. Another parameter - noLocal - controls whether the client wants to receive its own messages.
+ 1. Adds an event listener for “message” event providing the ability to receive messages. 
+ 1. Declares subscription queue for the client. Library randomly generates the name for every client.
+ 1. Binds the queue to a subscription exchange with “broadcastkey” routing key. 
+   >**Note** For fanout exchanges a routing key is not used. [More information about exchanges and routing keys](https://www.rabbitmq.com/tutorials/amqp-concepts.html)
+ 1. Starts basic consumer. Basic consumer is started with noAck=true parameter so the client does not need to implement explicit acknowledgement. Another parameter - noLocal - controls whether the client wants to receive its own messages.
 	
 ```javascript
 	consumeChannelOpenHandler:function(that{  
