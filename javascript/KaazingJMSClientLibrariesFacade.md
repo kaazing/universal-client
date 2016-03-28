@@ -53,7 +53,7 @@ The _Connect_ function implements the following sequence:
 	
 Once a connection is created, the callback function does the following:
 
-1. Obtains the connection from the _connectionFuture_ that was returned by _createConection_.
+1. Obtains the connection from the _connectionFuture_ that was returned by _createConnection_.
 1. Sets an exception listener to handle exceptions.
 1. Creates a session using the _createSession_ method. The session is created with auto-acknowledgement. 
 1. Starts the connection using the _start_ function passing to it a callback function.

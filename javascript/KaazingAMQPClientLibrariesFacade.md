@@ -1,24 +1,23 @@
 # Kaazing JavaScript AMQP Client Libraries Facade
-Kaazing JavaScript AMQP Client Libraries Facade simplifies the interaction with Kaazing JavaScript AMQP Client libraries that enable the developers to interact with [AMQP 0-9-1](https://www.rabbitmq.com/tutorials/amqp-concepts.html) brokers via WebSockets.
+The Kaazing JavaScript AMQP Client Libraries Facade simplifies the interaction with the Kaazing JavaScript AMQP Client libraries that enable the developers to interact with [AMQP 0-9-1](https://www.rabbitmq.com/tutorials/amqp-concepts.html) brokers via WebSockets.
 
-Kaazing AMQP Client Libraries Facade:
-• Implements basic publish-subscribe functionality for AMQP protocol to help developers in getting started with their AMQP WebSocket projects 
-• Provide developers with the reference implementations for using Kaazing AMQP JavaScript client libraries
+The Kaazing AMQP Client Libraries Facade:
+- Implements basic publish-subscribe functionality for AMQP protocol to help developers in getting started with their AMQP WebSocket projects 
+- Provide developers with the reference implementations for using Kaazing AMQP JavaScript client libraries
 For more information see:
 - [How to Build JavaScript Clients Using Kaazing  WebSocket Gateway][2]
 - [Use the Kaazing WebSocket Gateway JavaScript AMQP Client Library][3]
 
 ## Organization of the library
-Library consists of amqpClientFunction that creates AmqpClient object. AmqpClient objects provides the following functionality:
+This library consists of an _amqpClientFactory_ that creates an _AmqpClient_ object. The _AmqpClient_ object provides the following functionality:
 - **connect** function - connects client to Kaazing WebSocket AMQP gateway and on success returns via callback a _connection_ object that will be used to create subscriptions.
-- ** subscribe ** method of a _connection_ object that creates publishing endpoint and subscribes to a subscription endpoint. Method returns via callback a _subscription_ object that is used for sending messages.
+- **subscribe** method of a _connection_ object that creates publishing endpoint and subscribes to a subscription endpoint. Method returns via callback a _subscription_ object that is used for sending messages.
 - **sendMessage** method of a _subscription_ object - sends the message to a publishing endpoint
 - **disconnect** function of a _subscription_ object - closes both publishing and subscription.
 - **close** method - closes all subscriptions and disconnects client from Kaazing WebSocket AMQP gateway
 
-
 ### **connect** function
-Connect function implements the following sequence:
+The _connect_ function implements the following sequence:
 
 - Create WebSocket and AMQP client factories
 
@@ -37,7 +36,7 @@ Connect function implements the following sequence:
 	amqpClient = amqpClientFactory.createAmqpClient();
 ```
 
-- Connect to Gateway using amqpClient connect function. Connect function uses has the following parameters:
+- Connect to Gateway using the _amqpClient_ _connect_ function. The _connect_ function uses has the following parameters:
 	- Connection options. In most common cases it contains of URL, credentials and virtual host (set to ‘/‘) hat specifies the namespace for entities (exchanges and queues) referred to by the protocol. Note that this is not virtual hosting in the HTTP sense.
 	- Callback function that will be called once connection is established. 
 
@@ -67,7 +66,7 @@ Connect function implements the following sequence:
 		
 	Once the channels are created method returns the _subscription_ object via a callback.
 	During the creation of the channels:
-- Publishing channel open handler declares AMQP Exchange of a _fanout_ type thus creating publishing endpoint.
+- Publishing channel open handler declares an AMQP Exchange of a _fanout_ type thus creating publishing endpoint.
 		
 ```javascript
 	publishChannelOpenHandler:function(that){
@@ -76,13 +75,11 @@ Connect function implements the following sequence:
 ```
 
 - Consumption (or subscription) channel open handler:
-	1. Adds an event listener for “message” event providing the ability to receive messages. 
-	2. Declares subscription queue for the client. Library randomly generates the name for every client.
-	3. Binds the queue to a subscription exchange with “broadcastkey” routing key. 
-		
+1. Adds an event listener for “message” event providing the ability to receive messages. 
+1. Declares subscription queue for the client. Library randomly generates the name for every client.
+1. Binds the queue to a subscription exchange with “broadcastkey” routing key. 
 	**Note** For fanout exchanges routing key is not used. For more information about exchanges and routing keys see: [https://www.rabbitmq.com/tutorials/amqp-concepts.html][1] 
-		
-	4. Starts basic consumer. Basic consumer is started with noAck=true parameter so the client does not need to implement explicit acknowledgement. Another parameter - noLocal - controls whether the client wants to receive its own messages.
+1. Starts basic consumer. Basic consumer is started with noAck=true parameter so the client does not need to implement explicit acknowledgement. Another parameter - noLocal - controls whether the client wants to receive its own messages.
 	
 ```javascript
 	consumeChannelOpenHandler:function(that{  
@@ -141,7 +138,7 @@ Function sets AMQP properties and sends the message to a publishing exchange usi
 ```
 		
 ### **disconnect** function of a subscription object
-Deletes declared subscription queue and closes the channels:
+Deletes a declared subscription queue and closes the channel:
 ```javascript
 	...
 	var config = {
