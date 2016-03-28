@@ -7,13 +7,13 @@ import java.io.Serializable;
 
 /**
  * Listener for the messages received by Universal Client
- * @author romans
- *
  */
 public interface MessagesListener {
-	/**
-	 * Called when message is received
-	 * @param message body of the message
-	 */
-	public void onMessage(Serializable message);
+    /**
+     * Called when message is received
+     * 
+     * @param message
+     *            body of the message
+     */
+    public void onMessage(Serializable message);
 }

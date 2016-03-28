@@ -5,27 +5,24 @@ package com.kaazing.client.universal;
 
 /**
  * Contains the exception reported by Universal Client
- * @author romans
- *
  */
 public class ClientException extends Exception {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3071666188376628792L;
-	
-	public ClientException(String text, Throwable t){
-		super(text, t);
-	}
-	
-	public ClientException(String text){
-		super(text);
-	}
-	
-	public ClientException(Throwable t){
-		super(t);
-	}
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 3071666188376628792L;
 
+    public ClientException(String text, Throwable t) {
+        super(text, t);
+    }
+
+    public ClientException(String text) {
+        super(text);
+    }
+
+    public ClientException(Throwable t) {
+        super(t);
+    }
 
 }
