@@ -79,7 +79,7 @@ The _connect_ function implements the following sequence:
  1. Adds an event listener for “message” event providing the ability to receive messages. 
  1. Declares subscription queue for the client. Library randomly generates the name for every client.
  1. Binds the queue to a subscription exchange with “broadcastkey” routing key. 
-   >**Note** For fanout exchanges a routing key is not used. [More information about exchanges and routing keys](https://www.rabbitmq.com/tutorials/amqp-concepts.html)
+>**Note** For fanout exchanges a routing key is not used. [More information about exchanges and routing keys](https://www.rabbitmq.com/tutorials/amqp-concepts.html)
  1. Starts basic consumer. Basic consumer is started with noAck=true parameter so the client does not need to implement explicit acknowledgement. Another parameter - noLocal - controls whether the client wants to receive its own messages.
 	
 ```javascript
