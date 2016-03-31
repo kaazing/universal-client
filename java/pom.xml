@@ -9,6 +9,7 @@
         <version>2.17</version>
     </parent>
 
+    <groupId>org.kaazing</groupId>
     <artifactId>universal.client</artifactId>
     <name>Kaazing Java Universal Client</name>
     <version>develop-SNAPSHOT</version>
