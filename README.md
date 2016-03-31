@@ -24,7 +24,7 @@ Regardless of the client technology, all of the clients are organized as shown o
 ![][image-1]
 
 [1]:	https://github.com/kaazing/universal-client/tree/develop/javascript "Universal Clients for JavaScript applications"
-[2]:	https://github.com/kaazing/universal-client/tree/develop/javascript "Universal Clients for JavaScript applications"
+[2]:	https://github.com/kaazing/universal-client/tree/develop/java "Universal Clients for Java applications"
 
 
 [image-1]:	images/UniversalClients.png "Universal Clients"
