@@ -1,8 +1,8 @@
 # Universal Clients for JavaScript Applications
-The [Kaazing JavaScript WebSocket Universal Clients][2] library that can be also used with AngularJS, ReactJS and so on.
+This is the [Kaazing JavaScript WebSocket Universal Clients][2] library. It can be also used with AngularJS, ReactJS and other JavaScript frameworks.
 
-The library uses [JavaScript AMQP Client Libraries Facade][3] and [JavaScript JMS Client Libraries Facade][4] scripts for interaction with Kaazing AMQP and JMS client libraries.
-Please, refer to the links above for the details about the details of the usage and implementations.
+This library uses the [JavaScript AMQP Client Libraries Facade][3] and the [JavaScript JMS Client Libraries Facade][4] scripts to interact with the Kaazing AMQP and JMS client libraries.
+Please, refer to the links above for the details on usage and implementation.
 
 ## Using the Client Libraries
 ### Using Client Libraries with Bower
@@ -17,7 +17,7 @@ Please, refer to the links above for the details about the details of the usage 
 - Install Kaazing Universal Javascript client libraries  
 	`bower install kaazing-javascript-universal-client`
 	
-__Note__: If you used prior versions of the library you may want to clean bower cache by running:  
+__Note__: If you have used prior versions of the library you may want to clean your bower cache by running:  
 	`bower cache clean`
 	
 #### Using the library
@@ -57,7 +57,7 @@ Add the following to your main html page (index.html):
 ```
 
 ### Obtaining and Configuring Kaazing Gateway
-The Kaazing Universal WebSocket clients depend on the Kaazing WebSocket Gateway (KWG) being installed on one or more servers. KWG supports two protocols, AMQP and JMS. Read [Obtaining and configuring Kaazing Gateways and related Servers](https://github.com/kaazing/universal-client/blob/develop/ObtainingGateways.md) for more information.
+The Kaazing Universal WebSocket client connect to the Kaazing WebSocket Gateway (KWG) running on one or more servers. KWG supports two message broker protocols: AMQP and JMS. Read [Obtaining and configuring Kaazing Gateways and related Servers](https://github.com/kaazing/universal-client/blob/develop/ObtainingGateways.md) for more information.
 
 ### Documentation
 
