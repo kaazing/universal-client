@@ -5,6 +5,7 @@ This library uses the [JavaScript AMQP Client Libraries Facade][3] and the [Java
 Please, refer to the links above for the details on usage and implementation.
 
 ## Using the Client Libraries
+For sample applications and tutorials demonstrating how to use Kaazing Universal Client, please, visit [Kaazing Examples and Tutorials](https://github.com/kaazing/tutorials) as well as [Kaazing JavaScript Starter Applications](https://github.com/kaazing/javascript.getting.started) and [Kaazing Java Starter Application](https://github.com/kaazing/java.getting.started).
 ### Using Client Libraries with Bower
 #### Obtaining Libraries
 - Install NodeJS - please refer to the [NodeJS downloads page][9] for the installer that is appropriate for your OS
