@@ -23,14 +23,14 @@ public class JMSUniversalClientTest {
 	private JMSUniversalClient jmsClient;
 	private String receivedMessage="";
 	private String errorMessage="";
-	final CountDownLatch latch=new CountDownLatch(1);
+	private CountDownLatch latch;
 
 	
 	@Before
 	public void setUp() throws ClientException, URISyntaxException{
 		this.receivedMessage="";
 		this.errorMessage="";
-		jmsClient=new JMSUniversalClient(new URI("ws://localhost:8001/jms"), "", "", new ErrorsListener() {
+		jmsClient=new JMSUniversalClient(new URI("ws://sandbox.kaazing.net/jms"), "", "", new ErrorsListener() {
 			
 			@Override
 			public void onException(ClientException exception) {
@@ -44,7 +44,7 @@ public class JMSUniversalClientTest {
 
 	@Test
 	public void testString() throws ClientException, InterruptedException {
-		
+		this.latch=new CountDownLatch(1);
 		ClientSubscription connection = jmsClient.subscribe("test", "test", new MessagesListener() {
 			
 			@Override
@@ -63,7 +63,7 @@ public class JMSUniversalClientTest {
 	
 	@Test
 	public void testObject() throws ClientException, InterruptedException {
-		
+		this.latch=new CountDownLatch(1);
 		ClientSubscription connection = jmsClient.subscribe("test", "test", new MessagesListener() {
 			
 			@Override
@@ -82,7 +82,7 @@ public class JMSUniversalClientTest {
 
 	@Test
 	public void testNoLocal() throws ClientException, InterruptedException {
-		
+		this.latch=new CountDownLatch(1);
 		ClientSubscription connection = jmsClient.subscribe("test", "test", new MessagesListener() {
 			
 			@Override

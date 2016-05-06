@@ -23,14 +23,14 @@ public class AmqpUniversalClientTest {
 	private AmqpUniversalClient amqpClient;
 	private String receivedMessage="";
 	private String errorMessage="";
-	final CountDownLatch latch=new CountDownLatch(1);
+	private CountDownLatch latch;
 
 	
 	@Before
 	public void setUp() throws ClientException, URISyntaxException{
 		this.receivedMessage="";
 		this.errorMessage="";
-		amqpClient=new AmqpUniversalClient(new URI("ws://localhost:8001/amqp"), "guest", "guest", new ErrorsListener() {
+		amqpClient=new AmqpUniversalClient(new URI("ws://sandbox.kaazing.net/amqp091"), "guest", "guest", new ErrorsListener() {
 			
 			@Override
 			public void onException(ClientException exception) {
@@ -44,7 +44,7 @@ public class AmqpUniversalClientTest {
 
 	@Test
 	public void testString() throws ClientException, InterruptedException {
-		
+		this.latch=new CountDownLatch(1);
 		ClientSubscription connection = amqpClient.subscribe("test", "test", new MessagesListener() {
 			
 			@Override
@@ -63,7 +63,7 @@ public class AmqpUniversalClientTest {
 	
 	@Test
 	public void testObject() throws ClientException, InterruptedException {
-		
+		this.latch=new CountDownLatch(1);
 		ClientSubscription connection = amqpClient.subscribe("test", "test", new MessagesListener() {
 			
 			@Override
@@ -82,6 +82,7 @@ public class AmqpUniversalClientTest {
 
 	@Test
 	public void testNoLocal() throws ClientException, InterruptedException {
+		this.latch=new CountDownLatch(1);
 		ClientSubscription connection = amqpClient.subscribe("test", "test", new MessagesListener() {
 			
 			@Override
@@ -93,7 +94,7 @@ public class AmqpUniversalClientTest {
 		}, true);
 		
 		connection.sendMessage(new TestObject(1, "Kaazing"));
-		latch.await(1, TimeUnit.SECONDS);
+		latch.await(5, TimeUnit.SECONDS);
 		assertEquals("", errorMessage);
 		assertEquals("", receivedMessage);
 	}
