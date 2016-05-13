@@ -54,7 +54,7 @@ Add the following to your main html page (index.html):
 
 ***Note***: When using JMS, add the following line to your main html page:
 ```javascript
-<script src="<script src="node_modules/kaazing-javascript-universal-client/node_modules/kaazing-javascript-jms-client/JmsClient.js"></script>"></script>
+<script src="node_modules/kaazing-javascript-universal-client/node_modules/kaazing-javascript-jms-client/JmsClient.js"></script>
 ```
 
 ### Obtaining and Configuring Kaazing Gateway
