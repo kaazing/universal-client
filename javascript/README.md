@@ -23,13 +23,13 @@ __Note__: If you have used prior versions of the library you may want to clean y
 
 #### Using the library
 Add the following to your main html page (index.html):
-```
+```javascript
 <script src="bower_components/requirejs/require.js"></script>
 <script src="bower_components/kaazing-javascript-universal-client/javascript/src/JavascriptUniversalClient.js"></script>
 ```
 
 ***Note***: When using JMS, add the following line to your main html page:
-```
+```javascript
 <script src="bower_components/kaazing-jms-client-javascript/javascript/src/JmsClient.js"></script>
 ```
 
@@ -47,13 +47,13 @@ Add the following to your main html page (index.html):
 
 #### Using the library
 Add the following to your main html page (index.html):
-```
+```javascript
 <script src="node_modules/requirejs/require.js"></script>
 <script src="node_modules/kaazing-javascript-universal-client/javascript/src/JavascriptUniversalClientNPM.js"></script>
 ```
 
 ***Note***: When using JMS, add the following line to your main html page:
-```
+```javascript
 <script src="<script src="node_modules/kaazing-javascript-universal-client/node_modules/kaazing-javascript-jms-client/JmsClient.js"></script>"></script>
 ```
 
