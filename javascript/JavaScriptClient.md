@@ -196,24 +196,29 @@ As shown on the diagram above, Kaazing Universal Client works as following:
         For Bower
 
         ```javascript
-        ...
         requirejs(['bower_components/kaazing-amqp-0-9-1-client-javascript/javascript/WebSocket.js'],function(){
-            requirejs(['bower_components/jquery/dist/jquery.js','bower_components/kaazing-amqp-0-9-1-client-javascript/javascript/Amqp-0-9-1.js', 'bower_components/kaazing-javascript-universal-client/javascript/src/AmqpUniversalClient.js'], function () {
+            requirejs([
+              'bower_components/jquery/dist/jquery.js',
+              'bower_components/kaazing-amqp-0-9-1-client-javascript/javascript/Amqp-0-9-1.js',
+              'bower_components/kaazing-javascript-universal-client/javascript/src/AmqpUniversalClient.js'
+              ], function () {
                 ...
                 });
             });
-        ...
         ```
 
         For NPM
 
         ```javascript
-        ...
       requirejs(['node_modules/kaazing-javascript-universal-client/node_modules/kaazing-javascript-gateway-client/WebSocket.js'],function(){
-            requirejs(['node_modules/jquery/dist/jquery.js','node_modules/kaazing-javascript-universal-client/node_modules/kaazing-javascript-amqp-client/AmqpClient.js', 'node_modules/kaazing-javascript-universal-client/AmqpUniversalClient.js'], function () {
+            requirejs([
+              'node_modules/jquery/dist/jquery.js',
+              'node_modules/kaazing-javascript-universal-client/node_modules/kaazing-javascript-amqp-client/AmqpClient.js',
+              'node_modules/kaazing-javascript-universal-client/AmqpUniversalClient.js'
+              ], function () {
             ...
             });
-        });			...
+        });
         ```
     _The reason for different Bower and NPM implementations is the difference in path of the dependent packages._
 
