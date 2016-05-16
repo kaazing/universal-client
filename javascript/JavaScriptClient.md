@@ -8,26 +8,22 @@ an object that can be used in the client application to interact with Kaazing Ga
 ### Install the library
 #### Using Bower
 - Install library with the Bower as specified in a [README document][1].
-- Add the following to the `<head>` section of your page:
+- Add the following scripts to your page:
 	```html
 	
-    <head>
-     <script src="bower_components/kaazing-javascript-universal-client/javascript/src/AngularUniversalClient.js"></script>
-     <script src="bower_components/kaazing-javascript-universal-client/javascript/src/JmsClient.js"></script>
-	</head>
+    <script src="bower_components/kaazing-javascript-universal-client/javascript/src/AngularUniversalClient.js"></script>
+    <script src="bower_components/kaazing-javascript-universal-client/javascript/src/JmsClient.js"></script>
 
 	```
 **Note:** `JmsClient.js` is not needed when using the AMQP protocol.
 
 #### Using NPM
 - Install library with the NPM as specified in a [README document][1].
-- Add the following to the `<head>` section of your page:
+- Add the following scripts to your page::
 	```html
 	
-    <head>
-     <script src="node_modules/kaazing-javascript-universal-client/node_modules/kaazing-javascript-jms-client/JmsClient.js"></script>
-     <script src="node_modules/kaazing-javascript-universal-client/AngularUniversalClientNPM.js"></script>
-	</head>
+    <script src="node_modules/kaazing-javascript-universal-client/node_modules/kaazing-javascript-jms-client/JmsClient.js"></script>
+    <script src="node_modules/kaazing-javascript-universal-client/AngularUniversalClientNPM.js"></script>
 	```
 **Note:** Addition of JmsClient.js is not needed when using AMQP protocol.
 
@@ -35,7 +31,7 @@ an object that can be used in the client application to interact with Kaazing Ga
 ### Add the library to your application
 - Create an instance of the Universal Client Library.
 	```javascript
-	var client=UniversalClientDef(protocol);
+	var client = UniversalClientDef(protocol);
 	```
 	Where:
 	- **protocol**: Specifies the protocol that should be used for communications:
@@ -44,7 +40,7 @@ an object that can be used in the client application to interact with Kaazing Ga
 
 - Establish a connection
 	```javascript
-	var client=UniversalClientDef(protocol);
+	var client = UniversalClientDef(protocol);
 	$(document).ready(function () {
 		client.connect(connectionInfo, // Connection info
 				onError, // callback function to process errors
@@ -68,7 +64,7 @@ an object that can be used in the client application to interact with Kaazing Ga
 	var logWebSocketMessage = function (cls, msg) {
  		...
 	}
-	var client=UniversalClientDef(protocol);
+	var client = UniversalClientDef(protocol);
 	// Set the logger function
 	client.loggerFuncHandle=logWebSocketMessage;
 
@@ -77,7 +73,7 @@ an object that can be used in the client application to interact with Kaazing Ga
 
 ```javascript
 
-	var client=UniversalClientDef(protocol);
+	var client = UniversalClientDef(protocol);
 	$(document).ready(function () {
 		var subscription;
 		client.connect(connectionInfo, // Connection info
@@ -87,8 +83,8 @@ an object that can be used in the client application to interact with Kaazing Ga
 										 topicS, // Topic to subscribe to receive messsages
 										 onMessage, // callback function to process received messages
 										 noLocal, // noLocal flag set to false - allow receiving your own messages
-						function(subscription){
-							subscription=subscr;
+						function(sub){
+							subscription = sub;
 						});
 					})
 				})
@@ -104,7 +100,7 @@ Where:
 
 - Add disconnect on window close (shown method uses JQuery):
 	```javascript
-	var client=UniversalClientDef(protocol);
+	var client = UniversalClientDef(protocol);
 	$(document).ready(function () {
 		var subscription;
 		client.connect(connectionInfo, // Connection info
@@ -114,8 +110,8 @@ Where:
 										 topicS, // Topic to subscribe to receive messsages
 										 onMessage, // callback function to process received message
 										 noLocal, // noLocal flag set to false - allow receiving your own messages
-						function(subscription){
-							subscription = subscr;
+						function(sub){
+							subscription = sub;
 						});
 					})
 				})
@@ -145,8 +141,8 @@ Where:
 										 topicS, // Topic to subscribe to receive messages
 										 onMessage, // callback function to process received message
 										 noLocal, // noLocal flag set to false - allow receiving your own messages
-						function(subscription){
-							subscription = subscr;
+						function(sub){
+							subscription = sub;
 						});
 					})
 				})
@@ -199,7 +195,7 @@ As shown on the diagram above, Kaazing Universal Client works as following:
     _Bower and NPM implementations differ due to paths of the dependent packages._
 
 
-   - Due to certain limitations, RequireJS cannot download Kaazing JMSClient.js library - hence it has to be included in the `<head>` section
+   - Due to certain limitations, RequireJS cannot download Kaazing JMSClient.js library - hence it has to be included directly
 - Instantiate required Client Facade Library that will interact with necessary Kaazing Javascript Client Libraries
 - Pass the data to and from the Kaazing Javascript Client libraries via instantiated Client Facade Library
 
