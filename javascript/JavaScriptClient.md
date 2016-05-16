@@ -11,11 +11,9 @@ an object that can be used in the client application to interact with Kaazing Ga
 - Add the following to the `<head>` section of your page:
 	```html
 	
-	<head>  
-	....    
-	<script src="bower_components/kaazing-javascript-universal-client/javascript/src/AngularUniversalClient.js"></script>
-	<script src="bower_components/kaazing-javascript-universal-client/javascript/src/JmsClient.js"></script>
-	....  
+    <head>
+     <script src="bower_components/kaazing-javascript-universal-client/javascript/src/AngularUniversalClient.js"></script>
+     <script src="bower_components/kaazing-javascript-universal-client/javascript/src/JmsClient.js"></script>
 	</head>
 
 	```
@@ -26,11 +24,9 @@ an object that can be used in the client application to interact with Kaazing Ga
 - Add the following to the `<head>` section of your page:
 	```html
 	
-	<head>  
-	....    
-    <script src="node_modules/kaazing-javascript-universal-client/node_modules/kaazing-javascript-jms-client/JmsClient.js"></script>
-    <script src="node_modules/kaazing-javascript-universal-client/AngularUniversalClientNPM.js"></script>
-	....  
+    <head>
+     <script src="node_modules/kaazing-javascript-universal-client/node_modules/kaazing-javascript-jms-client/JmsClient.js"></script>
+     <script src="node_modules/kaazing-javascript-universal-client/AngularUniversalClientNPM.js"></script>
 	</head>
 	```
 **Note:** Addition of JmsClient.js is not needed when using AMQP protocol.
@@ -39,11 +35,7 @@ an object that can be used in the client application to interact with Kaazing Ga
 ### Add the library to your application
 - Create an instance of the Universal Client Library.
 	```javascript
-	...
-
 	var client=UniversalClientDef(protocol);
-	...
-
 	```
 	Where:
 	- **protocol**: Specifies the protocol that should be used for communications:
@@ -52,18 +44,13 @@ an object that can be used in the client application to interact with Kaazing Ga
 
 - Establish a connection
 	```javascript
-	...
-
 	var client=UniversalClientDef(protocol);
-	...
-
 	$(document).ready(function () {
 		client.connect(connectionInfo, // Connection info
 				onError, // callback function to process errors
 				function(connection){
 			...
 		}
-
 	}
 
 	```
@@ -117,11 +104,7 @@ Where:
 
 - Add disconnect on window close (shown method uses JQuery):
 	```javascript
-	...
-
 	var client=UniversalClientDef(protocol);
-	...
-
 	$(document).ready(function () {
 		var subscription;
 		client.connect(connectionInfo, // Connection info
@@ -134,30 +117,24 @@ Where:
 						function(subscription){
 							subscription = subscr;
 						});
-					}		
-				}
+					})
+				})
 		...
 		$( window ).unload(function() {
             // Disconnect
             client.disconnect();
         });
-
 	}
 
 	```
 - To send messages use sendMessage(msg) method of a subscription object
 	where _**msg**_ JavaScript object to be sent (as a JSON string). 
 	```javascript
-	...
-
 	var client=UniversalClientDef(protocol);
-	...
-
 	var sendMessage=function(msg){
 		// Send message
     	subscription.sendMessage(msg);
 	}
-
 
 	$(document).ready(function () {
 		var subscription;
@@ -171,14 +148,13 @@ Where:
 						function(subscription){
 							subscription = subscr;
 						});
-					}		
-				}
+					})
+				})
 		...
 		$( window ).unload(function() {
             // Disconnect
             client.disconnect();
         });
-
 	}
 	```
 
@@ -220,7 +196,7 @@ As shown on the diagram above, Kaazing Universal Client works as following:
             });
         });
         ```
-    _The reason for different Bower and NPM implementations is the difference in path of the dependent packages._
+    _Bower and NPM implementations differ due to paths of the dependent packages._
 
 
    - Due to certain limitations, RequireJS cannot download Kaazing JMSClient.js library - hence it has to be included in the `<head>` section
