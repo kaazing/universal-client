@@ -110,8 +110,8 @@ an object that can be used in the client application to interact with Kaazing Ga
 Where:
   - **topicP**: Name of the publishing endpoint - AMQP exchange used for publishing or JMS Topic
   - **topicS**: Name of the subscription endpoint - AMQP exchange used for subscription or JMS Topic
-  - **noLocal**: Flag indicating whether the client wants to receive its own messages (true) or not (false). That flag should be used when publishing and subscription endpoints are the same.
   - **onMessage**: Function that will be used to process received messages from subscription endpoint in a format of _function(message)_
+  - **noLocal**: Flag indicating whether the client wants to receive its own messages (true) or not (false). That flag should be used when publishing and subscription endpoints are the same.
   - _callback_ function to receive subscription object
 **Note** Multiple subscriptions are allowed within single connection!
 
