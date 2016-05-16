@@ -1,11 +1,12 @@
 # Kaazing JavaScript AMQP Client Libraries Facade
-The Kaazing JavaScript AMQP Client Libraries Facade simplifies the interaction with the Kaazing JavaScript AMQP Client libraries that enable the developers to interact with [AMQP 0-9-1](https://www.rabbitmq.com/tutorials/amqp-concepts.html) brokers via WebSockets.
+The Kaazing JavaScript AMQP Client Libraries Facade simplifies the interaction with the Kaazing JavaScript AMQP Client
+libraries that enable the developers to interact with [AMQP 0-9-1](https://www.rabbitmq.com/tutorials/amqp-concepts.html) brokers via WebSockets.
 
 The Kaazing AMQP Client Libraries Facade:
 - Implements basic publish-subscribe functionality for AMQP protocol to help developers in getting started with their AMQP WebSocket projects 
 - Provide developers with the reference implementations for using Kaazing AMQP JavaScript client libraries
 
-`For more information see:
+For more information see:
 - [How to Build JavaScript Clients Using Kaazing  WebSocket Gateway][2]
 - [Use the Kaazing WebSocket Gateway JavaScript AMQP Client Library][3]
 
@@ -25,7 +26,7 @@ The _connect_ function implements the following sequence:
 ```javascript
 	var amqpClientFactory = new AmqpClientFactory();  
 	var webSocketFactory;  
-	if ($gatewayModule && typeof($gatewayModule.WebSocketFactory) === "function") {  
+	if ( $gatewayModule && typeof($gatewayModule.WebSocketFactory) === "function" ) {
 		webSocketFactory = createWebSocketFactory();  
 		amqpClientFactory.setWebSocketFactory(webSocketFactory);  
 	}
@@ -37,9 +38,11 @@ The _connect_ function implements the following sequence:
 	amqpClient = amqpClientFactory.createAmqpClient();
 ```
 
-- Connect to Gateway using the _amqpClient_ _connect_ function. The _connect_ function uses has the following parameters:
-	- Connection options. In most common cases it contains of URL, credentials and virtual host (set to ‘/‘) hat specifies the namespace for entities (exchanges and queues) referred to by the protocol. Note that this is not virtual hosting in the HTTP sense.
-	- Callback function that will be called once connection is established. 
+- Connect to Gateway using the _amqpClient_ _connect_ function. The _connect_ function has the following parameters:
+  - Connection options. In most common cases it contains of URL, credentials and virtual host (set to ‘/‘) that specify
+	the namespace for entities (exchanges and queues) referred to by the protocol. Note that this is not virtual hosting
+	in the HTTP sense.
+  - Callback function that will be called once connection is established.
 
 ```javascript
 	var credentials = {username: username, password: password};  
@@ -56,7 +59,8 @@ The _connect_ function implements the following sequence:
 	
 ### **subscribe** method of connection object
 - Creates and initializes subscription object
-- Opens publishing and consumption (subscription) channels using amqpClient openChannel function that will call on success the callback function that is passed as a parameter:  
+- Opens publishing and consumption (subscription) channels using `amqpClient` openChannel function that will, on
+success, call the callback function that is passed as a parameter:
 	
 ```javascript
 	var openHandler=function(){  
@@ -65,8 +69,9 @@ The _connect_ function implements the following sequence:
 	}		
 ```
 		
-	Once the channels are created method returns the _subscription_ object via a callback.
-	During the creation of the channels:
+Once the channels are created method returns the _subscription_ object via a callback.
+
+During the creation of the channels:
 - Publishing channel open handler declares an AMQP Exchange of a _fanout_ type thus creating publishing endpoint.
 		
 ```javascript
@@ -77,18 +82,23 @@ The _connect_ function implements the following sequence:
 
 - Consumption (or subscription) channel open handler:
  1. Adds an event listener for “message” event providing the ability to receive messages. 
- 1. Declares subscription queue for the client. Library randomly generates the name for every client.
- 1. Binds the queue to a subscription exchange with “broadcastkey” routing key. 
+ 1. Declares subscription queue for the client. The library randomly generates the name for every client.
+ 1. Binds the queue to a subscription exchange with `broadcastkey` routing key.
+
 >**Note** For fanout exchanges a routing key is not used. [More information about exchanges and routing keys](https://www.rabbitmq.com/tutorials/amqp-concepts.html)
- 1. Starts basic consumer. Basic consumer is started with noAck=true parameter so the client does not need to implement explicit acknowledgement. Another parameter - noLocal - controls whether the client wants to receive its own messages.
+
+ 1. Starts basic consumer. Basic consumer is started with `noAck=true` parameter so the client does not need to
+ implement explicit acknowledgement. Another parameter - `noLocal` - controls whether the client wants to receive its own messages.
 	
 ```javascript
 	consumeChannelOpenHandler:function(that{  
 		consumeChannel.addEventListener("message", function(message) {  
-			var body = null;  
+			var body = null;
+
 			// Check how the payload was packaged since older browsers like IE7 don't  
-			// support ArrayBuffer. In those cases, a Kaazing ByteBuffer was used instead.  
-			if (typeof(ArrayBuffer) === "undefined") {  
+			// support ArrayBuffer. In those cases, a Kaazing ByteBuffer was used instead.
+
+			if ( typeof(ArrayBuffer) === "undefined" ) {
 				body = message.getBodyAsByteBuffer().getString(Charset.UTF8);  
 			}  
 			else {  
@@ -97,14 +107,16 @@ The _connect_ function implements the following sequence:
 			that.messageReceivedFunc(body);
 		});  
 		 that.consumeChannel.declareQueue({queue: that.queueName})
-                    .bindQueue({queue: that.queueName, exchange: that.topicSub, routingKey: routingKey })
-                    .consumeBasic({queue: that.queueName, consumerTag: that.clientId, noAck: true, noLocal:that.noLocal })  
+            .bindQueue({queue: that.queueName, exchange: that.topicSub, routingKey: routingKey })
+            .consumeBasic({queue: that.queueName, consumerTag: that.clientId, noAck: true, noLocal:that.noLocal })
 	}
 ```
 			
 ### **sendMessage** function of a subscription object
 Function sets AMQP properties and sends the message to a publishing exchange using specified routing key.   
-**Note:** As mentioned earlier, library creates a fanout type of exchange that does not use routing keys; thus library sets the value of the routing key to 'broadcast'.
+
+**Note:** As mentioned earlier, the library creates a fanout type of exchange that does not use routing keys;
+thus the library sets the value of the routing key to `broadcast`.
 
 ```javascript
 	sendMessage:function(msg){
@@ -133,7 +145,7 @@ Function sets AMQP properties and sends the message to a publishing exchange usi
                 props.setPriority("6");
                 props.setTimestamp(new Date());
                 props.setUserId(this.user);
-				logInformation("sent","Sending message to "+this.topicPub+": "+ msg, "sent");
+                logInformation("sent","Sending message to "+this.topicPub+": "+ msg, "sent");
                 this.publishChannel.publishBasic({body: body, properties: props, exchange: this.topicPub, routingKey: routingKey});
         }
 ```
