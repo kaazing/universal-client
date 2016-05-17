@@ -129,10 +129,11 @@ Where:
     client.connect(connectionInfo, // Connection info
             onError, // callback function to process errors
             function(connection){
-                connection.subscribe(topicP, // Topic to send message
-                                     topicS, // Topic to subscribe to receive messages
-                                     onMessage, // callback function to process received message
-                                     noLocal, // noLocal flag set to false - allow receiving your own messages
+                 connection.subscribe(
+                    topicP, // Topic to send message
+                    topicS, // Topic to subscribe to receive messages
+                    onMessage, // callback function to process received message
+                    noLocal, // noLocal flag set to false - allow receiving your own messages
                     function(sub){
                         subscription = sub;
                     });
