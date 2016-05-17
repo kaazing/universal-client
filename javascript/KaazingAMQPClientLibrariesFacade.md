@@ -24,18 +24,18 @@ The _connect_ function implements the following sequence:
 - Create WebSocket and AMQP client factories
 
 ```javascript
-	var amqpClientFactory = new AmqpClientFactory();  
-	var webSocketFactory;  
-	if ( $gatewayModule && typeof($gatewayModule.WebSocketFactory) === "function" ) {
-		webSocketFactory = createWebSocketFactory();  
-		amqpClientFactory.setWebSocketFactory(webSocketFactory);  
-	}
+var amqpClientFactory = new AmqpClientFactory();
+var webSocketFactory;
+if ( $gatewayModule && typeof($gatewayModule.WebSocketFactory) === "function" ) {
+    webSocketFactory = createWebSocketFactory();
+    amqpClientFactory.setWebSocketFactory(webSocketFactory);
+}
 ```
 
 - Create AMQP client
 
 ```javascript
-	amqpClient = amqpClientFactory.createAmqpClient();
+amqpClient = amqpClientFactory.createAmqpClient();
 ```
 
 - Connect to Gateway using the _amqpClient_ _connect_ function. The _connect_ function has the following parameters:
@@ -45,16 +45,16 @@ The _connect_ function implements the following sequence:
   - Callback function that will be called once connection is established.
 
 ```javascript
-	var credentials = {username: username, password: password};  
-	var options = {  
-		url: url,  
-		virtualHost: "/",  
-		credentials: credentials  
-	};  
-	amqpClient.connect(options, function(){
-          var connection=createConnectionObject(amqpClient,connectionInfo.username);
-                connectedFunctionHandle(connection);
-            });
+var credentials = {username: username, password: password};
+var options = {
+    url: url,
+    virtualHost: "/",
+    credentials: credentials
+};
+amqpClient.connect(options, function(){
+      var connection=createConnectionObject(amqpClient,connectionInfo.username);
+            connectedFunctionHandle(connection);
+        });
 ```
 	
 ### **subscribe** method of connection object
@@ -63,10 +63,10 @@ The _connect_ function implements the following sequence:
 success, call the callback function that is passed as a parameter:
 	
 ```javascript
-	var openHandler=function(){  
-		publishChannel = amqpClient.openChannel(this.publishChannelOpenHandler);  
-		consumeChannel = amqpClient.openChannel(this.consumeChannelOpenHandler);  
-	}		
+var openHandler=function(){
+    publishChannel = amqpClient.openChannel(this.publishChannelOpenHandler);
+    consumeChannel = amqpClient.openChannel(this.consumeChannelOpenHandler);
+}
 ```
 		
 Once the channels are created method returns the _subscription_ object via a callback.
@@ -75,9 +75,9 @@ During the creation of the channels:
 - Publishing channel open handler declares an AMQP Exchange of a _fanout_ type thus creating publishing endpoint.
 		
 ```javascript
-	publishChannelOpenHandler:function(that){
-    		that.publishChannel.declareExchange({exchange: that.topicPub, type: "fanout"});
-    	}
+publishChannelOpenHandler:function(that){
+        that.publishChannel.declareExchange({exchange: that.topicPub, type: "fanout"});
+    }
 ```
 
 - Consumption (or subscription) channel open handler:
@@ -91,25 +91,25 @@ During the creation of the channels:
  implement explicit acknowledgement. Another parameter - `noLocal` - controls whether the client wants to receive its own messages.
 	
 ```javascript
-	consumeChannelOpenHandler:function(that{  
-		consumeChannel.addEventListener("message", function(message) {  
-			var body = null;
+consumeChannelOpenHandler:function(that{
+    consumeChannel.addEventListener("message", function(message) {
+        var body = null;
 
-			// Check how the payload was packaged since older browsers like IE7 don't  
-			// support ArrayBuffer. In those cases, a Kaazing ByteBuffer was used instead.
+        // Check how the payload was packaged since older browsers like IE7 don't
+        // support ArrayBuffer. In those cases, a Kaazing ByteBuffer was used instead.
 
-			if ( typeof(ArrayBuffer) === "undefined" ) {
-				body = message.getBodyAsByteBuffer().getString(Charset.UTF8);  
-			}  
-			else {  
-				body = arrayBufferToString(message.getBodyAsArrayBuffer());  
-			}  
-			that.messageReceivedFunc(body);
-		});  
-		 that.consumeChannel.declareQueue({queue: that.queueName})
-            .bindQueue({queue: that.queueName, exchange: that.topicSub, routingKey: routingKey })
-            .consumeBasic({queue: that.queueName, consumerTag: that.clientId, noAck: true, noLocal:that.noLocal })
-	}
+        if ( typeof(ArrayBuffer) === "undefined" ) {
+            body = message.getBodyAsByteBuffer().getString(Charset.UTF8);
+        }
+        else {
+            body = arrayBufferToString(message.getBodyAsArrayBuffer());
+        }
+        that.messageReceivedFunc(body);
+    });
+     that.consumeChannel.declareQueue({queue: that.queueName})
+        .bindQueue({queue: that.queueName, exchange: that.topicSub, routingKey: routingKey })
+        .consumeBasic({queue: that.queueName, consumerTag: that.clientId, noAck: true, noLocal:that.noLocal })
+}
 ```
 			
 ### **sendMessage** function of a subscription object
@@ -119,63 +119,60 @@ Function sets AMQP properties and sends the message to a publishing exchange usi
 thus the library sets the value of the routing key to `broadcast`.
 
 ```javascript
-	sendMessage:function(msg){
-                if (typeof msg ==="object"){
-					msg.clientId=this.clientId;
-                    msg=JSON.stringify(msg);
-                }
-                else{
-                    handleException("Message "+msg+" should be an object!");
-                }
+sendMessage:function(msg){
+    if (typeof msg ==="object"){
+        msg.clientId=this.clientId;
+        msg=JSON.stringify(msg);
+    }
+    else{
+        handleException("Message "+msg+" should be an object!");
+    }
 
-                var body = null;
-                if (typeof(ArrayBuffer) === "undefined") {
-                    body = new ByteBuffer();
-                    body.putString(msg, Charset.UTF8);
-                    body.flip();
-                }
-                else {
-                    body = stringToArrayBuffer(msg);
-                }
-                var props = new AmqpProperties();
-                props.setContentType("text/plain");
-                props.setContentEncoding("UTF-8");
-                props.setDeliveryMode("1");
-                props.setMessageId((this.messageIdCounter++).toString());
-                props.setPriority("6");
-                props.setTimestamp(new Date());
-                props.setUserId(this.user);
-                logInformation("sent","Sending message to "+this.topicPub+": "+ msg, "sent");
-                this.publishChannel.publishBasic({body: body, properties: props, exchange: this.topicPub, routingKey: routingKey});
-        }
+    var body = null;
+    if (typeof(ArrayBuffer) === "undefined") {
+        body = new ByteBuffer();
+        body.putString(msg, Charset.UTF8);
+        body.flip();
+    }
+    else {
+        body = stringToArrayBuffer(msg);
+    }
+    var props = new AmqpProperties();
+    props.setContentType("text/plain");
+    props.setContentEncoding("UTF-8");
+    props.setDeliveryMode("1");
+    props.setMessageId((this.messageIdCounter++).toString());
+    props.setPriority("6");
+    props.setTimestamp(new Date());
+    props.setUserId(this.user);
+    logInformation("sent","Sending message to "+this.topicPub+": "+ msg, "sent");
+    this.publishChannel.publishBasic({body: body, properties: props, exchange: this.topicPub, routingKey: routingKey});
+    }
 ```
 		
 ### **disconnect** function of a subscription object
 Deletes a declared subscription queue and closes the channel:
 ```javascript
-	...
-	var config = {
-        replyCode: 0, 
-        replyText, '', 
-        classId: 0,
-        methodId: 0
-    };
-    this.consumeChannel.deleteQueue({queue:this.queueName, ifEmpty: false}, function(){
-	    this.consumeChannel.closeChannel(config, function(){
-    		this.publishChannel.closeChannel(config, function(){
+var config = {
+    replyCode: 0,
+    replyText, '',
+    classId: 0,
+    methodId: 0
+};
+this.consumeChannel.deleteQueue({queue:this.queueName, ifEmpty: false}, function(){
+    this.consumeChannel.closeChannel(config, function(){
+        this.publishChannel.closeChannel(config, function(){
 
-        	});
-		});
-	});
+        });
+    });
+});
 ```
 
 ### **close** function
 Disconnects the client from Kaazing WebSocket AMQP Gateway
 ```javascript
-	amqpClient.disconnect();
+amqpClient.disconnect();
 ```
-
-
 
 [1]:	https://www.rabbitmq.com/tutorials/amqp-concepts.html
 [2]:	http://developer.kaazing.com/documentation/amqp/4.0/dev-js/o_dev_js.html#keglibs

@@ -9,20 +9,20 @@ an object that can be used in the client application to interact with Kaazing Ga
 #### Using Bower
 - Install library with the Bower as specified in the [README][1].
 - Add the following scripts to your page:
-	```html	
-    <script src="bower_components/kaazing-javascript-universal-client/javascript/src/AngularUniversalClient.js"></script>
-    <script src="bower_components/kaazing-javascript-universal-client/javascript/src/JmsClient.js"></script>
+```html
+<script src="bower_components/kaazing-javascript-universal-client/javascript/src/AngularUniversalClient.js"></script>
+<script src="bower_components/kaazing-javascript-universal-client/javascript/src/JmsClient.js"></script>
 
-	```
+```
 **Note:** `JmsClient.js` is not needed when using the AMQP protocol.
 
 #### Using NPM
 - Install library with the NPM as specified in the [README][1].
-- Add the following scripts to your page::
-	```html
-    <script src="node_modules/kaazing-javascript-universal-client/node_modules/kaazing-javascript-jms-client/JmsClient.js"></script>
-    <script src="node_modules/kaazing-javascript-universal-client/AngularUniversalClientNPM.js"></script>
-	```
+- Add the following scripts to your page:
+```html
+<script src="node_modules/kaazing-javascript-universal-client/node_modules/kaazing-javascript-jms-client/JmsClient.js"></script>
+<script src="node_modules/kaazing-javascript-universal-client/AngularUniversalClientNPM.js"></script>
+```
 **Note:** Addition of JmsClient.js is not needed when using AMQP protocol.
 
 
@@ -39,14 +39,11 @@ an object that can be used in the client application to interact with Kaazing Ga
 - Establish a connection
 	```javascript
 	var client = UniversalClientDef(protocol);
-	$(document).ready(function () {
-		client.connect(connectionInfo, // Connection info
-				onError, // callback function to process errors
-				function(connection){
-			...
-		}
-	}
-
+	client.connect(connectionInfo, // Connection info
+      onError, // callback function to process errors
+      function(connection){
+        }
+	);
 	```
 	Where:
 	- **connectionInfo**: Connection object that includes:
@@ -70,24 +67,21 @@ an object that can be used in the client application to interact with Kaazing Ga
 - Subscribe to  topics of interest
 
 ```javascript
-
-	var client = UniversalClientDef(protocol);
-	$(document).ready(function () {
-		var subscription;
-		client.connect(
-		    connectionInfo, // Connection info
-            onError, // callback function to process errors
-            function(connection){
-                connection.subscribe(
-                    topicP, // Topic to send message
-                    topicS, // Topic to subscribe to receive messsages
-                    onMessage, // callback function to process received messages
-                    noLocal, // noLocal flag set to false - allow receiving your own messages
-                    function(sub){
-                        subscription = sub;
-                    });
-                })
-            })
+var client = UniversalClientDef(protocol);
+var subscription;
+client.connect(
+    connectionInfo, // Connection info
+    onError, // callback function to process errors
+    function(connection){
+        connection.subscribe(
+            topicP, // Topic to send message
+            topicS, // Topic to subscribe to receive messsages
+            onMessage, // callback function to process received messages
+            noLocal, // noLocal flag set to false - allow receiving your own messages
+            function(sub){
+                subscription = sub;
+            });
+        })
 ````
 	
 Where:
@@ -98,31 +92,30 @@ Where:
   - _callback_ function to receive subscription object
 **Note** Multiple subscriptions are allowed within single connection!
 
-- Add disconnect on window close (shown method uses JQuery):
 	```javascript
 	var client = UniversalClientDef(protocol);
-	$(document).ready(function () {
-		var subscription;
-		client.connect(
-            connectionInfo, // Connection info
-            onError, // callback function to process errors
-            function(connection){
-                connection.subscribe(
-                    topicP, // Topic to send message
-                    topicS, // Topic to subscribe to receive messsages
-                    onMessage, // callback function to process received messages
-                    noLocal, // noLocal flag set to false - allow receiving your own messages
-                    function(sub){
-                        subscription = sub;
-                    });
-                })
-		...
-		$(window).unload(function() {
+    var subscription;
+    client.connect(
+        connectionInfo, // Connection info
+        onError, // callback function to process errors
+        function(connection){
+            connection.subscribe(
+                topicP, // Topic to send message
+                topicS, // Topic to subscribe to receive messsages
+                onMessage, // callback function to process received messages
+                noLocal, // noLocal flag set to false - allow receiving your own messages
+                function(sub){
+                    subscription = sub;
+                });
+            })
+	```
+	- Add disconnect on window close (this example uses JQuery):
+
+    ```javascript
+        $(window).unload(function() {
             client.disconnect();
         });
-	}
-
-	```
+    ```
 - To send messages use sendMessage(msg) method of a subscription object
 	where _**msg**_ JavaScript object to be sent (as a JSON string). 
 	```javascript
@@ -132,25 +125,19 @@ Where:
     	subscription.sendMessage(msg);
 	}
 
-	$(document).ready(function () {
-		var subscription;
-		client.connect(connectionInfo, // Connection info
-				onError, // callback function to process errors
-				function(connection){
-					connection.subscribe(topicP, // Topic to send message
-										 topicS, // Topic to subscribe to receive messages
-										 onMessage, // callback function to process received message
-										 noLocal, // noLocal flag set to false - allow receiving your own messages
-						function(sub){
-							subscription = sub;
-						});
-					})
-				})
-		...
-		$(window).unload(function() {
-            client.disconnect();
-        });
-	}
+	var subscription;
+    client.connect(connectionInfo, // Connection info
+            onError, // callback function to process errors
+            function(connection){
+                connection.subscribe(topicP, // Topic to send message
+                                     topicS, // Topic to subscribe to receive messages
+                                     onMessage, // callback function to process received message
+                                     noLocal, // noLocal flag set to false - allow receiving your own messages
+                    function(sub){
+                        subscription = sub;
+                    });
+                }
+            );
 	```
 
 ## Organization of Kaazing JavaScript Universal Client   
