@@ -7,10 +7,9 @@ an object that can be used in the client application to interact with Kaazing Ga
 ## Using the Library
 ### Install the library
 #### Using Bower
-- Install library with the Bower as specified in a [README document][1].
+- Install library with the Bower as specified in the [README][1].
 - Add the following scripts to your page:
-	```html
-	
+	```html	
     <script src="bower_components/kaazing-javascript-universal-client/javascript/src/AngularUniversalClient.js"></script>
     <script src="bower_components/kaazing-javascript-universal-client/javascript/src/JmsClient.js"></script>
 
@@ -18,10 +17,9 @@ an object that can be used in the client application to interact with Kaazing Ga
 **Note:** `JmsClient.js` is not needed when using the AMQP protocol.
 
 #### Using NPM
-- Install library with the NPM as specified in a [README document][1].
+- Install library with the NPM as specified in the [README][1].
 - Add the following scripts to your page::
 	```html
-	
     <script src="node_modules/kaazing-javascript-universal-client/node_modules/kaazing-javascript-jms-client/JmsClient.js"></script>
     <script src="node_modules/kaazing-javascript-universal-client/AngularUniversalClientNPM.js"></script>
 	```
@@ -119,8 +117,7 @@ Where:
                     });
                 })
 		...
-		$( window ).unload(function() {
-            // Disconnect
+		$(window).unload(function() {
             client.disconnect();
         });
 	}
@@ -150,8 +147,7 @@ Where:
 					})
 				})
 		...
-		$( window ).unload(function() {
-            // Disconnect
+		$(window).unload(function() {
             client.disconnect();
         });
 	}
@@ -198,7 +194,7 @@ As shown on the diagram above, Kaazing Universal Client works as following:
     _Bower and NPM implementations differ due to paths of the dependent packages._
 
 
-   - Due to certain limitations, RequireJS cannot download Kaazing JMSClient.js library - hence it has to be included directly
+   - Due to certain limitations, RequireJS cannot download the Kaazing JMSClient.js library hence it has to be included directly
 - Instantiate required Client Facade Library that will interact with necessary Kaazing Javascript Client Libraries
 - Pass the data to and from the Kaazing Javascript Client libraries via instantiated Client Facade Library
 
