@@ -28,27 +28,27 @@ The _Connect_ function implements the following sequence:
 - Create connection. The _createConnection_ function of _JmsConnectionFactory_ takes three parameters: _login_, _password_ and a callback function that will be called upon completion. The function returns the future that is checked in a callback function for exceptions.
 
 ```javascript
-	var connectionFuture = jmsConnectionFactory.createConnection(username, password, function () {
-		if (!connectionFuture.exception) {
-			try {
-				connection = connectionFuture.getValue();
-				connection.setExceptionListener(handleException);
-		
-				session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-		
-				connection.start(function () {
-					 var connectionObject=createConnectionObject(session, JMSClient);
-                     connectedFunctionHandle(connectionObject);
-				});
-			}
-			catch (e) {
-				handleException(e);
-			}
-		}
-		else {
-			handleException(connectionFuture.exception);
-		}
-	})
+var connectionFuture = jmsConnectionFactory.createConnection(username, password, function () {
+    if (!connectionFuture.exception) {
+        try {
+            connection = connectionFuture.getValue();
+            connection.setExceptionListener(handleException);
+
+            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+
+            connection.start(function () {
+                 var connectionObject=createConnectionObject(session, JMSClient);
+                 connectedFunctionHandle(connectionObject);
+            });
+        }
+        catch (e) {
+            handleException(e);
+        }
+    }
+    else {
+        handleException(connectionFuture.exception);
+    }
+})
 ```
 	
 Once a connection is created, the callback function does the following:
@@ -95,19 +95,19 @@ This function creates a text message and sends it. In order to prevent the clien
 `appId` string property may be set to this client application ID - a randomly generated GUID.
 
 ```javascript
-	sendMessage:function(msg){
-		var textMsg = session.createTextMessage(msg);
-		if ( noLocalFlag ) textMsg.setStringProperty("appId", appId);
-		try {
-			var future = producer.send(textMsg, function () {
-			if (future.exception) {
-				handleException(future.exception);
-			};	
-		});
-		} catch (e) {
-			handleException(e);
-		}
-	}
+sendMessage:function(msg){
+    var textMsg = session.createTextMessage(msg);
+    if ( noLocalFlag ) textMsg.setStringProperty("appId", appId);
+    try {
+        var future = producer.send(textMsg, function () {
+        if (future.exception) {
+            handleException(future.exception);
+        };
+    });
+    } catch (e) {
+        handleException(e);
+    }
+}
 ```
 
 
@@ -115,31 +115,30 @@ This function creates a text message and sends it. In order to prevent the clien
 This function closes the producer and consumer that were created during the subscription call.
 
 ```javascript
-	this.producer.close(function(){
-		this.consumer.close(function(){
-		});
-	})
+this.producer.close(function(){
+    this.consumer.close(function(){
+    });
+})
 ```
 	    	
 ### **close** function
 Closes all subscriptions (causing closing of their producer and consumer), stops the connection and then closes session and connection in a chain of callbacks.
 	
 ```javascript
-	JMSClient.disconnect=function(){
-		for( var i=0; i<this.subscriptions.length; i++ ){
-			this.subscriptions[i].close();
-		}
-	
-		... Wait while all the subscriptions are closed...
-		
-		connection.stop(function(){
-				session.close(function () {
-					connection.close(function () {
+JMSClient.disconnect=function(){
+    for( var i=0; i<this.subscriptions.length; i++ ){
+        this.subscriptions[i].close();
+    }
 
-					});
-				});
-			});
-        }
+    ... Wait while all the subscriptions are closed...
 
+    connection.stop(function(){
+            session.close(function () {
+                connection.close(function () {
+
+                });
+            });
+        });
+    }
 ```
 

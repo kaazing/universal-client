@@ -31,25 +31,21 @@ an object that can be used in the client application to interact with Kaazing Ga
 	```javascript
 	var client = UniversalClientDef(protocol);
 	```
-	Where:
-	- **protocol**: Specifies the protocol that should be used for communications:
-	  - jms - for communication with the Kaazing JMS Gateway
-	  - amqp - for communication with the Kaazing AMQP Gateway.
+	Where **protocol** is a string that specifies the protocol that should be used for communications:
+  - 'jms' - for communication with the Kaazing JMS Gateway
+  - 'amqp' - for communication with the Kaazing AMQP Gateway.
 
 - Establish a connection
 	```javascript
-	client.connect(connectionInfo, // Connection info
-      onError, // callback function to process errors
-      function(connection){
-        }
-	);
+	client.connect(connectionInfo,onError,function(connection){
+     ...
+     });
 	```
-	Where:
-	- **connectionInfo**: Connection object that includes:
+	- **connectionInfo** is an object that includes:
 	  - _URL_ (e.g. ws://localhost:8001/amqp or ws://localhost:8001/jms)
-	  - _username_(user name to be used to establish connection) and
-	  - _password_(user password to be used to establish connection)
-    - **onError**: function that is used for error handling in a format of _function(error)_.
+	  - _username_ (user name to be used to establish connection) and
+	  - _password_ (user password to be used to establish connection)
+    - **onError**: a function that is used for error handling in a format of _function(error)_.
 	- _callback_ function to receive a connection object once connection is established.
 	
 	**Note:** If you want to add a logger to log library messages, add the following after creating the client:
@@ -142,7 +138,6 @@ As shown on the diagram above, Kaazing Universal Client works as following:
         });
         ```
     _Bower and NPM implementations differ due to paths of the dependent packages._
-
 
    - Due to certain limitations, RequireJS cannot download the Kaazing JMSClient.js library hence it has to be included directly
 - Instantiate required Client Facade Library that will interact with necessary Kaazing Javascript Client Libraries
