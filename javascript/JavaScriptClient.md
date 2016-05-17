@@ -38,7 +38,6 @@ an object that can be used in the client application to interact with Kaazing Ga
 
 - Establish a connection
 	```javascript
-	var client = UniversalClientDef(protocol);
 	client.connect(connectionInfo, // Connection info
       onError, // callback function to process errors
       function(connection){
@@ -55,20 +54,15 @@ an object that can be used in the client application to interact with Kaazing Ga
 	
 	**Note:** If you want to add a logger to log library messages, add the following after creating the client:
 	```javascript
-	
-	var logWebSocketMessage = function (cls, msg) {
- 		...
-	}
 	var client = UniversalClientDef(protocol);
-	// Set the logger function
-	client.loggerFuncHandle=logWebSocketMessage;
-
+	client.loggerFuncHandle = function (severity, message) {
+     ...
+     };
 	```
 - Subscribe to  topics of interest
 
 ```javascript
-var client = UniversalClientDef(protocol);
-var subscription;
+var subscription; // will be registered as the subscription handle in the callback
 client.connect(
     connectionInfo, // Connection info
     onError, // callback function to process errors
@@ -92,23 +86,6 @@ Where:
   - _callback_ function to receive subscription object
 **Note** Multiple subscriptions are allowed within single connection!
 
-	```javascript
-	var client = UniversalClientDef(protocol);
-    var subscription;
-    client.connect(
-        connectionInfo, // Connection info
-        onError, // callback function to process errors
-        function(connection){
-            connection.subscribe(
-                topicP, // Topic to send message
-                topicS, // Topic to subscribe to receive messsages
-                onMessage, // callback function to process received messages
-                noLocal, // noLocal flag set to false - allow receiving your own messages
-                function(sub){
-                    subscription = sub;
-                });
-            })
-	```
 	- Add disconnect on window close (this example uses JQuery):
 
     ```javascript
@@ -116,29 +93,13 @@ Where:
             client.disconnect();
         });
     ```
-- To send messages use sendMessage(msg) method of a subscription object
-	where _**msg**_ JavaScript object to be sent (as a JSON string). 
+- To send messages use the sendMessage(msg) method of a subscription object
+	where _**msgObject**_ is the JavaScript object to be sent (it will be delivered as a JSON string).
 	```javascript
-	var client=UniversalClientDef(protocol);
-	var sendMessage=function(msg){
-		// Send message
-    	subscription.sendMessage(msg);
-	}
-
-	var subscription;
-    client.connect(connectionInfo, // Connection info
-            onError, // callback function to process errors
-            function(connection){
-                 connection.subscribe(
-                    topicP, // Topic to send message
-                    topicS, // Topic to subscribe to receive messages
-                    onMessage, // callback function to process received message
-                    noLocal, // noLocal flag set to false - allow receiving your own messages
-                    function(sub){
-                        subscription = sub;
-                    });
-                }
-            );
+    var sendMessage=function(msgObject){
+        // Send message
+        subscription.sendMessage(msg);
+    }
 	```
 
 ## Organization of Kaazing JavaScript Universal Client   
@@ -150,7 +111,8 @@ As shown on the diagram above, Kaazing Universal Client works as following:
 - Download all necessary JavaScript libraries including the needed Client Library Facade using RequireJS.
 	- **Notes:**
 
-    - Kaazing AMQP client libraries require Kaazing WebSocket library to be downloaded and instantiated first, to achieve it Universal Client uses the following code:
+    - Kaazing AMQP client libraries require Kaazing WebSocket library to be downloaded and instantiated first,
+    to achieve this the Universal Client uses the following code:
 
         For Bower
 
