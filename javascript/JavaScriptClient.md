@@ -76,18 +76,20 @@ an object that can be used in the client application to interact with Kaazing Ga
 	var client = UniversalClientDef(protocol);
 	$(document).ready(function () {
 		var subscription;
-		client.connect(connectionInfo, // Connection info
-				onError, // callback function to process errors
-				function(connection){
-					connection.subscribe(topicP, // Topic to send message
-										 topicS, // Topic to subscribe to receive messsages
-										 onMessage, // callback function to process received messages
-										 noLocal, // noLocal flag set to false - allow receiving your own messages
-						function(sub){
-							subscription = sub;
-						});
-					})
-				})
+		client.connect(
+		    connectionInfo, // Connection info
+            onError, // callback function to process errors
+            function(connection){
+                connection.subscribe(
+                    topicP, // Topic to send message
+                    topicS, // Topic to subscribe to receive messsages
+                    onMessage, // callback function to process received messages
+                    noLocal, // noLocal flag set to false - allow receiving your own messages
+                    function(sub){
+                        subscription = sub;
+                    });
+                })
+            })
 ````
 	
 Where:
@@ -103,18 +105,19 @@ Where:
 	var client = UniversalClientDef(protocol);
 	$(document).ready(function () {
 		var subscription;
-		client.connect(connectionInfo, // Connection info
-				onError, // callback function to process errors
-				function(connection){
-					connection.subscribe(topicP, // Topic to send message
-										 topicS, // Topic to subscribe to receive messsages
-										 onMessage, // callback function to process received message
-										 noLocal, // noLocal flag set to false - allow receiving your own messages
-						function(sub){
-							subscription = sub;
-						});
-					})
-				})
+		client.connect(
+            connectionInfo, // Connection info
+            onError, // callback function to process errors
+            function(connection){
+                connection.subscribe(
+                    topicP, // Topic to send message
+                    topicS, // Topic to subscribe to receive messsages
+                    onMessage, // callback function to process received messages
+                    noLocal, // noLocal flag set to false - allow receiving your own messages
+                    function(sub){
+                        subscription = sub;
+                    });
+                })
 		...
 		$( window ).unload(function() {
             // Disconnect
