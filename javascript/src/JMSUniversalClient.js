@@ -109,6 +109,10 @@ var jmsClientFunction=function(logInformation){
 	}
 
 
+	var startsWith=function(string, startString){
+		return string.substring(0,startString.length)===startString;
+	}
+
 	var createConnectionObject=function(session, connection){
 		/**
 		 * Contains infomration about established connection.
@@ -126,10 +130,10 @@ var jmsClientFunction=function(logInformation){
 			 * @param subscribedCallbackFunction {function} callback function if a format function(SubcriptionObject) to be called when SubsriptionObject is created.
 			 */
 			subscribe:function(topicPub, topicSub, messageReceivedFunc, noLocal, subscribedCallbackFunction){
-				if (!topicPub.startsWith("/topic/")){
+				if (!startsWith(topicPub,"/topic/")){
 					topicPub="/topic/"+topicPub;
 				}
-				if (!topicSub.startsWith("/topic/")){
+				if (!startsWith(topicSub,"/topic/")){
 					topicSub="/topic/"+topicSub;
 				}
 
@@ -186,7 +190,8 @@ var jmsClientFunction=function(logInformation){
 
         logInformation("INFO","CONNECTING TO: " + connectionInfo.url);
 
-        var jmsConnectionFactory = new JmsConnectionFactory(connectionInfo.url);
+		var connectionProperties = new JmsConnectionProperties();
+        var jmsConnectionFactory = new JmsConnectionFactory(connectionInfo.url, connectionProperties);
 
         try {
             var connectionFuture = jmsConnectionFactory.createConnection(connectionInfo.username, connectionInfo.password, function () {
