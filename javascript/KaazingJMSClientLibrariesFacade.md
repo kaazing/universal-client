@@ -28,27 +28,27 @@ The _Connect_ function implements the following sequence:
 - Create connection. The _createConnection_ function of _JmsConnectionFactory_ takes three parameters: _login_, _password_ and a callback function that will be called upon completion. The function returns the future that is checked in a callback function for exceptions.
 
 ```javascript
-	var connectionFuture = jmsConnectionFactory.createConnection(username, password, function () {
-		if (!connectionFuture.exception) {
-			try {
-				connection = connectionFuture.getValue();
-				connection.setExceptionListener(handleException);
-		
-				session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-		
-				connection.start(function () {
-					 var connectionObject=createConnectionObject(session, JMSClient);
-                     connectedFunctionHandle(connectionObject);
-				});
-			}
-			catch (e) {
-				handleException(e);
-			}
-		}
-		else {
-			handleException(connectionFuture.exception);
-		}
-	})
+var connectionFuture = jmsConnectionFactory.createConnection(username, password, function () {
+    if (!connectionFuture.exception) {
+        try {
+            connection = connectionFuture.getValue();
+            connection.setExceptionListener(handleException);
+
+            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+
+            connection.start(function () {
+                 var connectionObject=createConnectionObject(session, JMSClient);
+                 connectedFunctionHandle(connectionObject);
+            });
+        }
+        catch (e) {
+            handleException(e);
+        }
+    }
+    else {
+        handleException(connectionFuture.exception);
+    }
+})
 ```
 	
 Once a connection is created, the callback function does the following:
@@ -61,7 +61,7 @@ Once a connection is created, the callback function does the following:
 Once a connection is started, a _connection_ object is returned for the subscription to be created using the __subscribe__ method.
 
 ### **subscribe** method of connection object
-Method executed the following actions:
+This method executes the following actions:
 
 - Creates publishing topic and producer to send messages
 
@@ -70,8 +70,10 @@ Method executed the following actions:
 	var producer = session.createProducer(dest);
 	```
 - Creates subscription topic and consumer.
-	_In order to prevent client from receiving its own messages consumer may be created with a query that will filter out the messages with the `appId` string property set to this client application ID - a randomly generated GUID._
-	Once a consumer is created, the _setMessageListener_ function is used to specify the function to be called when a new message is received.
+	_In order to prevent the client from receiving its own messages the consumer may be created with a query that will
+	filter out the messages with the `appId` string property set to this client application ID - a randomly generated GUID._
+	Once a consumer is created, the _setMessageListener_ function is used to specify the function to be called when a
+	new message is received.
 
 	```javascript
 	var subDest = session.createTopic(topicSub);			
@@ -89,54 +91,54 @@ Method executed the following actions:
 - Creates subscription object, adds it to the array of opened subscriptions and returns it via callback.
 	   
 ### **sendMessage** function of a subscription object	
-This function creates a text message and sends it. In order to prevent the client from receiving its own messages the `appId` string property may be set to this client application ID - a randomly generated GUID.
+This function creates a text message and sends it. In order to prevent the client from receiving its own messages the
+`appId` string property may be set to this client application ID - a randomly generated GUID.
 
 ```javascript
-	sendMessage:function(msg){
-		var textMsg = session.createTextMessage(msg);
-		if (noLocalFlag)
-			textMsg.setStringProperty("appId", appId);
-		try {
-			var future = producer.send(textMsg, function () {
-			if (future.exception) {
-				handleException(future.exception);
-			};	
-		});
-		} catch (e) {
-			handleException(e);
-		}
-	}
-``` 	
+sendMessage:function(msg){
+    var textMsg = session.createTextMessage(msg);
+    if ( noLocalFlag ) textMsg.setStringProperty("appId", appId);
+    try {
+        var future = producer.send(textMsg, function () {
+        if (future.exception) {
+            handleException(future.exception);
+        };
+    });
+    } catch (e) {
+        handleException(e);
+    }
+}
+```
+
 
 ### **disconnect** function of a subscription object
 This function closes the producer and consumer that were created during the subscription call.
 
 ```javascript
-	this.producer.close(function(){
-		this.consumer.close(function(){
-		});
-	})
+this.producer.close(function(){
+    this.consumer.close(function(){
+    });
+})
 ```
 	    	
 ### **close** function
 Closes all subscriptions (causing closing of their producer and consumer), stops the connection and then closes session and connection in a chain of callbacks.
 	
 ```javascript
-	JMSClient.disconnect=function(){
-		for(var i=0;i<this.subscriptions.length;i++){
-			this.subscriptions[i].close();
-		}
-	
-		... Wait while all the subscriptions are closed...
-		
-		connection.stop(function(){
-				session.close(function () {
-					connection.close(function () {
-
-					});
-				});
-			});
+JMSClient.disconnect=function(){
+    for( var i=0; i<this.subscriptions.length; i++ ){
+        this.subscriptions[i].close();
     }
 
+    ... Wait while all the subscriptions are closed...
+
+    connection.stop(function(){
+            session.close(function () {
+                connection.close(function () {
+
+                });
+            });
+        });
+    }
 ```
 

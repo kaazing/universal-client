@@ -1,181 +1,101 @@
 # Kaazing JavaScript Universal Client for Javascript
-This library is intended to be used with 'plain JavaScript', AngularJS, ReactJS applications (see [Kaazing JavaScript Starter Applications](https://github.com/kaazing/javascript.getting.started) and [Kaazing Examples and Tutorials](https://github.com/kaazing/tutorials)); it provides JavaScript function that returns an object that can be used in the client application to interact with Kaazing Gateway.
+This library is intended to be used with 'plain JavaScript', AngularJS, and ReactJS applications
+(see [Kaazing JavaScript Starter Applications](https://github.com/kaazing/javascript.getting.started) and
+[Kaazing Examples and Tutorials](https://github.com/kaazing/tutorials)); it provides a JavaScript function that returns
+an object that can be used in the client application to interact with Kaazing Gateway.
 
 ## Using the Library
 ### Install the library
 #### Using Bower
-- Install library with the Bower as specified in a [README document][1].
-- Add the following to the **\<head\>** section of your page:  
-	```html
-	
-	<head>  
-	....    
-	<script src="bower_components/kaazing-javascript-universal-client/javascript/src/AngularUniversalClient.js"></script>
-	<script src="bower_components/kaazing-javascript-universal-client/javascript/src/JmsClient.js"></script>
-	....  
-	</head>
+- Install library with the Bower as specified in the [README][1].
+- Add the following scripts to your page:
+```html
+<script src="bower_components/kaazing-javascript-universal-client/javascript/src/AngularUniversalClient.js"></script>
+<script src="bower_components/kaazing-javascript-universal-client/javascript/src/JmsClient.js"></script>
 
-	```
-<font color='red'> **Note:** </font> Addition of JmsClient.js is not needed when using AMQP protocol.
+```
+**Note:** `JmsClient.js` is not needed when using the AMQP protocol.
 
 #### Using NPM
-- Install library with the NPM as specified in a [README document][1].
-- Add the following to the **\<head\>** section of your page:  
-	```html
-	
-	<head>  
-	....    
-    <script src="node_modules/kaazing-javascript-universal-client/node_modules/kaazing-javascript-jms-client/JmsClient.js"></script>
-    <script src="node_modules/kaazing-javascript-universal-client/AngularUniversalClientNPM.js"></script>
-	....  
-	</head>
-	```
-<font color='red'> **Note:** </font> Addition of JmsClient.js is not needed when using AMQP protocol.
+- Install library with the NPM as specified in the [README][1].
+- Add the following scripts to your page:
+```html
+<script src="node_modules/kaazing-javascript-universal-client/node_modules/kaazing-javascript-jms-client/JmsClient.js"></script>
+<script src="node_modules/kaazing-javascript-universal-client/AngularUniversalClientNPM.js"></script>
+```
+**Note:** Addition of JmsClient.js is not needed when using AMQP protocol.
 
 
 ### Add the library to your application
 - Create an instance of the Universal Client Library.
 	```javascript
-	...
-
-	var client=UniversalClientDef(protocol);
-	...
-
+	var client = UniversalClientDef(protocol);
 	```
-	Where:
-	- **protocol**: Specifies protocol that should be used for communications: jms - for communication with Kaazing JMS Gateway, amqp - for communication with Kaazing AMQP Gateway.
+	Where **protocol** is a string that specifies the protocol that should be used for communications:
+  - 'jms' - for communication with the Kaazing JMS Gateway
+  - 'amqp' - for communication with the Kaazing AMQP Gateway.
 
 - Establish a connection
 	```javascript
-	...
-
-	var client=UniversalClientDef(protocol);
-	...
-
-	$(document).ready(function () {
-		client.connect(connectionInfo, // Connection info
-				onError, // callback function to process errors
-				function(connection){
-			...
-		}
-
-	}
-
+	client.connect(connectionInfo,onError,function(connection){
+     ...
+     });
 	```
-	Where:
-	- **coonectionInfo**: Connection information that contains _URL_ (e.g. ws://localhost:8001/amqp or ws://localhost:8001/jms), _username_(user name to be used to establish connection) and _password_(user password to be used to establish connection)
-	- **onError**: function that is used for error handling in a format of _function(error)_. 
-	- _callback function_ to receive a connection object once connection is established.
+	- **connectionInfo** is an object that includes:
+	  - _URL_ (e.g. ws://localhost:8001/amqp or ws://localhost:8001/jms)
+	  - _username_ (user name to be used to establish connection) and
+	  - _password_ (user password to be used to establish connection)
+    - **onError**: a function that is used for error handling in a format of _function(error)_.
+	- _callback_ function to receive a connection object once connection is established.
 	
 	**Note:** If you want to add a logger to log library messages, add the following after creating the client:
 	```javascript
-	
-	var logWebSocketMessage = function (cls, msg) {
- 		...
-	}
-	var client=UniversalClientDef(protocol);
-	// Set the logger function
-	client.loggerFuncHandle=logWebSocketMessage;
-
+	var client = UniversalClientDef(protocol);
+	client.loggerFuncHandle = function (severity, message) {
+     ...
+     };
 	```
-- Subscribe to the topics of interest
-	```javascript
-	...
+- Subscribe to  topics of interest
 
-	var client=UniversalClientDef(protocol);
-	...
-
-	$(document).ready(function () {
-		var subscription;
-		client.connect(connectionInfo, // Connection info
-				onError, // callback function to process errors
-				function(connection){
-					connection.subscribe(topicP, // Topic to send message
-										 topicS, // Topic to subscribe to receive messsages
-										 onMessage, // callback function to process received messages
-										 noLocal, // noLocal flag set to false - allow receiving your own messages
-						function(subscription){
-							subscription=subscr;
-						});
-					}		
-				}
-
-	}
+```javascript
+var subscription; // will be registered as the subscription handle in the callback
+client.connect(
+    connectionInfo, // Connection info
+    onError, // callback function to process errors
+    function(connection){
+        connection.subscribe(
+            topicP, // Topic to send message
+            topicS, // Topic to subscribe to receive messsages
+            onMessage, // callback function to process received messages
+            noLocal, // noLocal flag set to false - allow receiving your own messages
+            function(sub){
+                subscription = sub;
+            });
+        })
+````
 	
-	```	
-	
-	Where:
-	- **topicP**: Name of the publishing endpoint - AMQP exchange used for publishing or JMS Topic
-	- **topicS**: Name of the subscription endpoint - AMQP exchange used for subscription or JMS Topic
-	- **noLocal**: Flag indicating whether the client wants to receive its own messages (true) or not (false). That flag should be used when publishing and subscription endpoints are the same.
-	- **onMessage**: Function that will be used to process received messages from subscription endpoint in a format of _function(message)_
-	- _callback function_ to receive subscription object
-	**Note** Multiple subscriptions are allowed within single connection!
-- Add disconnect on window close (shown method uses JQuery):
-	```javascript
-	...
+Where:
+  - **topicP**: Name of the publishing endpoint - AMQP exchange used for publishing or JMS Topic
+  - **topicS**: Name of the subscription endpoint - AMQP exchange used for subscription or JMS Topic
+  - **onMessage**: Function that will be used to process received messages from subscription endpoint in a format of _function(message)_
+  - **noLocal**: Flag indicating whether the client wants to receive its own messages (true) or not (false). That flag should be used when publishing and subscription endpoints are the same.
+  - _callback_ function to receive subscription object
+**Note** Multiple subscriptions are allowed within single connection!
 
-	var client=UniversalClientDef(protocol);
-	...
+	- Add disconnect on window close (this example uses JQuery):
 
-	$(document).ready(function () {
-		var subscription;
-		client.connect(connectionInfo, // Connection info
-				onError, // callback function to process errors
-				function(connection){
-					connection.subscribe(topicP, // Topic to send message
-										 topicS, // Topic to subscribe to receive messsages
-										 onMessage, // callback function to process received message
-										 noLocal, // noLocal flag set to false - allow receiving your own messages
-						function(subscription){
-							subscription=subscr;
-						});
-					}		
-				}
-		...
-		$( window ).unload(function() {
-            // Disconnect
+    ```javascript
+        $(window).unload(function() {
             client.disconnect();
         });
-
-	}
-
-	```
-- To send messages use sendMessage(msg) method of a subscription object
-	where _**msg**_ JavaScript object to be sent (as a JSON string). 
+    ```
+- To send messages use the sendMessage(msg) method of a subscription object
+	where _**msgObject**_ is the JavaScript object to be sent (it will be delivered as a JSON string).
 	```javascript
-	...
-
-	var client=UniversalClientDef(protocol);
-	...
-
-	var sendMessage=function(msg){
-		// Send message
-    	subscrpiption.sendMessage(msg);
-	}
-
-
-	$(document).ready(function () {
-		var subscription;
-		client.connect(connectionInfo, // Connection info
-				onError, // callback function to process errors
-				function(connection){
-					connection.subscribe(topicP, // Topic to send message
-										 topicS, // Topic to subscribe to receive messsages
-										 onMessage, // callback function to process received message
-										 noLocal, // noLocal flag set to false - allow receiving your own messages
-						function(subscription){
-							subscription=subscr;
-						});
-					}		
-				}
-		...
-		$( window ).unload(function() {
-            // Disconnect
-            client.disconnect();
-        });
-
-	}
+    var sendMessage=function(msgObject){
+        // Send message
+        subscription.sendMessage(msg);
+    }
 	```
 
 ## Organization of Kaazing JavaScript Universal Client   
@@ -185,36 +105,41 @@ This library is intended to be used with 'plain JavaScript', AngularJS, ReactJS 
 As shown on the diagram above, Kaazing Universal Client works as following:
 - Determine Client Library Facade based on the specified protocol
 - Download all necessary JavaScript libraries including the needed Client Library Facade using RequireJS.
-	- <font color='red'> **Notes:** </font>
+	- **Notes:**
 
-		- Kaazing AMQP client libraries require Kaazing WebSocket library to be downloaded and instantiated first, to achieve it Universal Client uses the following code:
+    - Kaazing AMQP client libraries require Kaazing WebSocket library to be downloaded and instantiated first,
+    to achieve this the Universal Client uses the following code:
 
-			For Bower
+        For Bower
 
-			```javascript
-			...
-			requirejs(['bower_components/kaazing-amqp-0-9-1-client-javascript/javascript/WebSocket.js'],function(){
-				requirejs(['bower_components/jquery/dist/jquery.js','bower_components/kaazing-amqp-0-9-1-client-javascript/javascript/Amqp-0-9-1.js', 'bower_components/kaazing-javascript-universal-client/javascript/src/AmqpUniversalClient.js'], function () {
-					...
-					});              
-				});
-			...
-			```
-			
-			For NPM
-
-			```javascript
-			...
-		  requirejs(['node_modules/kaazing-javascript-universal-client/node_modules/kaazing-javascript-gateway-client/WebSocket.js'],function(){
-                requirejs(['node_modules/jquery/dist/jquery.js','node_modules/kaazing-javascript-universal-client/node_modules/kaazing-javascript-amqp-client/AmqpClient.js', 'node_modules/kaazing-javascript-universal-client/AmqpUniversalClient.js'], function () {
+        ```javascript
+        requirejs(['bower_components/kaazing-amqp-0-9-1-client-javascript/javascript/WebSocket.js'],function(){
+            requirejs([
+              'bower_components/jquery/dist/jquery.js',
+              'bower_components/kaazing-amqp-0-9-1-client-javascript/javascript/Amqp-0-9-1.js',
+              'bower_components/kaazing-javascript-universal-client/javascript/src/AmqpUniversalClient.js'
+              ], function () {
                 ...
                 });
-            });			...
-			```
-		_The reason for different Bower and NPM implementations is the difference in path of the dependent packages installed via one or another._
+            });
+        ```
 
+        For NPM
 
-		- <font color='orange'> Due to certain limitations, RequireJS cannot download Kaazing JMSClient.js library - hence it has to be included in the \<head\> section </font>
+        ```javascript
+      requirejs(['node_modules/kaazing-javascript-universal-client/node_modules/kaazing-javascript-gateway-client/WebSocket.js'],function(){
+            requirejs([
+              'node_modules/jquery/dist/jquery.js',
+              'node_modules/kaazing-javascript-universal-client/node_modules/kaazing-javascript-amqp-client/AmqpClient.js',
+              'node_modules/kaazing-javascript-universal-client/AmqpUniversalClient.js'
+              ], function () {
+            ...
+            });
+        });
+        ```
+    _Bower and NPM implementations differ due to paths of the dependent packages._
+
+   - Due to certain limitations, RequireJS cannot download the Kaazing JMSClient.js library hence it has to be included directly
 - Instantiate required Client Facade Library that will interact with necessary Kaazing Javascript Client Libraries
 - Pass the data to and from the Kaazing Javascript Client libraries via instantiated Client Facade Library
 
