@@ -1,6 +1,6 @@
 {
    "name":"kaazing-javascript-universal-client",
-   "version": "develop-SNAPSHOT",
+   "version": "1.0.5-RC000",
    "main":[
       "javascript/JavascriptUniversalClient.js"
    ],
