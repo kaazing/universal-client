@@ -20,6 +20,8 @@ build
 
 # Github java basic 
 *.class
+# Editors
+*.plist
 
 
 
