@@ -42,7 +42,7 @@ public class AmqpUniversalClientTest {
 	public void setUp() throws ClientException, URISyntaxException{
 		this.receivedMessage="";
 		this.errorMessage="";
-		amqpClient=new AmqpUniversalClient(new URI("ws://sandbox.kaazing.net/amqp091"), "guest", "guest", new ErrorsListener() {
+		amqpClient=new AmqpUniversalClient(new URI("wss://sandbox.kaazing.net/amqp091"), "guest", "guest", new ErrorsListener() {
 			
 			@Override
 			public void onException(ClientException exception) {

@@ -2,7 +2,14 @@
 
 ## [Unreleased](https://github.com/kaazing/universal-client/tree/HEAD)
 
-[Full Changelog](https://github.com/kaazing/universal-client/compare/1.0.3...HEAD)
+[Full Changelog](https://github.com/kaazing/universal-client/compare/1.0.4...HEAD)
+
+**Merged pull requests:**
+
+- Updated maven and gradle builds. [\#55](https://github.com/kaazing/universal-client/pull/55) ([nemigaservices](https://github.com/nemigaservices))
+
+## [1.0.4](https://github.com/kaazing/universal-client/tree/1.0.4) (2016-05-19)
+[Full Changelog](https://github.com/kaazing/universal-client/compare/1.0.3...1.0.4)
 
 **Merged pull requests:**
 
