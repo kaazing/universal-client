@@ -1,6 +1,6 @@
 {
    "name":"kaazing-javascript-universal-client",
-   "version": "1.0.6-RC001",
+   "version": "1.0.6",
    "main":[
       "javascript/JavascriptUniversalClient.js"
    ],
