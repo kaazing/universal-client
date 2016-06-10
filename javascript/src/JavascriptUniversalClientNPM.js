@@ -57,7 +57,7 @@ var UniversalClientDef=function(protocol){
                 console.trace(message);
         }
         if (protocol.toLowerCase() === "amqp") {
-                requirejs(['node_modules/kaazing-javascript-universal-client/node_modules/kaazing-javascript-gateway-client/WebSocket.js'],function(){
+                requirejs(['node_modules/kaazing-javascript-gateway-client/WebSocket.js'],function(){
                     requirejs(['node_modules/jquery/dist/jquery.js','node_modules/kaazing-javascript-universal-client/node_modules/kaazing-javascript-amqp-client/AmqpClient.js', 'node_modules/kaazing-javascript-universal-client/AmqpUniversalClient.js'], function () {
                         console.info("Using AMQP protocol!");
                         client = amqpClientFunction(logInformation);
@@ -66,7 +66,7 @@ var UniversalClientDef=function(protocol){
                 });
         }
         else if (protocol.toLowerCase() === "jms") {
-                requirejs(['node_modules/kaazing-javascript-universal-client/node_modules/kaazing-javascript-gateway-client/WebSocket.js','node_modules/kaazing-javascript-universal-client/JMSUniversalClient.js'], function () {
+                requirejs(['node_modules/kaazing-javascript-gateway-client/WebSocket.js','node_modules/kaazing-javascript-universal-client/JMSUniversalClient.js'], function () {
                 console.info("Using JMS protocol!");
                 client = jmsClientFunction(logInformation);
                 client.connect(connectionInfo, errorFunctionHandle, connectedFunctionHandle);
