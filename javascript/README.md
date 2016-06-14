@@ -11,30 +11,27 @@ For sample applications and tutorials demonstrating how to use Kaazing Universal
 - Install NodeJS - please refer to the [NodeJS downloads page][9] for the installer that is appropriate for your OS
 - Update npm
 
-	`sudo npm update npm -g`
+	`npm update npm -g`
 
 - Install bower
-
-	`sudo npm install -g bower`
+	`npm install -g bower`
 
 - Install Kaazing Universal Javascript client libraries
-
 	`bower install kaazing-javascript-universal-client`
-	
-__Note__: If you have used prior versions of the library you may want to clean your bower cache by running:
 
+__Note__: If you have used prior versions of the library you may want to clean your bower cache by running:
 	`bower cache clean`
-	
+
 #### Using the library
 Add the following to your main html page (index.html):
-```
+```javascript
 <script src="bower_components/requirejs/require.js"></script>
 <script src="bower_components/kaazing-javascript-universal-client/javascript/src/JavascriptUniversalClient.js"></script>
 ```
 
 ***Note***: When using JMS, add the following line to your main html page:
-```
-<script src="bower_components/kaazing-jms-client-javascript/javascript/src/JmsClient.js"></script>	
+```javascript
+<script src="bower_components/kaazing-jms-client-javascript/javascript/src/JmsClient.js"></script>
 ```
 
 ### Using Client Libraries with NPM
@@ -42,30 +39,24 @@ Add the following to your main html page (index.html):
 - Install NodeJS - please refer to the [NodeJS downloads page][9] for the installer that is appropriate for your OS
 - Update npm
 
-	`sudo npm update npm -g`
-
+	`npm update npm -g`
 - Install RequireJS libraries
-
 	`npm install requirejs`
-
 - Install jQuery libraries
-
 	`npm install requirejs`
-
 - Install Kaazing Universal Javascript client libraries
-
 	`npm install kaazing-javascript-universal-client`
-	
+
 #### Using the library
 Add the following to your main html page (index.html):
-```
+```javascript
 <script src="node_modules/requirejs/require.js"></script>
 <script src="node_modules/kaazing-javascript-universal-client/javascript/src/JavascriptUniversalClientNPM.js"></script>
 ```
 
 ***Note***: When using JMS, add the following line to your main html page:
-```
-<script src="<script src="node_modules/kaazing-javascript-universal-client/node_modules/kaazing-javascript-jms-client/JmsClient.js"></script>"></script>	
+```javascript
+<script src="node_modules/kaazing-javascript-universal-client/node_modules/kaazing-javascript-jms-client/JmsClient.js"></script>
 ```
 
 ### Obtaining and Configuring Kaazing Gateway

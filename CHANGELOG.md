@@ -2,7 +2,14 @@
 
 ## [Unreleased](https://github.com/kaazing/universal-client/tree/HEAD)
 
-[Full Changelog](https://github.com/kaazing/universal-client/compare/1.0.4...HEAD)
+[Full Changelog](https://github.com/kaazing/universal-client/compare/1.0.6...HEAD)
+
+**Merged pull requests:**
+
+- Updated to accomodate the latest version of NPM. [\#56](https://github.com/kaazing/universal-client/pull/56) ([nemigaservices](https://github.com/nemigaservices))
+
+## [1.0.6](https://github.com/kaazing/universal-client/tree/1.0.6) (2016-05-20)
+[Full Changelog](https://github.com/kaazing/universal-client/compare/1.0.4...1.0.6)
 
 **Merged pull requests:**
 
@@ -14,6 +21,7 @@
 **Merged pull requests:**
 
 - Fixed an IE issue. [\#54](https://github.com/kaazing/universal-client/pull/54) ([nemigaservices](https://github.com/nemigaservices))
+- Miscellaneous fixes [\#53](https://github.com/kaazing/universal-client/pull/53) ([robinzimmermann](https://github.com/robinzimmermann))
 - Updated gradle. [\#52](https://github.com/kaazing/universal-client/pull/52) ([nemigaservices](https://github.com/nemigaservices))
 - Switched tests to sandbox. [\#51](https://github.com/kaazing/universal-client/pull/51) ([nemigaservices](https://github.com/nemigaservices))
 - Set version to develop-SNAPSHOT in develop, explicitly add groupID to… [\#50](https://github.com/kaazing/universal-client/pull/50) ([ahousing](https://github.com/ahousing))
