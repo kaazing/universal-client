@@ -2,7 +2,14 @@
 
 ## [Unreleased](https://github.com/kaazing/universal-client/tree/HEAD)
 
-[Full Changelog](https://github.com/kaazing/universal-client/compare/1.0.6...HEAD)
+[Full Changelog](https://github.com/kaazing/universal-client/compare/1.0.7...HEAD)
+
+**Merged pull requests:**
+
+- Updated dependencies. [\#57](https://github.com/kaazing/universal-client/pull/57) ([nemigaservices](https://github.com/nemigaservices))
+
+## [1.0.7](https://github.com/kaazing/universal-client/tree/1.0.7) (2016-06-14)
+[Full Changelog](https://github.com/kaazing/universal-client/compare/1.0.6...1.0.7)
 
 **Merged pull requests:**
 
