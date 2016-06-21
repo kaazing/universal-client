@@ -12,7 +12,7 @@
 	<groupId>org.kaazing</groupId>
 	<artifactId>universal.client</artifactId>
 	<name>Kaazing Java Universal Client</name>
-	<version>1.0.8-RC001</version>
+	<version>1.0.8</version>
 	<packaging>jar</packaging>
 
 	<url>https://github.com/kaazing/universal-client</url>
