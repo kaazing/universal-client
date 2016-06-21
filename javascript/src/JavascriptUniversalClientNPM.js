@@ -58,7 +58,7 @@ var UniversalClientDef=function(protocol){
         }
         if (protocol.toLowerCase() === "amqp") {
                 requirejs(['node_modules/kaazing-javascript-gateway-client/WebSocket.js'],function(){
-                    requirejs(['node_modules/jquery/dist/jquery.js','node_modules/kaazing-javascript-universal-client/node_modules/kaazing-javascript-amqp-client/AmqpClient.js', 'node_modules/kaazing-javascript-universal-client/AmqpUniversalClient.js'], function () {
+                    requirejs(['node_modules/jquery/dist/jquery.js','node_modules/kaazing-javascript-amqp-client/AmqpClient.js', 'node_modules/kaazing-javascript-universal-client/AmqpUniversalClient.js'], function () {
                         console.info("Using AMQP protocol!");
                         client = amqpClientFunction(logInformation);
                         client.connect(connectionInfo, errorFunctionHandle, connectedFunctionHandle);
