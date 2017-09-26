@@ -42,7 +42,7 @@ public class JMSUniversalClientTest {
 	public void setUp() throws ClientException, URISyntaxException{
 		this.receivedMessage="";
 		this.errorMessage="";
-		jmsClient=new JMSUniversalClient(new URI("wss://sandbox.kaazing.net/jms"), "", "", new ErrorsListener() {
+		jmsClient=new JMSUniversalClient(new URI("wss://demos.kaazing.com/jms"), "", "", new ErrorsListener() {
 			
 			@Override
 			public void onException(ClientException exception) {
